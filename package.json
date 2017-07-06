@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "A NodeJS generator for Node/TypeScript which is targetting AWS Lambda (or other microservice platform)",
   "license": "MIT",
   "main": "app/index.js",
