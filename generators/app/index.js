@@ -43,11 +43,29 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath('test/index-spec.ts'),
         this.destinationPath('test/index-spec.ts')
       );
+      this.fs.copyTpl(
+        this.templatePath('test/testing/helpers.ts'),
+        this.destinationPath('test/testing/helpers.ts')
+      );
+      this.fs.copyTpl(
+        this.templatePath('test/testing/test-console.ts'),
+        this.destinationPath('test/testing/test-console.ts')
+      );
     },
 
     projectfiles: function() {
       var today = new Date();
 
+      this.fs.copy(
+        this.templatePath('_wallaby.js'),
+        this.destinationPath('wallaby.js')
+      );      
+      
+      this.fs.copy(
+        this.templatePath('_serverless.yml'),
+        this.destinationPath('serverless.yml')
+      );      
+      
       this.fs.copy(
         this.templatePath('_vscode/tasks.json'),
         this.destinationPath('.vscode/tasks.json')

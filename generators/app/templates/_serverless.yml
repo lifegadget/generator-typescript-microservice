@@ -1,0 +1,120 @@
+service: <%= appname %>-services
+package:
+  include:
+    - "lib/*"
+    - "node_modules/**"
+  exclude:
+    - "*.mp3"
+    - "test/*"
+    - "src/*"
+    - ".git/**"
+    - "ssl/**"
+
+custom:
+  stage: "${opt:stage, self:provider.stage}"
+  region: "${opt:region, self:provider.region}"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  profile: <%= appname %>
+  stage: dev
+  region: us-east-1
+
+functions:
+  foo:
+    environment: ${file(env.yml):${self:custom.stage}}
+    description: lorem ipsum
+    handler: lib/foo.handler
+    timeout: 5
+    memorySize: 1536
+    events:
+      - http:
+          method: get
+          path: accounting/authorize
+          cors: true
+
+  bar:
+    description: lorem ipsum
+    handler: lib/bar.handler
+    timeout: 2
+    memorySize: 1024
+    environment: ${file(env.yml):${self:custom.stage}}
+
+  baz:
+    description: lorem ipsum
+    handler: lib/baz.handler
+    environment: ${file(env.yml):${self:custom.stage}}
+    timeout: 2
+    memorySize: 1024
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - lambda:InvokeFunction
+    events:
+      - http:
+          method: post
+          path: accounting/sync
+          cors: true
+
+resources:
+  Resources:
+    # ROLES
+    # -----------------------------------------------------------
+    accounting:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: <%= appname %>-services-${self:custom.stage}-accounting
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+
+  
+    # POLICIES
+    # -----------------------------------------------------------    
+    logging:
+      Type: AWS::IAM::Policy
+      Properties:
+        PolicyName: <%= appname %>-logging
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/*:*:*
+            - Effect: "Allow"
+              Action:
+                - "s3:PutObject"
+              Resource:
+                Fn::Join:
+                  - ""
+                  - - "arn:aws:s3:::"
+                    - "Ref" : "ServerlessDeploymentBucket" 
+        Roles: 
+          - <%= appname %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
+          - <%= appname %>-services-${self:custom.stage}-accounting
+
+    lambdaInvocation:
+      Type: AWS::IAM::Policy
+      Properties:
+        PolicyName: <%= appname %>-invocation
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+                - lambda:ListFunctions
+              Resource: 
+                - "arn:aws:lambda:${self:custom.region}:*:function:<%= appname %>-services-${self:custom.stage}-*"
+        Roles:
+          - <%= appname %>-services-${self:custom.stage}-accounting
+          - <%= appname %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
