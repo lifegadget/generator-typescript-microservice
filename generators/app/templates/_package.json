@@ -50,6 +50,7 @@
     "prettier": "^1.5.2",
     "rimraf": "^2.0.0",
     "serverless": "^1.0.0",
+    "shelljs": "^0.7.0",
     "tslint": "^5.0.0",
     "tslint-config-prettier": "^1.1.0",
     "js-yaml": "^3.0.0",
