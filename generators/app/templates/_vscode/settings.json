@@ -1,3 +1,10 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib/"
+    "typescript.tsdk": "node_modules/typescript/lib/",
+    "eslint.enable": false,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "test/**/*.js": {"when": "$(basename).ts"},
+        "lib/*": true
+    }
 }

@@ -26,7 +26,9 @@ describe('node-typescript:app with gulp', function () {
       '.editorconfig',
       '.gitignore',
       'LICENSE',
-      'README.md'
+      'README.md',
+      'wallaby.js',
+      'serverless.yml'
     ]);
   });
 
