@@ -6,7 +6,8 @@
   "repository": "",
   "author": "",
   "keywords": [
-    ""
+    "serverless",
+    "typescript"
   ],
   "files": [
     "lib"
@@ -32,8 +33,11 @@
     "@types/node": "^6.0.0",
     "@types/chai": "^3.0.0",
     "@types/chalk": "^0.4.31",
+    "@types/faker": "^4.1.0",
+    "@types/mocha": "^2.2.41",
     "@types/shelljs": "^0.7.1",  
     "@types/lodash": "^4.0.0",
+    "@types/stack-trace": "^0.0.28",
     "chai": "^4.0.0",
     "chalk": "^2.0.0",
     "chance": "^1.0.0",
