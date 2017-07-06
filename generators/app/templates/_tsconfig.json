@@ -2,14 +2,11 @@
   "compilerOptions": {
     "declaration": true,
     "module": "commonjs",
+    "target": "ES6", 
     "moduleResolution": "node",
-    "lib": [
-      "esnext"
-    ],
-    "target": "es2015",
+    "sourceMap": true,
     "noImplicitAny": true,
     "outDir": "./lib",
-    "preserveConstEnums": true,
     "removeComments": true,
     "typeRoots": [
       "./node_modules/@types"

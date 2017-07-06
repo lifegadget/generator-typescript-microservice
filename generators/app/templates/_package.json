@@ -14,36 +14,45 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib && rimraf coverage && rimraf .nyc_output && rimraf lib_test",
-    "prettier": "prettier --write \"{src,test}/**/*.ts\"",
+    "clean": "rimraf lib",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
-    "prepublish": "npm run build",
-    "prebuild": "npm run clean && npm run prettier && npm run lint && echo Using TypeScript && tsc --version",
-    "build": "tsc --pretty",
-    "test": "npm run clean && tsc -p tsconfig.test.json --pretty && nyc --exclude \"**/*-spec.js\" ava \"**/*-spec.js\" --verbose",
-    "coverage": "nyc report --reporter=lcov --reporter=text --reporter=html",
-    "watch": "npm run build -- --watch",
-    "watch:test": "npm run test -- --watch"
+    "build": "ts-node ./scripts/build.ts",
+    "test": "ts-node ./scripts/test.ts ",
+    "coverage": "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
+    "watch": "ts-node ./scripts/watch.ts",
+    "watch:test": "ts-node ./scripts/watch.ts test",
+    "watch:all": "ts-node ./scripts/watch.ts all",
+    "cli": "ts-node cli/index.ts --"
   },
+
   "dependencies": {
+    "moment": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^7.0.0",
-    "ava": "^0.20.0",
+    "@types/node": "^6.0.0",
+    "@types/chai": "^3.0.0",
+    "@types/chalk": "^0.4.31",
+    "@types/shelljs": "^0.7.1",  
+    "@types/lodash": "^4.0.0",
+    "chai": "^4.0.0",
+    "chalk": "^2.0.0",
+    "chance": "^1.0.0",
+    "faker": "^4.1.0",
+    "lodash": "^4.0.0",
+    "mocha": "^3.4.0",
     "coveralls": "^2.0.0",
-    "nyc": "^10.0.0",
+    "nyc": "^11.0.0",
     "prettier": "^1.5.2",
     "rimraf": "^2.0.0",
+    "serverless": "^1.0.0",
     "tslint": "^5.0.0",
     "tslint-config-prettier": "^1.1.0",
-    "typescript": "^2.0.0"
+    "js-yaml": "^3.0.0",
+    "typescript": "^2.0.0",
+    "ts-node": "^3.1.0",
+    "test-console": "^1.0.0"
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "ava": {
-    "require": [
-      "babel-register"
-    ]
   }
 }

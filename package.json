@@ -1,14 +1,14 @@
 {
-  "name": "generator-node-typescript",
+  "name": "generator-typescript-microservice",
   "version": "3.0.0",
-  "description": "A minimal Yeoman Generator for creating NodeJS modules using TypeScript",
+  "description": "A NodeJS generator for Node/TypeScript which is targetting AWS Lambda (or other microservice platform)",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "ospatil/generator-node-typescript",
+  "repository": "lifegadget/generator-typescript-microservice",
   "author": {
-    "name": "Omkar Patil",
-    "email": "ospatil@gmail.com",
-    "url": "https://github.com/ospatil"
+    "name": "Ken Snyder",
+    "email": "ken@ken.net",
+    "url": "https://github.com/lifegadget"
   },
   "scripts": {
     "test": "mocha"
@@ -20,16 +20,18 @@
     "yeoman-generator",
     "typescript",
     "gulp",
-    "nodejs"
+    "nodejs",
+    "lambda",
+    "serverless"
   ],
   "dependencies": {
-    "chalk": "1.1.1",
-    "lodash": "3.10.1",
-    "yeoman-generator": "0.21.1",
-    "yosay": "1.0.5"
+    "chalk": "^2.0.0",
+    "lodash": "4.17.4",
+    "yeoman-generator": "^1.1.1",
+    "yosay": "2.0.0"
   },
   "devDependencies": {
-    "mocha": "2.3.3"
+    "mocha": "2.4.2"
   },
   "preferGlobal": true,
   "publishConfig": {

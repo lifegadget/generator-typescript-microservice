@@ -11,7 +11,7 @@ module.exports = yeoman.generators.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the minimal ' + chalk.red('Node TypeScript') + ' generator!'
+      'Welcome to the minimal ' + chalk.red('Node TypeScript') + ' generator for firebase!'
     ));
 
     this.log(
@@ -57,68 +57,33 @@ module.exports = yeoman.generators.Base.extend({
     projectfiles: function () {
       var today = new Date();
 
-      if (this.options.gulp) {
-        this.fs.copy(
-          this.templatePath('_vscode/tasks_gulp.json'),
-          this.destinationPath('.vscode/tasks.json')
-        );
 
-        this.fs.copyTpl(
-          this.templatePath('_package_gulp.json'),
-          this.destinationPath('package.json'),
-          { appname: _.kebabCase(path.basename(process.cwd())) }
-        );
+      this.fs.copy(
+        this.templatePath('_vscode/tasks.json'),
+        this.destinationPath('.vscode/tasks.json')
+      );
 
-        this.fs.copy(
-          this.templatePath('_gulpfile.js'),
-          this.destinationPath('gulpfile.js'),
-          { appname: _.kebabCase(path.basename(process.cwd())) }
-        );
+      this.fs.copyTpl(
+        this.templatePath('_package.json'),
+        this.destinationPath('package.json'),
+        { appname: _.kebabCase(path.basename(process.cwd())) }
+      );
 
-        this.fs.copy(
-          this.templatePath('README_gulp.md'),
-          this.destinationPath('README.md')
-        );
-      } else {
-        this.fs.copy(
-          this.templatePath('_vscode/tasks.json'),
-          this.destinationPath('.vscode/tasks.json')
-        );
+      this.fs.copy(
+        this.templatePath('travis.yml'),
+        this.destinationPath('.travis.yml')
+      );
 
-        if (this.options.mocha) {
-          this.fs.copyTpl(
-            this.templatePath('_package_mocha.json'),
-            this.destinationPath('package.json'),
-            { appname: _.kebabCase(path.basename(process.cwd())) }
-          );
+      this.fs.copy(
+        this.templatePath('_tsconfig.test.json'),
+        this.destinationPath('tsconfig.test.json')
+      );        
+      
 
-          this.fs.copy(
-            this.templatePath('travis_mocha.yml'),
-            this.destinationPath('.travis.yml')
-          );
-        } else {
-          this.fs.copyTpl(
-            this.templatePath('_package.json'),
-            this.destinationPath('package.json'),
-            { appname: _.kebabCase(path.basename(process.cwd())) }
-          );
-
-          this.fs.copy(
-            this.templatePath('travis.yml'),
-            this.destinationPath('.travis.yml')
-          );
-
-          this.fs.copy(
-            this.templatePath('_tsconfig.test.json'),
-            this.destinationPath('tsconfig.test.json')
-          );
-        }
-
-        this.fs.copy(
-          this.templatePath('README.md'),
-          this.destinationPath('README.md')
-        );
-      }
+      this.fs.copy(
+        this.templatePath('README.md'),
+        this.destinationPath('README.md')
+      );
 
       this.fs.copy(
         this.templatePath('_vscode/settings.json'),
@@ -131,6 +96,10 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copy(
         this.templatePath('_tslint.json'),
         this.destinationPath('tslint.json')
+      );
+      this.fs.copy(
+        this.templatePath('_launch.json'),
+        this.destinationPath('launch.json')
       );
       this.fs.copy(
         this.templatePath('editorconfig'),
