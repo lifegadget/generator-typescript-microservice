@@ -2,8 +2,7 @@ import * as chalk from 'chalk';
 import { exec } from 'shelljs';
 import * as rm from 'rimraf';
 import * as process from 'process';
-import * as Promise from 'bluebird';
-import '../test/testing/test-console';
+import './testing/test-console';
 import { stdout, stderr } from 'test-console';
 
 function prepOutput(output: string) {
@@ -23,27 +22,27 @@ function getExecutionStage(): Promise<string> {
 }
 
 function getScope(): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    let scope: string;
+  return new Promise((resolve, reject) => {
+    let fileScope: string;
     
-    exec(`npm get files`, (code, stdout) => {
-      if (!stdout || stdout === 'undefined\n') {
+    exec(`npm get files`, (code, out) => {
+      if (!out || out === 'undefined\n') {
         console.log(
           chalk.white(
             'no files specified with "--files=file.ts" option so all files being tested'
           )
         );
-        scope = '--recursive test/**/*-spec.ts';
+        fileScope = '--recursive test/**/*-spec.ts';
       } else {
-        scope = 'test/' + stdout.replace(/\t\r/, '').replace('*', '*');
+        fileScope = 'test/' + out.replace(/\t\r/, '').replace('*', '*');
       }
 
       console.log(
         chalk.green(
-          `${chalk.bold('mocha')} --compilers ts:ts-node/register  ${scope}`
+          `${chalk.bold('mocha')} --compilers ts:ts-node/register  ${fileScope}`
         )
       );
-      resolve(scope);
+      resolve(fileScope);
     });
   });
 }
@@ -57,13 +56,13 @@ function cleanJSTests() {
   rm.sync('test/**/*.js');
 }
 
-function executeTests(stage: string, scope: string): void {
-  process.env.AWS_STAGE = stage;
+function executeTests(stg: string, fileScope: string): void {
+  process.env.AWS_STAGE = stg;
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
   exec(
-    `mocha --debug-brk --compilers ts:ts-node/register ` +
+    `mocha --compilers ts:ts-node/register ` +
     `--compilerOptions --require ts-node/register ` + 
-    scope
+    fileScope
   );
 }
 
