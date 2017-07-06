@@ -21,7 +21,6 @@ describe('node-typescript:app with gulp', function () {
       '.vscode/settings.json',
       'src/index.ts',
       'package.json',
-      'gulpfile.js',
       'tsconfig.json',
       'tslint.json',
       '.editorconfig',
@@ -46,9 +45,7 @@ describe('node-typescript:app without gulp', function () {
     assert.file([
       '.vscode/tasks.json',
       '.vscode/settings.json',
-      'src/greeter.ts',
       'src/index.ts',
-      'test/greeter-spec.ts',
       'package.json',
       'tsconfig.json',
       'tslint.json',

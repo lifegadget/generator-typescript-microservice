@@ -11,7 +11,7 @@ module.exports = yeoman.generators.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the minimal ' + chalk.red('Node TypeScript') + ' generator for firebase!'
+      'Welcome to the minimal ' + chalk.red('TypeScript for Microservices') + ' generator!'
     ));
 
     this.log(
@@ -29,30 +29,11 @@ module.exports = yeoman.generators.Base.extend({
     dir: function () {
       this.directory('src', 'src');
 
-      if (this.options.mocha) {
-        // 2.0.0-beta: copying the spec file needs templating due to the ts-node problem on windows
-        // this.directory('test', 'test');
-        this.fs.copyTpl(
-          this.templatePath('test/greeter-spec_mocha.ts'),
-          this.destinationPath('test/greeter-spec.ts'),
-          { isWindows: process.platform === 'win32' }
-        );
-        this.fs.copyTpl(
-          this.templatePath('test/index-spec_mocha.ts'),
-          this.destinationPath('test/index-spec.ts'),
-          { isWindows: process.platform === 'win32' }
-        );
-      } else {
-        this.fs.copyTpl(
-          this.templatePath('test/greeter-spec.ts'),
-          this.destinationPath('test/greeter-spec.ts')
-        );
         this.fs.copyTpl(
           this.templatePath('test/index-spec.ts'),
           this.destinationPath('test/index-spec.ts')
         );
-      }
-    },
+      },
 
     projectfiles: function () {
       var today = new Date();
