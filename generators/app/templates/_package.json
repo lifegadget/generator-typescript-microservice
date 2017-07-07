@@ -27,6 +27,7 @@
   },
 
   "dependencies": {
+    "common-types": "^1.1.0",
     "moment": "^2.0.0"
   },
   "devDependencies": {
