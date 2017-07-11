@@ -31,6 +31,7 @@
     "yosay": "1.0.5"
   },
   "devDependencies": {
+    "@types/rimraf": "^0.0.28",
     "mocha": "2.4.2"
   },
   "preferGlobal": true,
