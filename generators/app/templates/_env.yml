@@ -1,0 +1,14 @@
+global: &all_stages
+
+
+dev:
+  <<: *all_stages
+
+test:
+  <<: *all_stages  
+
+stage:
+  <<: *all_stages
+
+prod:
+  <<: *all_stages

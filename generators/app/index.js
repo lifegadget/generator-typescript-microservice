@@ -65,7 +65,12 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath('_serverless.yml'),
         this.destinationPath('serverless.yml')
       );      
-      
+
+      this.fs.copy(
+        this.templatePath('_env.yml'),
+        this.destinationPath('env.yml')
+      );      
+
       this.fs.copy(
         this.templatePath('_vscode/tasks.json'),
         this.destinationPath('.vscode/tasks.json')
