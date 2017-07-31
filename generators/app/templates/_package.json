@@ -37,6 +37,7 @@
     "@types/chance": "^0.7.33",
     "@types/faker": "^4.1.0",
     "@types/mocha": "^2.2.41",
+    "@types/rimraf": "^0.0.28",
     "@types/shelljs": "^0.7.1",  
     "@types/lodash": "^4.0.0",
     "@types/stack-trace": "^0.0.28",
