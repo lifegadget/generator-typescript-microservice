@@ -1,10 +1,10 @@
-import index = require("../src/index");
+import thingy = require("../src/thingy");
 import * as chai from "chai";
 
 const expect = chai.expect;
 
-describe("index", () => {
+describe("thingy", () => {
   it("should do something", () => {
-    expect(index).to.not.be.undefined;
+    expect(thingy).to.not.equal(undefined);
   });
 });

@@ -2,7 +2,7 @@ import * as chalk from 'chalk';
 import { exec } from 'shelljs';
 import * as rm from 'rimraf';
 import * as process from 'process';
-import './testing/test-console';
+import '../test/testing/test-console';
 import { stdout, stderr } from 'test-console';
 
 function prepOutput(output: string) {
