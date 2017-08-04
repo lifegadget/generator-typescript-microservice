@@ -1,14 +1,27 @@
 global: &all_stages
-
+  MAILGUN_API_KEY: "pubkey-xxyyzz"
+  MAILGUN_API_SECRET: "key-xxyyzz"
 
 dev:
   <<: *all_stages
+  AWS_STAGE: 'dev'
+  FIREBASE_SERVICE_ACCOUNT: ""
+  FIREBASE_DATA_ROOT_URL: ""
 
 test:
-  <<: *all_stages  
+  <<: *all_stages
+  AWS_STAGE: 'test'
+  FIREBASE_SERVICE_ACCOUNT: ""
+  FIREBASE_DATA_ROOT_URL: ""
 
 stage:
   <<: *all_stages
+  AWS_STAGE: 'stage'
+  FIREBASE_SERVICE_ACCOUNT: ""
+  FIREBASE_DATA_ROOT_URL: ""
 
 prod:
   <<: *all_stages
+  AWS_STAGE: 'prod'
+  FIREBASE_SERVICE_ACCOUNT: ""
+  FIREBASE_DATA_ROOT_URL: ""
