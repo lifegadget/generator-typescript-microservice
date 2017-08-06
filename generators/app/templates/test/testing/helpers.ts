@@ -90,5 +90,5 @@ export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
 }
 
 export function length(listOf: IDictionary) {
-  return Object.keys(listOf).length;
+  return listOf ? Object.keys(listOf).length : 0;
 }
