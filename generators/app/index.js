@@ -59,17 +59,17 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copy(
         this.templatePath('_wallaby.js'),
         this.destinationPath('wallaby.js')
-      );      
-      
+      );
+
       this.fs.copy(
         this.templatePath('_serverless.yml'),
         this.destinationPath('serverless.yml')
-      );      
+      );
 
       this.fs.copy(
         this.templatePath('_env.yml'),
         this.destinationPath('env.yml')
-      );      
+      );
 
       this.fs.copy(
         this.templatePath('_vscode/tasks.json'),
@@ -140,6 +140,11 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copyTpl(
         this.templatePath('scripts/watch.ts'),
         this.destinationPath('scripts/watch.ts')
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('scripts/deploy.ts'),
+        this.destinationPath('scripts/deploy.ts')
       );
 
     }

@@ -34,17 +34,28 @@ async function getScope(): Promise<string> {
   });
 }
 
+async function clearLib() {
+  return new Promise((resolve) => {
+    rm('lib', () => {
+      console.log(chalk.grey('- cleared LIB directory of all previous files'));
+      resolve();
+    });
+  });
+
+}
+
 async function execute(scope: string) {
   console.log(
-    chalk.bold.yellow('Executing Build: ') +
-    chalk.yellow.dim(`( ./node_modules/.bin/tsc ${scope} )\n`)
+    chalk.bold.yellow('- executing build: ') +
+    chalk.yellow.dim(`( ./node_modules/.bin/tsc ${scope} )`)
   );
+  await clearLib();
 
-  exec(`./node_modules/.bin/tsc ${scope}`, (code, stdout) => {
+  exec(`./node_modules/.bin/tsc ${scope}`, (code, out) => {
     if (code === 0) {
-      console.log(chalk.green.bold(`\nCompleted successfully`));
+      console.log(chalk.green.bold(`- build completed successfully 👍\n`));
     } else {
-      console.log(chalk.red.bold(`\nCompleted with code: ${code}`));
+      console.log(chalk.red.bold(`\n- Completed with code: ${code}  😡 `));
     }
   });
 }
