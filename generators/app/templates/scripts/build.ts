@@ -37,7 +37,7 @@ async function getScope(): Promise<string> {
 async function clearLib() {
   return new Promise((resolve) => {
     rm('lib', () => {
-      console.log(chalk.grey('- cleared LIB directory of all previous files'));
+      console.log(chalk.dim('- cleared LIB directory of all previous files'));
       resolve();
     });
   });
@@ -46,11 +46,15 @@ async function clearLib() {
 
 async function execute(scope: string) {
   console.log(
-    chalk.bold.yellow('- executing build: ') +
-    chalk.yellow.dim(`( ./node_modules/.bin/tsc ${scope} )`)
+    chalk.bold.yellow('- starting build process ')
   );
   await clearLib();
 
+  console.log(
+    chalk.dim(`- transpiling typescript ( `) +
+    chalk.dim.grey(`./node_modules/.bin/tsc ${scope}`) +
+    chalk.dim(` )`)
+  );
   exec(`./node_modules/.bin/tsc ${scope}`, (code, out) => {
     if (code === 0) {
       console.log(chalk.green.bold(`- build completed successfully 👍\n`));

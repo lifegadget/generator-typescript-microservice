@@ -14,7 +14,7 @@ function getExecutionStage(): Promise<string> {
     const inspect = stdout.inspect();
     exec(`npm get stage`, (code, output) => {
       inspect.restore();
-      
+
       const result = prepOutput(output).trim();
       resolve(result ? result : 'test');
     });
@@ -24,7 +24,7 @@ function getExecutionStage(): Promise<string> {
 function getScope(): Promise<string> {
   return new Promise((resolve, reject) => {
     let fileScope: string;
-    
+
     exec(`npm get files`, (code, out) => {
       if (!out || out === 'undefined\n') {
         console.log(
@@ -34,7 +34,15 @@ function getScope(): Promise<string> {
         );
         fileScope = '--recursive test/**/*-spec.ts';
       } else {
-        fileScope = 'test/' + out.replace(/\t\r/, '').replace('*', '*');
+        const prefix = out.slice(0, 5) === 'test/'
+        ? ''
+        : 'test/';
+        const postfix = out.slice(-5) === '-spec'
+          ? ''
+          : '-spec';
+        out = out.split('.')[0].replace(/\W/, '');
+
+        fileScope = prefix + out + postfix + '.ts';
       }
 
       console.log(
@@ -61,7 +69,7 @@ function executeTests(stg: string, fileScope: string): void {
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
   exec(
     `mocha --compilers ts:ts-node/register ` +
-    `--compilerOptions --require ts-node/register ` + 
+    `--compilerOptions --require ts-node/register ` +
     fileScope
   );
 }
