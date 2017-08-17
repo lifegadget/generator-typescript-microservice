@@ -48,6 +48,29 @@ export function ignoreStdout() {
   const rStdout = stdout.ignore();
   const restore = () => {
     rStdout();
+    console._restored = true;
+  };
+
+  return restore;
+}
+
+export function captureStdout(): () => any {
+  const rStdout: IAsyncStreamCallback = stdout.inspect();
+  const restore = () => {
+    rStdout.restore();
+    console._restored = true;
+    return rStdout.output;
+  };
+
+  return restore;
+}
+
+export function captureStderr(): () => any {
+  const rStderr: IAsyncStreamCallback = stderr.inspect();
+  const restore = () => {
+    rStderr.restore();
+    console._restored = true;
+    return rStderr.output;
   };
 
   return restore;
@@ -57,6 +80,7 @@ export function ignoreStderr() {
   const rStdErr = stderr.ignore();
   const restore = () => {
     rStdErr();
+    console._restored = true;
   };
 
   return restore;
@@ -68,11 +92,11 @@ export function ignoreBoth() {
   const restore = () => {
     rStdOut();
     rStdErr();
+    console._restored = true;
   };
 
   return restore;
 }
-
 
 /**
  * The first key in a Hash/Dictionary
