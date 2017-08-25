@@ -111,7 +111,7 @@ module.exports = yeoman.generators.Base.extend({
       );
       this.fs.copy(
         this.templatePath('_launch.json'),
-        this.destinationPath('launch.json')
+        this.destinationPath('.vscode/launch.json')
       );
       this.fs.copy(
         this.templatePath('editorconfig'),
