@@ -60,7 +60,11 @@ async function execute(scope: string) {
       console.log(chalk.green.bold(`- build completed successfully 👍\n`));
     } else {
       console.log(chalk.red.bold(`\n- Completed with code: ${code}  😡 `));
+      console.log(chalk.red(`- Error was:\n`) + out + "\n");
+      throw new Error('Problem with build step, see above');
     }
+
+    return Promise.resolve();
   });
 }
 
