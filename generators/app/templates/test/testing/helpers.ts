@@ -27,6 +27,10 @@ export function restoreStdoutAndStderr() {
   console._restored = true;
 }
 
+export async function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export function setupEnv() {
 
   if (! process.env.AWS_STAGE) {
