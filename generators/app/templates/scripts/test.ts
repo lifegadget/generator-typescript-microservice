@@ -40,7 +40,7 @@ function getScope(): Promise<string> {
         const postfix = out.slice(-5) === '-spec'
           ? ''
           : '-spec';
-        out = out.split('.')[0].replace(/\W/, '');
+        out = out.split(/\.ts$/)[0].replace(/\n/, '');
 
         fileScope = prefix + out + postfix + '.ts';
       }
