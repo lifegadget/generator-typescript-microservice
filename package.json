@@ -1,7 +1,8 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "3.0.23",
-  "description": "A NodeJS generator for Node/TypeScript which is targetting AWS Lambda (or other microservice platform)",
+  "version": "3.1.0",
+  "description":
+    "A NodeJS generator for Node/TypeScript which leverages 'serverless' to be deployable to all the major cloud platforms",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "lifegadget/generator-typescript-microservice",
@@ -13,9 +14,7 @@
   "scripts": {
     "test": "mocha"
   },
-  "files": [
-    "generators"
-  ],
+  "files": ["generators"],
   "keywords": [
     "yeoman-generator",
     "typescript",
