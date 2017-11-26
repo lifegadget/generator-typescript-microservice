@@ -1,12 +1,13 @@
-import * as chalk from 'chalk';
-import { exec } from 'shelljs';
-import * as rm from 'rimraf';
-import * as process from 'process';
-import '../test/testing/test-console';
-import { stdout, stderr } from 'test-console';
+// tslint:disable:no-implicit-dependencies
+import * as chalk from "chalk";
+import { exec } from "shelljs";
+import * as rm from "rimraf";
+import * as process from "process";
+import "../test/testing/test-console";
+import { stdout, stderr } from "test-console";
 
 function prepOutput(output: string) {
-  return output.replace(/\t\r\n/, '').replace('undefined', '');
+  return output.replace(/\t\r\n/, "").replace("undefined", "");
 }
 
 function getExecutionStage(): Promise<string> {
@@ -16,7 +17,7 @@ function getExecutionStage(): Promise<string> {
       inspect.restore();
 
       const result = prepOutput(output).trim();
-      resolve(result ? result : 'test');
+      resolve(result ? result : "test");
     });
   });
 }
@@ -26,28 +27,24 @@ function getScope(): Promise<string> {
     let fileScope: string;
 
     exec(`npm get files`, (code, out) => {
-      if (!out || out === 'undefined\n') {
+      if (!out || out === "undefined\n") {
         console.log(
           chalk.white(
             'no files specified with "--files=file.ts" option so all files being tested'
           )
         );
-        fileScope = '--recursive test/**/*-spec.ts';
+        fileScope = "--recursive test/**/*-spec.ts";
       } else {
-        const prefix = out.slice(0, 5) === 'test/'
-        ? ''
-        : 'test/';
-        const postfix = out.slice(-5) === '-spec'
-          ? ''
-          : '-spec';
-        out = out.split(/\.ts$/)[0].replace(/\n/, '');
+        const prefix = out.slice(0, 5) === "test/" ? "" : "test/";
+        const postfix = out.slice(-5) === "-spec" ? "" : "-spec";
+        out = out.split(/\.ts$/)[0].replace(/\n/, "");
 
-        fileScope = prefix + out + postfix + '.ts';
+        fileScope = prefix + out + postfix + ".ts";
       }
 
       console.log(
         chalk.green(
-          `${chalk.bold('mocha')} --compilers ts:ts-node/register  ${fileScope}`
+          `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
         )
       );
       resolve(fileScope);
@@ -61,7 +58,7 @@ function getScope(): Promise<string> {
  * may represent unintentional stale tests
  */
 function cleanJSTests() {
-  rm.sync('test/**/*.js');
+  rm.sync("test/**/*.js");
 }
 
 function executeTests(stg: string, fileScope: string): void {
@@ -69,8 +66,8 @@ function executeTests(stg: string, fileScope: string): void {
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
   exec(
     `mocha --compilers ts:ts-node/register ` +
-    `--compilerOptions --require ts-node/register ` +
-    fileScope
+      `--compilerOptions --require ts-node/register ` +
+      fileScope
   );
 }
 
