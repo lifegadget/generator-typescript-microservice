@@ -1,16 +1,18 @@
 // tslint:disable:no-implicit-dependencies
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { exec } from "shelljs";
 import * as rm from "rimraf";
 import * as process from "process";
 import "../test/testing/test-console";
 import { stdout, stderr } from "test-console";
+import * as glob from "glob";
+import { log } from "util";
 
 function prepOutput(output: string) {
   return output.replace(/\t\r\n/, "").replace("undefined", "");
 }
 
-function getExecutionStage(): Promise<string> {
+async function getExecutionStage(): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const inspect = stdout.inspect();
     exec(`npm get stage`, (code, output) => {
@@ -22,8 +24,8 @@ function getExecutionStage(): Promise<string> {
   });
 }
 
-function getScope(): Promise<string> {
-  return new Promise((resolve, reject) => {
+async function getScope(): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
     let fileScope: string;
 
     exec(`npm get files`, (code, out) => {
@@ -34,22 +36,27 @@ function getScope(): Promise<string> {
           )
         );
         fileScope = "--recursive test/**/*-spec.ts";
+        communicateScope(fileScope);
+        resolve(fileScope);
       } else {
-        const prefix = out.slice(0, 5) === "test/" ? "" : "test/";
+        const prefix = out.slice(0, 5) === "./test/" ? "" : "test/**/";
         const postfix = out.slice(-5) === "-spec" ? "" : "-spec";
-        out = out.split(/\.ts$/)[0].replace(/\n/, "");
+        const regex = out.split(".")[0].replace(/[\n\t\r]/, "");
+        fileScope = prefix + regex + postfix + ".ts";
 
-        fileScope = prefix + out + postfix + ".ts";
+        communicateScope(fileScope);
+        resolve(fileScope);
       }
-
-      console.log(
-        chalk.green(
-          `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
-        )
-      );
-      resolve(fileScope);
     });
   });
+}
+
+function communicateScope(fileScope: string) {
+  console.log(
+    chalk.green(
+      `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
+    )
+  );
 }
 
 /**
@@ -74,8 +81,8 @@ function executeTests(stg: string, fileScope: string): void {
 let stage: string;
 let scope: string;
 
-getExecutionStage()
-  .then(stg => Promise.resolve((stage = stg)))
-  .then(() => getScope())
-  .then(sc => Promise.resolve((scope = sc)))
-  .then(() => executeTests(stage, scope));
+(async () => {
+  const stage: string = await getExecutionStage();
+  const scope: string = await getScope();
+  executeTests(stage, scope);
+})();
