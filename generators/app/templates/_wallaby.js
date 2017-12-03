@@ -6,7 +6,7 @@ module.exports = function(w) {
       { pattern: "env.yml", instrument: false },
       { pattern: "test/testing/helpers.ts", instrument: false },
       { pattern: "test/testing/test-console.ts", instrument: false },
-      { pattern: "test/data/*.ts", instrument: false }
+      { pattern: "test/data/*", instrument: false }
     ],
 
     tests: ["test/**/*-spec.ts"],

@@ -1,24 +1,27 @@
-import { IDictionary } from 'common-types';
-import { first, last } from 'lodash';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as process from 'process';
-import './test-console'; // TS declaration
-import { stdout, stderr } from 'test-console';
+import { IDictionary } from "common-types";
+import { first, last } from "lodash";
+import * as fs from "fs";
+import * as yaml from "js-yaml";
+import * as process from "process";
+import "./test-console"; // TS declaration
+import { stdout, stderr } from "test-console";
 
 // tslint:disable-next-line
 interface Console {
-    _restored: boolean;
-    Console: typeof NodeJS.Console;
-    assert(value: any, message?: string, ...optionalParams: any[]): void;
-    dir(obj: any, options?: {showHidden?: boolean, depth?: number, colors?: boolean}): void;
-    error(message?: any, ...optionalParams: any[]): void;
-    info(message?: any, ...optionalParams: any[]): void;
-    log(message?: any, ...optionalParams: any[]): void;
-    time(label: string): void;
-    timeEnd(label: string): void;
-    trace(message?: any, ...optionalParams: any[]): void;
-    warn(message?: any, ...optionalParams: any[]): void;
+  _restored: boolean;
+  Console: typeof NodeJS.Console;
+  assert(value: any, message?: string, ...optionalParams: any[]): void;
+  dir(
+    obj: any,
+    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
+  ): void;
+  error(message?: any, ...optionalParams: any[]): void;
+  info(message?: any, ...optionalParams: any[]): void;
+  log(message?: any, ...optionalParams: any[]): void;
+  time(label: string): void;
+  timeEnd(label: string): void;
+  trace(message?: any, ...optionalParams: any[]): void;
+  warn(message?: any, ...optionalParams: any[]): void;
 }
 
 declare var console: Console;
@@ -32,19 +35,18 @@ export async function timeout(ms: number) {
 }
 
 export function setupEnv() {
-
-  if (! process.env.AWS_STAGE) {
-    process.env.AWS_STAGE = 'test';
+  if (!process.env.AWS_STAGE) {
+    process.env.AWS_STAGE = "test";
   }
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
+  const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env
   };
 
   console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
-  Object.keys(combined).forEach(key => process.env[key] = combined[key]);
+  Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
   return combined;
 }
 
@@ -140,4 +142,16 @@ export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
 
 export function length(listOf: IDictionary) {
   return listOf ? Object.keys(listOf).length : 0;
+}
+
+export async function loadData(file: string) {
+  return new Promise<string>((resolve, reject) => {
+    fs.readFile(process.cwd() + "/test/data/" + file, "utf8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
 }
