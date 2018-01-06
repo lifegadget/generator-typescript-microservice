@@ -1,24 +1,29 @@
-import { IDictionary } from 'common-types';
-import { first, last } from 'lodash';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as process from 'process';
-import './test-console'; // TS declaration
-import { stdout, stderr } from 'test-console';
+// tslint:disable:no-implicit-dependencies
+import { IDictionary } from "common-types";
+import first = require("lodash.first");
+import last = require("lodash.last");
+import * as fs from "fs";
+import * as yaml from "js-yaml";
+import * as process from "process";
+import "./test-console"; // TS declaration
+import { stdout, stderr } from "test-console";
 
 // tslint:disable-next-line
 interface Console {
-    _restored: boolean;
-    Console: typeof NodeJS.Console;
-    assert(value: any, message?: string, ...optionalParams: any[]): void;
-    dir(obj: any, options?: {showHidden?: boolean, depth?: number, colors?: boolean}): void;
-    error(message?: any, ...optionalParams: any[]): void;
-    info(message?: any, ...optionalParams: any[]): void;
-    log(message?: any, ...optionalParams: any[]): void;
-    time(label: string): void;
-    timeEnd(label: string): void;
-    trace(message?: any, ...optionalParams: any[]): void;
-    warn(message?: any, ...optionalParams: any[]): void;
+  _restored: boolean;
+  Console: typeof NodeJS.Console;
+  assert(value: any, message?: string, ...optionalParams: any[]): void;
+  dir(
+    obj: any,
+    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
+  ): void;
+  error(message?: any, ...optionalParams: any[]): void;
+  info(message?: any, ...optionalParams: any[]): void;
+  log(message?: any, ...optionalParams: any[]): void;
+  time(label: string): void;
+  timeEnd(label: string): void;
+  trace(message?: any, ...optionalParams: any[]): void;
+  warn(message?: any, ...optionalParams: any[]): void;
 }
 
 declare var console: Console;
@@ -32,19 +37,18 @@ export async function timeout(ms: number) {
 }
 
 export function setupEnv() {
-
-  if (! process.env.AWS_STAGE) {
-    process.env.AWS_STAGE = 'test';
+  if (!process.env.AWS_STAGE) {
+    process.env.AWS_STAGE = "test";
   }
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
+  const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env
   };
 
   console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
-  Object.keys(combined).forEach(key => process.env[key] = combined[key]);
+  Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
   return combined;
 }
 
