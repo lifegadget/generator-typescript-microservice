@@ -4,3 +4,6 @@ npm-debug.log
 .nyc_output
 lib
 lib_test
+.rpt2_cache/
+.serverless/
+.vagrant/
