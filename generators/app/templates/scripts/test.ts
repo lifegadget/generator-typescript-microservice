@@ -24,12 +24,6 @@ function getScope(files: string): string {
     fileScope = prefix + files + postfix + ".ts";
   }
 
-  console.log(
-    chalk.green(
-      `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
-    )
-  );
-
   return fileScope;
 }
 
@@ -51,9 +45,19 @@ function cleanJSTests() {
 }
 
 function executeTests(stg: string, fileScope: string): void {
+  console.log(
+    chalk.green(
+      `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
+    )
+  );
   process.env.AWS_STAGE = stg;
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
   exec(`mocha --require ts-node/register ` + fileScope);
+}
+
+function lint() {
+  console.log(chalk.yellow(`Linting source files`));
+  return exec(`tslint ./src/**/*.ts`);
 }
 
 program
@@ -64,17 +68,18 @@ program
     /^(dev|test|stage|prod)^/,
     "test"
   )
+  .option("--skip-lint", "Skip the linting checks")
   .option(
     "-f, --files",
     "an alternative syntax to just specifying files as first argument on command line"
   )
   .action(async files => {
-    console.log(files, program.stage);
     await cleanJSTests();
     const stage = program.stage;
     const scope = getScope(files);
-    console.log("scope:", scope);
-
+    if (!program.skipLint) {
+      await lint();
+    }
     await executeTests(stage, scope);
   })
   .parse(process.argv);
