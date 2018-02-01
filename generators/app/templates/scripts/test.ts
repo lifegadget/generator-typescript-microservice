@@ -7,24 +7,28 @@ import * as program from "commander";
 import "../test/testing/test-console";
 import { stdout, stderr } from "test-console";
 
-function getScope(files?: string[]): string {
+function getScope(files: string): string {
   let fileScope: string;
 
-  if (!files || files[0] === "all") {
+  if (!files || files === "all") {
     console.log(
-      chalk.white("no specific files specified so all files being tested")
+      chalk.white(
+        "no specific files specified so all files being tested, use -h for more help"
+      )
     );
     fileScope = "--recursive test/**/*-spec.ts";
   } else {
-    const shapeFileName = (fn: string) => {
-      const prefix = fn.slice(0, 5) === "test/" ? "" : "test/";
-      const postfix = fn.slice(-5) === "-spec" ? "" : "-spec";
+    const prefix = files.slice(0, 5) === "test/" ? "" : "test/";
+    const postfix = files.slice(-5) === "-spec" ? "" : "-spec";
 
-      return prefix + fn + postfix + ".ts";
-    };
-
-    fileScope = files.map(f => shapeFileName(f)).join(" ");
+    fileScope = prefix + files + postfix + ".ts";
   }
+
+  console.log(
+    chalk.green(
+      `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
+    )
+  );
 
   return fileScope;
 }
@@ -47,38 +51,35 @@ function cleanJSTests() {
 }
 
 function executeTests(stg: string, fileScope: string): void {
-  console.log(
-    chalk.green(
-      `${chalk.bold("mocha")} --compilers ts:ts-node/register  ${fileScope}`
-    )
-  );
   process.env.AWS_STAGE = stg;
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
   exec(`mocha --require ts-node/register ` + fileScope);
 }
 
-function lint() {
-  console.log(chalk.yellow(`Linting source files`));
-  return exec(`tslint ./src/**/*.ts`);
+if (process.argv.length === 2) {
+  console.log(`No tests specified, running ${chalk.bold("all")} tests.`);
+  process.argv.push("all");
 }
 
 program
-  .arguments("[files...]")
-  .description("Run mocha tests with ts-node")
+  .arguments("[files]")
   .option(
     "-s, --stage [env]",
     "Environment to use",
     /^(dev|test|stage|prod)^/,
     "test"
   )
-  .option("--skip-lint", "Skip the linting checks")
+  .option(
+    "-f, --files",
+    "an alternative syntax to just specifying files as first argument on command line"
+  )
   .action(async files => {
+    console.log(files, program.stage);
     await cleanJSTests();
     const stage = program.stage;
     const scope = getScope(files);
-    if (!program.skipLint) {
-      await lint();
-    }
+    console.log("scope:", scope);
+
     await executeTests(stage, scope);
   })
   .parse(process.argv);
