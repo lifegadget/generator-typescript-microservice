@@ -31,13 +31,12 @@ function cleanJSTests() {
   rm.sync("test/**/*.js");
 }
 
-function scriptNames(scripts: string[]) {
-  return scripts.map(script =>
-    script
-      .split("/")
-      .pop()
-      .replace("-spec.ts", "")
-  );
+function scriptNames(scripts: string[], splitter = ", ") {
+  return scripts.map(script => {
+    const path = script.split("/");
+    const last = path.pop().replace("-spec.ts", "");
+    return chalk.grey(path.join("/") + "/" + chalk.white(last));
+  });
 }
 
 async function lintSource() {
@@ -65,6 +64,19 @@ async function mochaTests(stg: string, searchTerms: string[]) {
   const stage = await getExecutionStage();
   const searchTerms = process.argv.slice(2).filter(fn => fn[0] !== "-");
   const options = new Set(process.argv.slice(2).filter(fn => fn[0] === "-"));
+  const availableScripts = await find("./test").filter(f => f.match(/-spec\.ts/));
+  const scriptsToTest = searchTerms
+    ? availableScripts.filter(s => {
+        return searchTerms.reduce((prv, script) => s.match(script) || prv, 0);
+      })
+    : availableScripts;
+
+  if (options.has("-ls") || options.has("-l") || options.has("list")) {
+    console.log(chalk.yellow("- 🤓  The following test scripts are available:"));
+    console.log("    - " + scriptNames(availableScripts).join("\n    - "));
+
+    return;
+  }
 
   console.log(chalk.yellow("- 🕐  Starting testing"));
 
@@ -87,12 +99,6 @@ async function mochaTests(stg: string, searchTerms: string[]) {
     }
   }
 
-  const availableScripts = await find("./test").filter(f => f.match(/-spec\.ts/));
-  const scriptsToTest = searchTerms
-    ? availableScripts.filter(s => {
-        return searchTerms.reduce((prv, script) => s.match(script) || prv, 0);
-      })
-    : availableScripts;
   if (availableScripts.length === scriptsToTest.length) {
     console.log(
       chalk.yellow(
