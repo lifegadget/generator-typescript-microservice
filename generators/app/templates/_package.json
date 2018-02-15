@@ -15,6 +15,8 @@
     "build": "./node_modules/.bin/ts-node ./scripts/build.ts",
     "deps": "./node_modules/.bin/ts-node ./scripts/deps.ts",
     "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
+    "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
+    "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
     "coverage":
       "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
     "watch": "ts-node ./scripts/watch.ts",

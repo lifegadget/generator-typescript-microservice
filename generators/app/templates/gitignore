@@ -7,3 +7,4 @@ lib_test
 .rpt2_cache/
 .serverless/
 .vagrant/
+serverless-package/
