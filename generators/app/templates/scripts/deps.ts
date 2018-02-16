@@ -396,7 +396,8 @@ async function buildGlobalExcludeFile(results: IDeps) {
   const atTypes = ls("-d", "node_modules/*")
     .map(d => d.replace("node_modules/", ""))
     .filter(d => d[0] === "@");
-
+  const isModule = thingy => !thingy.match(/\[/);
+  let submoduleExclusions = 0;
   let staticDependencies: IStaticDependencies;
   let excludeCount: number;
   try {
@@ -484,7 +485,9 @@ async function buildGlobalExcludeFile(results: IDeps) {
     excluded.push(...results.analysis.multiDepNotInTopLevelDep);
   }
   if (answer.staticDependencies) {
+    const fileTypes = staticDependencies.exclude.filter(mod => !isModule(mod));
     excluded.push(...staticDependencies.exclude);
+    submoduleExclusions = submoduleExclusions + fileTypes.length;
   }
   const remainingModules = results.nodeModules.filter(m => {
     return !excluded.includes(m);
@@ -589,14 +592,13 @@ async function buildGlobalExcludeFile(results: IDeps) {
       name: "format",
       message: "What format should the output file be?",
       type: "list",
-      choices: ["inline to serverless.yaml", "json", "yaml"],
-      default: memory2 ? memory2.format : "inline to serverless.yaml"
+      choices: ["inline to serverless.yml", "json", "yaml"],
+      default: memory2 ? memory2.format : "inline to serverless.yml"
     }
   ]);
   fs.writeFileSync(QUESTIONS_MEMORY_2, JSON.stringify(answer2), { encoding: "utf-8" });
 
   const filename = "exclude-by-default." + answer2.format;
-  let submoduleExclusions = 0;
   process.stdout.write(
     chalk.bold(`\n- writing serverless config (${chalk.grey(filename)}) `)
   );
@@ -620,8 +622,6 @@ async function buildGlobalExcludeFile(results: IDeps) {
   }
   if (answer2.nodeModules) {
     const add = recursiveNodeModules.map(m => `${m}/node_modules`);
-    console.log(add);
-
     data = data.concat(...add);
     submoduleExclusions = submoduleExclusions + add.length;
   }
@@ -637,9 +637,12 @@ async function buildGlobalExcludeFile(results: IDeps) {
     submoduleExclusions = submoduleExclusions + test.length + tests.length;
   }
 
-  data = uniq(data.map(d => `node_modules/${d}/**`)).filter(
-    d => !staticDependencies.include.includes(d)
-  );
+  data = uniq(
+    data.map(
+      d =>
+        isModule(d) ? `node_modules/${d}/**` : `**/${d.replace("[", "").replace("]", "")}`
+    )
+  ).filter(d => !staticDependencies.include.includes(d));
   // Always exclude the possible "package" directory
   data = data.concat("serverless-package/**");
 
@@ -647,18 +650,18 @@ async function buildGlobalExcludeFile(results: IDeps) {
     answer2.format === "json"
       ? JSON.stringify(data)
       : yaml.dump({ package: { exclude: data } });
-  if (answer2.format === "inline to serverless.yaml") {
+  if (answer2.format === "inline to serverless.yml") {
     console.log(chalk.grey("- loading serverless.yml"));
     const configFile: IServerlessConfig = yaml.safeLoad(
       fs.readFileSync("serverless.yml", { encoding: "utf-8" })
     );
     configFile.package.exclude = data;
     fs.writeFileSync("serverless.yml", yaml.dump(configFile), { encoding: "utf-8" });
-    console.log(chalk.green(`- serverless.yml updated with global exclusions`));
+    console.log(chalk.green(`- serverless.yml updated with global exclusions 🚀\n`));
   } else {
     fs.writeFileSync(filename, output, { encoding: "utf-8" });
     console.log(
-      chalk.green(`- ${chalk.grey.bold("serverless.yml")} created with global exclusions`)
+      chalk.green(`- ${chalk.bold("serverless.yml")} created with global exclusions`)
     );
   }
 
