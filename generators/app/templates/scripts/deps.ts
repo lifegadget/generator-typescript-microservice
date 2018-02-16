@@ -1,14 +1,17 @@
 // tslint:disable:no-implicit-dependencies
 import chalk from "chalk";
-import { asyncExec, ls, cat } from "async-shelljs";
+import { asyncExec, ls, cat, find } from "async-shelljs";
 import { uniq } from "lodash";
 import * as program from "commander";
-import { IDictionary } from "common-types";
+import { IDictionary, IPackageJson } from "common-types";
 import * as inquirer from "inquirer";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 
-const pkg = JSON.parse(cat("./package.json"));
+const STATIC_DEPENDENCIES_FILE = "static-dependencies.yml";
+const QUESTIONS_MEMORY_1 = ".question1_memory.json";
+const QUESTIONS_MEMORY_2 = ".question2_memory.json";
+const pkg: IPackageJson = JSON.parse(cat("./package.json"));
 
 interface IAnalysis {
   singleNamedDepInDep: string[];
@@ -74,23 +77,9 @@ export async function functionsList() {
 }
 
 export async function nodeModulesDirectories() {
-  let nodeModules: any = ls("-d", "node_modules/*")
+  const nodeModules: any = ls("-d", "node_modules/*")
     .map(nm => nm.replace("node_modules/", ""))
-    .filter(f => (program.keepTypes ? true : !f.match(/@types/) && f !== undefined));
-  const removeAtTypes = f => (program.keepTypes ? true : !f.match(/@types/));
-  const atDeps = nodeModules
-    .filter(f => f[0] === "@")
-    .filter(removeAtTypes)
-    .map(nm => nm.replace("node_modules/", ""));
-  const typingDeps = ls("-d", "node_modules/@types/*").map(nm =>
-    nm.replace("node_modules/", "")
-  );
-  atDeps.forEach(dep => {
-    const extra = ls("-d", `node_modules/${dep}/*`).map(nm =>
-      nm.replace("node_modules/", "")
-    );
-    nodeModules = nodeModules.filter(nm => nm !== dep).concat(extra);
-  });
+    .filter(f => f[0] !== "@"); // remove all @ from modules but will handle when building excludes
 
   if (program.functions || program.all) {
     if (!program.json) {
@@ -98,24 +87,13 @@ export async function nodeModulesDirectories() {
         chalk.white(
           `- There are ${chalk.yellow.bold(
             String(nodeModules.length)
-          )} directories in your ${chalk.whiteBright.bold(
-            "node_modules"
-          )} directory including those under ${atDeps.join(", ")}`
+          )} directories in your ${chalk.whiteBright.bold("node_modules")}`
         )
       );
-      if (!program.keepTypes) {
-        console.log(
-          chalk.grey(
-            `- Note that @types/XYZ dependencies [${
-              typingDeps.length
-            } in this project] are all ignored as they should never be a dependency to JS`
-          )
-        );
-      }
     }
   }
 
-  return Promise.resolve({ nodeModules, typingDeps });
+  return Promise.resolve({ nodeModules });
 }
 
 export async function depAnalysis(data: IDeps): Promise<IDictionary> {
@@ -240,7 +218,16 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
   console.log(
     `- There were ${chalk.yellow(String(noDeps.length))} modules with NO dependencies`
   );
-  if (noDeps.length > 0) {
+  const show = await inquirer.prompt([
+    {
+      name: "details",
+      message: "show details?",
+      type: "confirm",
+      default: false,
+      when: noDeps.length > 0
+    }
+  ]);
+  if (show.details) {
     console.log(chalk.dim.grey(noDeps.join(", ")));
   }
   console.log(
@@ -250,7 +237,18 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       "only"
     )} a top-level project development dependency on them (aka, not required): `
   );
-  console.log(chalk.grey.dim(onlyDevDep.join(", ")));
+  const show1 = await inquirer.prompt([
+    {
+      name: "details",
+      message: "show details?",
+      type: "confirm",
+      default: false,
+      when: onlyDevDep.length > 0
+    }
+  ]);
+  if (show1.details) {
+    console.log(chalk.grey.dim(onlyDevDep.join(", ")));
+  }
 
   console.log(
     `- There were ${chalk.yellow(
@@ -259,8 +257,19 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       String(singleNamedDepNotInDep.length)
     )} have no dependency on top-level "dependencies" of the project: `
   );
-  process.stdout.write(chalk.dim.red(singleNamedDepInDep.join(", ")));
-  process.stdout.write(chalk.dim.grey(", " + singleNamedDepNotInDep.join(", ") + "\n"));
+  const show2 = await inquirer.prompt([
+    {
+      name: "details",
+      message: "show details?",
+      type: "confirm",
+      default: false,
+      when: singleNamedDepInDep.length + singleNamedDepNotInDep.length > 0
+    }
+  ]);
+  if (show2.details) {
+    process.stdout.write(chalk.dim.red(singleNamedDepInDep.join(", ")));
+    process.stdout.write(chalk.dim.grey(", " + singleNamedDepNotInDep.join(", ") + "\n"));
+  }
 
   console.log(
     `- There were ${chalk.yellow(
@@ -269,10 +278,21 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       String(multiDepNotInTopLevelDep.length)
     )} had no dependency on top-level "dependencies" of the project: `
   );
-  process.stdout.write(chalk.dim.red(multiDepInTopLevelDep.join(", ")));
-  process.stdout.write(chalk.dim.grey(", " + multiDepNotInTopLevelDep.join(", ") + "\n"));
-
-  // console.log(dependencyGraph);
+  const show3 = await inquirer.prompt([
+    {
+      name: "details",
+      message: "show details?",
+      type: "confirm",
+      default: false,
+      when: multiDepInTopLevelDep.length > 0
+    }
+  ]);
+  if (show3.details) {
+    process.stdout.write(chalk.dim.red(multiDepInTopLevelDep.join(", ")));
+    process.stdout.write(
+      chalk.dim.grey(", " + multiDepNotInTopLevelDep.join(", ") + "\n")
+    );
+  }
 
   const analysis: IAnalysis = {
     singleNamedDepInDep,
@@ -355,65 +375,306 @@ function extractWhy(
   return [];
 }
 
+interface IStaticDependencies {
+  include?: string[];
+  exclude?: string[];
+}
+
+interface IServerlessConfig {
+  service?: string;
+  package: {
+    individually?: boolean;
+    excludeDevDependencies?: boolean;
+    browser?: boolean;
+    include?: string[];
+    exclude?: string[];
+  };
+}
+
 async function buildGlobalExcludeFile(results: IDeps) {
   console.log(chalk.bold(`\n- building a global exclude file for serverless config\n`));
+  const atTypes = ls("-d", "node_modules/*")
+    .map(d => d.replace("node_modules/", ""))
+    .filter(d => d[0] === "@");
+
+  let staticDependencies: IStaticDependencies;
+  let excludeCount: number;
+  try {
+    staticDependencies = yaml.safeLoad(
+      fs.readFileSync(STATIC_DEPENDENCIES_FILE, { encoding: "utf-8" })
+    );
+    if (!staticDependencies.exclude) {
+      throw new Error(
+        `The ${STATIC_DEPENDENCIES_FILE} did not have an "exclude" property`
+      );
+    }
+    excludeCount = staticDependencies.exclude.length;
+  } catch (e) {
+    console.log(e);
+    staticDependencies = undefined;
+    excludeCount = 0;
+  }
+  let memory: IDictionary;
+  try {
+    memory = JSON.parse(fs.readFileSync(QUESTIONS_MEMORY_1, { encoding: "utf-8" }));
+    if (Object.keys(memory).length === 0) {
+      memory = undefined;
+    }
+  } catch (e) {
+    memory = undefined;
+  }
 
   const answer = await inquirer.prompt([
     {
       name: "onlyDevDep",
-      message: "Exclude top-level devDeps?",
+      message: `Exclude top-level devDeps? [ ${
+        results.analysis.onlyDevDep.length
+      } modules ]`,
       type: "confirm",
-      default: true
+      default: memory ? memory.singleNamedDepNotInDep : true
     },
     {
       name: "singleNamedDepNotInDep",
-      message:
-        "Exclude all modules with single dependencies which do not have top-level dependencies?",
+      message: `Exclude all modules with single dependencies which do not have top-level dependencies? [${
+        results.analysis.singleNamedDepNotInDep.length
+      } modules]`,
       type: "confirm",
-      default: true
+      default: memory ? memory.singleNamedDepNotInDep : true
     },
     {
       name: "multiDepNotInTopLevelDep",
-      message:
-        "Exclude all modules with multiple dependencies which do not have top-level dependencies?",
+      message: `Exclude all modules with multiple dependencies which do not have top-level dependencies? [${
+        results.analysis.multiDepNotInTopLevelDep.length
+      } modules]`,
       type: "confirm",
-      default: true
+      default: memory ? memory.multiDepNotInTopLevelDep : true
+    },
+    {
+      name: "atDependencies",
+      message:
+        "The modules under node_modules/@xxx (e.g., @types) are almost always just Typescript typing; choose which to remove",
+      type: "checkbox",
+      choices: atTypes,
+      default: memory ? memory.atDependencies : ["@types", "@serverless"]
+    },
+    {
+      name: "staticDependencies",
+      message: `You have an 'always-exclude.yaml' file with ${chalk.bold(
+        String(excludeCount)
+      )} exclusions. Should we add this?`,
+      type: "confirm",
+      when: staticDependencies ? true : false,
+      default: memory ? memory.staticDependencies : true
+    }
+  ]);
+  fs.writeFileSync(QUESTIONS_MEMORY_1, JSON.stringify(answer), { encoding: "utf-8" });
+
+  console.log(
+    `\nWhen library authors do not specify "files" in their package.json you get a lot of junk, the next few questions are ways in which we might be able to carve out some of this dead-code.\n`
+  );
+
+  const excluded = [];
+  if (answer.onlyDevDep) {
+    excluded.push(...results.analysis.onlyDevDep);
+  }
+  if (answer.singleNamedDepNotInDep) {
+    excluded.push(...results.analysis.singleNamedDepNotInDep);
+  }
+  if (answer.doesNotIncludeDev) {
+    excluded.push(...results.analysis.multiDepNotInTopLevelDep);
+  }
+  if (answer.staticDependencies) {
+    excluded.push(...staticDependencies.exclude);
+  }
+  const remainingModules = results.nodeModules.filter(m => {
+    return !excluded.includes(m);
+  });
+
+  const recursiveNodeModules = remainingModules.filter(m => {
+    try {
+      fs.statSync(`node_modules/${m}/node_modules`);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const testDirs = remainingModules.filter(m => {
+    try {
+      fs.statSync(`node_modules/${m}/test`);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const testsDirs = remainingModules.filter(m => {
+    try {
+      fs.statSync(`node_modules/${m}/tests`);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const docDirs = remainingModules.filter(m => {
+    try {
+      fs.statSync(`node_modules/${m}/documentation`);
+      return true;
+    } catch (e) {
+      try {
+        fs.statSync(`node_modules/${m}/docs`);
+        return false;
+      } catch (e) {
+        return false;
+      }
+    }
+  });
+
+  const srcDirs = remainingModules
+    .filter(m => {
+      try {
+        fs.statSync(`node_modules/${m}/src`);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })
+    .filter(m => {
+      return pkg.main.match(/src/);
+    });
+  let memory2: IDictionary;
+  try {
+    memory2 = JSON.parse(fs.readFileSync(QUESTIONS_MEMORY_2, { encoding: "utf-8" }));
+  } catch (e) {
+    memory2 = undefined;
+  }
+  const answer2 = await inquirer.prompt([
+    {
+      name: "nodeModules",
+      message: `Some library authors don't exclude "node_modules" in ".gitignore" and these directories\n  can be quite full of junk. There are ${chalk.yellow(
+        String(recursiveNodeModules.length)
+      )} cases of that within the remaining modules not excluded.\n  There are rare cases where this is actually a real requirement but if it's just a one-off you can add\n  to the ${STATIC_DEPENDENCIES_FILE} file.\n\n  Remove?`,
+      type: "confirm",
+      default: memory2 ? memory2.nodeModules : true
+    },
+    {
+      name: "docs",
+      message: `There are ${
+        docDirs.length
+      } that have a "docs" or "documentation" directory, should we remove?`,
+      type: "confirm",
+      default: memory2 ? memory2.docs : true,
+      when: docDirs.length > 0
+    },
+    {
+      name: "tests",
+      message: `There are ${
+        testDirs.length
+      } that have a "test" or "tests" directory, should we remove?`,
+      type: "confirm",
+      default: memory2 ? memory2.tests : true,
+      when: testDirs.length > 0
+    },
+    {
+      name: "src",
+      message: `The "src" directories are often still hanging around unnecessarily. In this case there are ${chalk.yellow(
+        String(srcDirs.length)
+      )} modules that have a "src" directory (and who's package.json's main does not point to the src dir), should we remove?`,
+      type: "confirm",
+      default: memory2 ? memory2.src : false,
+      when: srcDirs.length > 0
     },
     {
       name: "format",
       message: "What format should the output file be?",
       type: "list",
-      choices: ["json", "yaml"],
-      default: "json"
+      choices: ["inline to serverless.yaml", "json", "yaml"],
+      default: memory2 ? memory2.format : "inline to serverless.yaml"
     }
   ]);
-  const filename = "exclude-by-default." + answer.format;
+  fs.writeFileSync(QUESTIONS_MEMORY_2, JSON.stringify(answer2), { encoding: "utf-8" });
+
+  const filename = "exclude-by-default." + answer2.format;
+  let submoduleExclusions = 0;
   process.stdout.write(
     chalk.bold(`\n- writing serverless config (${chalk.grey(filename)}) `)
   );
-  let data: any = [];
+  let data: string[] = [];
   if (answer.onlyDevDep) {
     data = data.concat(results.analysis.onlyDevDep);
-    console.log("data", data.length);
   }
   if (answer.singleNamedDepNotInDep) {
     data = data.concat(results.analysis.singleNamedDepNotInDep);
-    console.log("data", data.length);
   }
   if (answer.doesNotIncludeDev) {
     data = data.concat(results.analysis.multiDepNotInTopLevelDep);
-    console.log("data", data.length);
+  }
+  if (answer.atDependencies) {
+    answer.atDependencies.forEach(type => {
+      data = data.concat(type);
+    });
+  }
+  if (answer.staticDependencies) {
+    data = data.concat(...staticDependencies.exclude);
+  }
+  if (answer2.nodeModules) {
+    const add = recursiveNodeModules.map(m => `${m}/node_modules`);
+    console.log(add);
+
+    data = data.concat(...add);
+    submoduleExclusions = submoduleExclusions + add.length;
+  }
+  if (answer2.src) {
+    const add = srcDirs.map(m => `${m}/src`);
+    data = data.concat(...add);
+    submoduleExclusions = submoduleExclusions + add.length;
+  }
+  if (answer2.tests) {
+    const test = testDirs.map(m => `${m}/test`);
+    const tests = testsDirs.map(m => `${m}/tests`);
+    data = data.concat(...test, ...tests);
+    submoduleExclusions = submoduleExclusions + test.length + tests.length;
   }
 
-  data = data.map(dep => `node_modules/${dep}/**`);
+  data = uniq(data.map(d => `node_modules/${d}/**`)).filter(
+    d => !staticDependencies.include.includes(d)
+  );
+  // Always exclude the possible "package" directory
+  data = data.concat("serverless-package/**");
 
-  data =
-    answer.format === "json"
+  const output =
+    answer2.format === "json"
       ? JSON.stringify(data)
       : yaml.dump({ package: { exclude: data } });
+  if (answer2.format === "inline to serverless.yaml") {
+    console.log(chalk.grey("- loading serverless.yml"));
+    const configFile: IServerlessConfig = yaml.safeLoad(
+      fs.readFileSync("serverless.yml", { encoding: "utf-8" })
+    );
+    configFile.package.exclude = data;
+    fs.writeFileSync("serverless.yml", yaml.dump(configFile), { encoding: "utf-8" });
+    console.log(chalk.green(`- serverless.yml updated with global exclusions`));
+  } else {
+    fs.writeFileSync(filename, output, { encoding: "utf-8" });
+    console.log(
+      chalk.green(`- ${chalk.grey.bold("serverless.yml")} created with global exclusions`)
+    );
+  }
 
-  fs.writeFileSync(filename, data, { encoding: "utf-8" });
-  process.stdout.write("... done!\n\n");
+  console.log(
+    `There are now ${chalk.bold.green(
+      String(data.length - submoduleExclusions)
+    )} exclusions out of a total of ${chalk.yellow(
+      String(results.nodeModules.length)
+    )} modules residing in node_modules.`
+  );
+
+  if (submoduleExclusions > 0) {
+    console.log(
+      chalk.grey(`- there were also ${submoduleExclusions} sub-module exclusions`)
+    );
+  }
 }
 
 if (process.argv.slice(2).filter(i => i[0] !== "-").length === 0) {
@@ -426,11 +687,11 @@ program
     "-f, --functions",
     "provide the serverless functions defined in serverless config"
   )
-  .option("--excludeFile", "generate a global exclude file for the serverless config")
+  .option("--skip", "skips writing output to file")
   .option("-v", "more verbose output")
   .option("--json", "output as JSON object instead of console output")
   .description(
-    "Get a summary of the dependencies that exist globally and per serverless function"
+    "Get a summary of the dependencies that exist globally and per serverless function and then create global and per-function exclusions"
   )
   .action(async () => {
     const args = process.argv.slice(2).filter(a => a[0] !== "-");
@@ -438,11 +699,12 @@ program
     if (args[0] === "all") {
       program.all = true;
     }
+
     results = await depsList();
     results = { ...(await devDepsList()), ...results };
     results = { ...(await nodeModulesDirectories()), ...results };
     results = { ...(await depAnalysis(results)), ...results };
-    if (program.excludeFile) {
+    if (!program.skip) {
       await buildGlobalExcludeFile(results);
     }
     results = { ...(await functionsList()), ...results };

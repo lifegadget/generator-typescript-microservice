@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description":
     "A NodeJS generator for Node/TypeScript which leverages 'serverless' to be deployable to all the major cloud platforms",
   "license": "MIT",
