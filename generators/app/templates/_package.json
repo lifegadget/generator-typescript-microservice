@@ -15,6 +15,7 @@
     "build": "./node_modules/.bin/ts-node ./scripts/build.ts",
     "deps": "./node_modules/.bin/ts-node ./scripts/deps.ts",
     "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
+    "invoke": "./node_modules/.bin/ts-node ./scripts/invoke.ts ",
     "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
     "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
     "coverage":
@@ -46,6 +47,7 @@
     "chance": "^1.0.0",
     "faker": "^4.1.0",
     "handlebars": "^4.0.11",
+    "inquirer": "^5.1.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
     "mocha": "^4.0.0",
@@ -58,7 +60,7 @@
     "tslint": "^5.9.1 ",
     "tslint-config-prettier": "^1.1.0",
     "js-yaml": "^3.0.0",
-    "typescript": "^2.7.1",
+    "typescript": "^2.7.2",
     "ts-node": "^4.1.0",
     "test-console": "^1.0.0"
   },
