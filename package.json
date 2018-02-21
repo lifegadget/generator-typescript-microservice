@@ -31,8 +31,9 @@
   },
   "devDependencies": {
     "@types/rimraf": "^0.0.28",
-    "mocha": "2.4.2",
-    "async-shelljs": "0.1.2"
+    "async-shelljs": "0.1.2",
+    "common-types": "^1.5.4",
+    "mocha": "2.4.2"
   },
   "preferGlobal": true,
   "publishConfig": {

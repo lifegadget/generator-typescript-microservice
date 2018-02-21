@@ -324,6 +324,10 @@ commander@~2.8.1:
   dependencies:
     graceful-readlink ">= 1.0.0"
 
+common-types@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.5.4.tgz#af0d7bd7018e622871f883f3418445630fb88786"
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
