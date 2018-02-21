@@ -74,9 +74,9 @@ resources:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
 
-  
+
     # POLICIES
-    # -----------------------------------------------------------    
+    # -----------------------------------------------------------
     logging:
       Type: AWS::IAM::Policy
       Properties:
@@ -97,8 +97,8 @@ resources:
                 Fn::Join:
                   - ""
                   - - "arn:aws:s3:::"
-                    - "Ref" : "ServerlessDeploymentBucket" 
-        Roles: 
+                    - "Ref" : "ServerlessDeploymentBucket"
+        Roles:
           - <%= appname %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
           - <%= appname %>-services-${self:custom.stage}-accounting
 
@@ -113,7 +113,7 @@ resources:
               Action:
                 - lambda:InvokeFunction
                 - lambda:ListFunctions
-              Resource: 
+              Resource:
                 - "arn:aws:lambda:${self:custom.region}:*:function:<%= appname %>-services-${self:custom.stage}-*"
         Roles:
           - <%= appname %>-services-${self:custom.stage}-accounting

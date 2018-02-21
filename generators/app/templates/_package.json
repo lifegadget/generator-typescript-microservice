@@ -17,6 +17,7 @@
     "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
     "invoke": "./node_modules/.bin/ts-node ./scripts/invoke.ts ",
     "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
+    "publish": "./node_modules/.bin/ts-node ./scripts/publish.ts ",
     "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
     "coverage":
       "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
@@ -31,6 +32,7 @@
     "moment": "^2.0.0"
   },
   "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
     "@types/node": "^6.0.0",
     "@types/chai": "^3.0.0",
     "@types/chalk": "^0.4.31",
