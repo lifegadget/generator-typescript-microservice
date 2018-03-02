@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description":
     "A NodeJS generator for Node/TypeScript which leverages 'serverless' to be deployable to all the major cloud platforms",
   "license": "MIT",
@@ -15,14 +15,7 @@
     "test": "mocha"
   },
   "files": ["generators"],
-  "keywords": [
-    "yeoman-generator",
-    "typescript",
-    "gulp",
-    "nodejs",
-    "lambda",
-    "serverless"
-  ],
+  "keywords": ["yeoman-generator", "typescript", "gulp", "nodejs", "lambda", "serverless"],
   "dependencies": {
     "chalk": "^2.0.0",
     "lodash": "4.17.4",
