@@ -7,65 +7,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const Generator = require("yeoman-generator");
+const Base = require("yeoman-generator");
 const chalk_1 = require("chalk");
 const lodash_1 = require("lodash");
 const yosay = require("yosay");
-class TypescriptMicroservice extends Generator {
+const fs = require("fs");
+const path = require("path");
+function isServerless(answers) {
+    return answers.serverless === "serverless" ? true : false;
+}
+class Generator extends Base {
     constructor(args, opts) {
         super(args, opts);
-        this.writing = {
-            testResources: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            projectResources: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            buildScripts: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            configResources: () => __awaiter(this, void 0, void 0, function* () {
-                const rootConfigFiles = [
-                    {
-                        file: "package.json",
-                        substitute: {
-                            appname: lodash_1.kebabCase(this.options.appName),
-                            author: `${this.user.git.name} <${this.user.git.email}>`
-                        }
-                    },
-                    ".editorconfig",
-                    ".gitignore",
-                    {
-                        file: "travis.yml",
-                        condition: this.options.travis
-                    }
-                ];
-                const serverlessConfig = [
-                    {
-                        file: "serverless.yml",
-                        substitute: {
-                            appname: lodash_1.kebabCase(this.options.appName)
-                        }
-                    },
-                    "serverless-config/env.yml",
-                    "serverless-config/"
-                ];
-                const config = this.options.serverless
-                    ? [...rootConfigFiles, ...serverlessConfig]
-                    : rootConfigFiles;
-                return this._private_processFiles("configuration", config);
-            })
-        };
     }
     initializing() {
-        this.log(chalk_1.default.bold("Welcome to the " + chalk_1.default.green("TypeScript for Serverless") + " generator!"));
-        this.log(chalk_1.default.white("- This template is primarily meant for AWS micro-services but big portions of it should apply equally well to other cloud platforms.\n" +
-            "- we assume the use of YARN over NPM but if you're a fan of the NPM cli then making the necessary changes should be relatively easy.\n" +
-            "- the build system leverages 'yarn run' rather than an external library like gulp, etc."));
+        const graphic = fs.readFileSync(path.join(__dirname, "../../computer.txt"), {
+            encoding: "utf-8"
+        });
+        this.log(graphic);
+        this.log(chalk_1.default.bold("\nWelcome to the " + chalk_1.default.green("TypeScript for Serverless") + " generator!\n"));
+        this.log(chalk_1.default.grey(`- This template is primarily meant for ${chalk_1.default.white("AWS")} micro-services but big portions of it should apply equally well to other cloud platforms.\n` +
+            `- we assume the use of ${chalk_1.default.white("YARN")} over NPM but if you're a fan of the NPM cli then making the necessary changes should be relatively easy.\n` +
+            "- the build system leverages 'yarn run' rather than an external library like gulp, etc.\n\n"));
     }
     prompting() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -78,46 +41,173 @@ class TypescriptMicroservice extends Generator {
                     store: true
                 },
                 {
-                    type: "checkbox",
-                    name: "use Wallaby?",
-                    message: "Wallaby is a great real-time testing tool that works with your Mocha tests (you do need a license though)",
+                    type: "confirm",
+                    name: "wallaby",
+                    message: "Include Wallaby configuration -- a real-time testing tool -- in project",
                     default: true,
+                    store: true
+                },
+                {
+                    type: "confirm",
+                    name: "travis",
+                    message: "Would you like to use Travis as part of CI solution?",
+                    default: true,
+                    store: true
+                },
+                {
+                    type: "list",
+                    name: "serverless",
+                    choices: ["serverless", "library-function"],
+                    message: `\n\n${chalk_1.default.bold("Project Type: ")} although the primary function of this template is to setup for a Serverless project, you can also choose here to instead build a Typescript-driven library function`,
+                    default: "serverless",
                     store: true
                 }
             ]);
-            this.options = Object.assign({}, this.options, answers);
-            this.config.save();
+            this.answers = answers;
+        });
+    }
+    writing() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.log("writing files ...");
+            const testResources = () => {
+                return new Promise(resolve => {
+                    const config = [
+                        "test/ping-spec.ts",
+                        "test/data/README.md",
+                        "test/testing/helpers.ts",
+                        "test/testing/test-console.ts"
+                    ];
+                    this._private_processFiles("test", config);
+                    resolve();
+                });
+            };
+            const projectResources = () => {
+                return new Promise(resolve => {
+                    const serverlessConfig = [
+                        "src/handlers/ping.ts",
+                        "src/models/README.md",
+                        "src/shared/README.md"
+                    ];
+                    const libraryConfig = ["src/index.ts"];
+                    this._private_processFiles("project", isServerless(this.answers) ? serverlessConfig : libraryConfig);
+                    resolve();
+                });
+            };
+            const buildScripts = () => {
+                return new Promise(resolve => {
+                    const config = [
+                        {
+                            file: "scripts/build.ts",
+                            condition: isServerless(this.answers),
+                            sourceFrom: "scripts/build-serverless.ts"
+                        },
+                        {
+                            file: "scripts/build.ts",
+                            condition: !isServerless(this.answers),
+                            sourceFrom: "scripts/build-library.ts"
+                        },
+                        "scripts/build.ts",
+                        "scripts/deploy.ts",
+                        "scripts/test.ts",
+                        {
+                            file: "scripts/invoke.ts",
+                            condition: isServerless(this.answers)
+                        },
+                        {
+                            file: "scripts/package.ts",
+                            condition: isServerless(this.answers)
+                        },
+                        {
+                            file: "scripts/publish.ts",
+                            condition: !isServerless(this.answers)
+                        },
+                        "scripts/watch.ts",
+                        "scripts/lib/java.ts",
+                        "scripts/lib/js.ts",
+                        "scripts/lib/npm.ts",
+                        {
+                            file: "scripts/lib/serverless.ts",
+                            condition: isServerless(this.answers)
+                        }
+                    ];
+                    this._private_processFiles("build/devops", config);
+                    resolve();
+                });
+            };
+            const configResources = () => {
+                return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+                    const rootConfigFiles = [
+                        {
+                            file: "package.json",
+                            substitute: {
+                                appname: lodash_1.kebabCase(this.answers.appName),
+                                author: `${this.user.git.name()} <${this.user.git.email()}>`,
+                                keywords: this.answers.serverless
+                                    ? '["serverless", "typescript"]'
+                                    : '["typescript"]',
+                                files: this.answers.serverless ? '["lib"]' : '["lib", "esm"]',
+                                module: this.answers.serverless ? "" : '"module": "esm/index.js",'
+                            }
+                        },
+                        ".editorconfig",
+                        ".gitignore",
+                        ".vscode/launch.json",
+                        ".vscode/settings.json",
+                        ".vscode/tasks.json",
+                        ".gitignore",
+                        {
+                            file: "travis.yml",
+                            condition: this.answers.travis
+                        }
+                    ];
+                    const serverlessConfig = [
+                        {
+                            file: "serverless.yml",
+                            substitute: {
+                                appname: lodash_1.kebabCase(this.answers.appName)
+                            }
+                        },
+                        "serverless-config/env.yml",
+                        "serverless-config/"
+                    ];
+                    const config = this.answers.serverless
+                        ? [...rootConfigFiles, ...serverlessConfig]
+                        : rootConfigFiles;
+                    this._private_processFiles("configuration", config);
+                    resolve();
+                }));
+            };
+            return Promise.all([
+                testResources(),
+                projectResources(),
+                buildScripts(),
+                configResources()
+            ]);
         });
     }
     _private_processFiles(name, config) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise(resolve => {
-                this.log(`- Copying across ${name} files`);
-                config.map(c => {
-                    if (typeof c === "object" && c.condition !== undefined && c.condition) {
-                        return;
-                    }
-                    const filename = typeof c === "string" ? c : c.file;
-                    const from = this.templatePath(`_${filename}`);
-                    const to = this.destinationPath(filename);
-                    if (typeof c === "object" && c.substitute) {
-                        this.fs.copyTpl(from, to, c.substitute);
-                    }
-                    else {
-                        this.fs.copy(from, to);
-                    }
-                });
-            });
+        config.map(c => {
+            if (typeof c === "object" && c.condition !== undefined && c.condition) {
+                return;
+            }
+            const filename = typeof c === "string" ? c : c.sourceFrom || c.file;
+            const from = this.templatePath(filename);
+            const to = this.destinationPath(filename);
+            if (typeof c === "object" && c.substitute) {
+                this.fs.copyTpl(from, to, c.substitute);
+            }
+            else {
+                this.fs.copy(from, to);
+            }
         });
+        this.log(`  ✔ Completed copying ${name} files`);
     }
     install() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.yarnInstall();
-        });
+        this.log("Installing Yarn dependencies ...");
+        this.spawnCommand("yarn", []);
     }
     end() {
-        this.log(yosay('\nSuccess. Type "yarn run help" for help.'));
+        this.log(yosay(`\n${chalk_1.default.bold("Success!")}\nType "yarn run help" for help.`));
     }
 }
-exports.TypescriptMicroservice = TypescriptMicroservice;
-exports.default = TypescriptMicroservice;
+module.exports = Generator;
