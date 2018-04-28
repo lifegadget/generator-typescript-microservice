@@ -83,12 +83,13 @@ class Generator extends Base {
             };
             const projectResources = () => {
                 return new Promise(resolve => {
-                    const config = [
+                    const serverlessConfig = [
                         "src/handlers/ping.ts",
                         "src/models/README.md",
                         "src/shared/README.md"
                     ];
-                    this._private_processFiles("project", config);
+                    const libraryConfig = ["src/index.ts"];
+                    this._private_processFiles("project", isServerless(this.answers) ? serverlessConfig : libraryConfig);
                     resolve();
                 });
             };
