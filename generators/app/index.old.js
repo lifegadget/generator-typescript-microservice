@@ -11,23 +11,14 @@ module.exports = yeoman.generators.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(
-      yosay(
-        "Welcome to the minimal " +
-          chalk.red("TypeScript for Microservices") +
-          " generator!"
-      )
+      yosay("Welcome to the " + chalk.green("TypeScript for Serverless") + " generator!")
     );
 
     this.log(
-      chalk.cyan("I simply get down to business of generating, no questions asked!") +
-        "\n" +
-        chalk.yellow(
-          "Libraries you ask? I use npm (or optionally gulp) as task runner and mocha for testing."
-        ) +
-        "\n" +
-        chalk.gray(
-          "Can you change these? Of course, it's your code. I get out of the way after scaffolding."
-        )
+      chalk.white(
+        "This template is primarily meant for AWS micro-services but big portions of it should apply equally well to other cloud platforms.\n\n" +
+          "This library assumes the use of YARN over NPM but if you're a fan of the NPM cli then making the necessary changes should be relatively easy.\n"
+      )
     );
 
     done();
