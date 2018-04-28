@@ -7,59 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const Generator = require("yeoman-generator");
+const Base = require("yeoman-generator");
 const chalk_1 = require("chalk");
 const lodash_1 = require("lodash");
 const yosay = require("yosay");
-class TypescriptMicroservice extends Generator {
+class Generator extends Base {
     constructor(args, opts) {
         super(args, opts);
-        this.writing = {
-            testResources: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            projectResources: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            buildScripts: () => __awaiter(this, void 0, void 0, function* () {
-                return new Promise(resolve => {
-                });
-            }),
-            configResources: () => __awaiter(this, void 0, void 0, function* () {
-                const rootConfigFiles = [
-                    {
-                        file: "package.json",
-                        substitute: {
-                            appname: lodash_1.kebabCase(this.options.appName),
-                            author: `${this.user.git.name} <${this.user.git.email}>`
-                        }
-                    },
-                    ".editorconfig",
-                    ".gitignore",
-                    {
-                        file: "travis.yml",
-                        condition: this.options.travis
-                    }
-                ];
-                const serverlessConfig = [
-                    {
-                        file: "serverless.yml",
-                        substitute: {
-                            appname: lodash_1.kebabCase(this.options.appName)
-                        }
-                    },
-                    "serverless-config/env.yml",
-                    "serverless-config/"
-                ];
-                const config = this.options.serverless
-                    ? [...rootConfigFiles, ...serverlessConfig]
-                    : rootConfigFiles;
-                return this._private_processFiles("configuration", config);
-            })
-        };
     }
     initializing() {
         this.log(chalk_1.default.bold("Welcome to the " + chalk_1.default.green("TypeScript for Serverless") + " generator!"));
@@ -78,36 +32,104 @@ class TypescriptMicroservice extends Generator {
                     store: true
                 },
                 {
-                    type: "checkbox",
+                    type: "confirm",
                     name: "use Wallaby?",
-                    message: "Wallaby is a great real-time testing tool that works with your Mocha tests (you do need a license though)",
+                    message: "Include Wallaby configuration -- a real-time testing tool -- in project",
                     default: true,
                     store: true
                 }
             ]);
             this.options = Object.assign({}, this.options, answers);
+            this.log("options: ", this.options);
             this.config.save();
         });
     }
-    _private_processFiles(name, config) {
+    writing() {
         return __awaiter(this, void 0, void 0, function* () {
-            return new Promise(resolve => {
-                this.log(`- Copying across ${name} files`);
-                config.map(c => {
-                    if (typeof c === "object" && c.condition !== undefined && c.condition) {
-                        return;
-                    }
-                    const filename = typeof c === "string" ? c : c.file;
-                    const from = this.templatePath(`_${filename}`);
-                    const to = this.destinationPath(filename);
-                    if (typeof c === "object" && c.substitute) {
-                        this.fs.copyTpl(from, to, c.substitute);
-                    }
-                    else {
-                        this.fs.copy(from, to);
-                    }
+            this.log("writing files ...");
+            const testResources = () => {
+                return new Promise(resolve => {
+                    resolve();
                 });
-            });
+            };
+            const projectResources = () => {
+                return new Promise(resolve => {
+                    resolve();
+                });
+            };
+            const buildScripts = () => {
+                return new Promise(resolve => {
+                    resolve();
+                });
+            };
+            const configResources = () => {
+                return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+                    const rootConfigFiles = [
+                        {
+                            file: "package.json",
+                            substitute: {
+                                appname: lodash_1.kebabCase(this.options.appName),
+                                author: `${this.user.git.name()} <${this.user.git.email()}>`,
+                                keywords: this.options.serverless
+                                    ? '["serverless", "typescript"]'
+                                    : '["typescript"]',
+                                files: this.options.serverless ? '["lib"]' : '["lib", "esm"]',
+                                module: this.options.serverless ? "" : '"module": "esm/index.js",\n'
+                            }
+                        },
+                        ".editorconfig",
+                        ".gitignore",
+                        ".vscode/launch.json",
+                        ".vscode/settings.json",
+                        ".vscode/tasks.json",
+                        ".gitignore",
+                        {
+                            file: "travis.yml",
+                            condition: this.options.travis
+                        }
+                    ];
+                    const serverlessConfig = [
+                        {
+                            file: "serverless.yml",
+                            substitute: {
+                                appname: lodash_1.kebabCase(this.options.appName)
+                            }
+                        },
+                        "serverless-config/env.yml",
+                        "serverless-config/"
+                    ];
+                    const config = this.options.serverless
+                        ? [...rootConfigFiles, ...serverlessConfig]
+                        : rootConfigFiles;
+                    this._private_processFiles("configuration", config);
+                    resolve();
+                }));
+            };
+            return Promise.all([
+                testResources(),
+                projectResources(),
+                buildScripts(),
+                configResources()
+            ]);
+        });
+    }
+    _private_processFiles(name, config) {
+        this.log(`- Copying across ${name} files`);
+        config.map(c => {
+            if (typeof c === "object" && c.condition !== undefined && c.condition) {
+                return;
+            }
+            const filename = typeof c === "string" ? c : c.file;
+            const from = this.templatePath(filename);
+            const to = this.destinationPath(filename);
+            if (typeof c === "object" && c.substitute) {
+                this.log(`copying template "${from}" to "${to}"`);
+                this.fs.copyTpl(from, to, c.substitute);
+            }
+            else {
+                this.log(`copying "${from}" to "${to}"`);
+                this.fs.copy(from, to);
+            }
         });
     }
     install() {
@@ -119,5 +141,4 @@ class TypescriptMicroservice extends Generator {
         this.log(yosay('\nSuccess. Type "yarn run help" for help.'));
     }
 }
-exports.TypescriptMicroservice = TypescriptMicroservice;
-exports.default = TypescriptMicroservice;
+module.exports = Generator;

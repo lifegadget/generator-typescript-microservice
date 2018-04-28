@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add --dev yeoman-assert @types/yeoman-assert
+  /usr/local/bin/node /usr/local/bin/yarn run test
 
 PATH: 
   /usr/local/bin:/Users/ken/.yarn/bin:/usr/local/share/android-sdk/platform-tools:.:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/Users/ken/.yarn/bin:/usr/local/share/android-sdk/platform-tools:.:/Users/ken/Library/Python/2.7/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/opt/X11/bin:/Users/kensnyder/.rvm/bin:/Users/kensnyder/.ec2/bin:/Developer/usr/bin:/Users/kensnyder/pear/bin:/usr/local/share/npm/bin:/Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin:/Users/kensnyder/repos/mine/api/commandline/bin:/Users/ken/Library/Python/2.7/bin:/usr/local/sbin:/usr/local/bin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/kensnyder/.rvm/bin:/Users/kensnyder/.ec2/bin:/Developer/usr/bin:/Users/kensnyder/pear/bin:/usr/local/share/npm/bin:/Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin:/Users/kensnyder/repos/mine/api/commandline/bin
@@ -17,7 +17,8 @@ npm manifest:
   {
     "name": "generator-typescript-microservice",
     "version": "4.0.0",
-    "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
+    "description":
+      "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
     "license": "MIT",
     "main": "app/index.js",
     "repository": "lifegadget/generator-typescript-microservice",
@@ -28,19 +29,10 @@ npm manifest:
     },
     "scripts": {
       "build": "tslint src/*.ts && tsc",
-      "test": "mocha --exit --require ts-node/register test/test-app.ts"
+      "test": "tsc && mocha --exit --require ts-node/register test/test-app.ts"
     },
-    "files": [
-      "generators"
-    ],
-    "keywords": [
-      "yeoman-generator",
-      "typescript",
-      "nodejs",
-      "lambda",
-      "serverless",
-      "aws"
-    ],
+    "files": ["generators"],
+    "keywords": ["yeoman-generator", "typescript", "nodejs", "lambda", "serverless", "aws"],
     "dependencies": {
       "chalk": "^2.4.1",
       "common-types": "^1.7.17",
@@ -2025,11 +2017,17 @@ Lockfile:
       wrap-ansi "^2.0.0"
 
 Trace: 
-  Error: Couldn't find package "@types/yeoman-assert" on the "npm" registry.
-      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at NpmResolver.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51625:15)
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:109:13
-      at <anonymous>
-      at process._tickCallback (internal/process/next_tick.js:188:7)
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c tsc && mocha --exit --require ts-node/register test/test-app.ts
+  Directory: /Users/ken/mine/oss/generator-typescript-microservice
+  Output:
+  
+      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)

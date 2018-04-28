@@ -8,16 +8,20 @@ const chaiFiles = require("chai-files");
 chai.use(chaiFiles);
 
 const expect = chai.expect;
-const file = (chaiFiles as any).file;
-const dir = (chaiFiles as any).dir;
+const file = chaiFiles.file;
+const dir = chaiFiles.dir;
 
 describe("generate project", () => {
-  before(done => {
-    run(path.join(__dirname, "../generators/app"))
+  this.timeout = 5000;
+  before(async () => {
+    return run(path.join(__dirname, "../generators/app"))
       .withOptions({
         skipInstall: true
       })
-      .on("end", done);
+      .withPrompts({
+        serverless: true,
+        walaby: true
+      });
   });
 
   it("creates necessary files", () => {

@@ -106,16 +106,6 @@ module.exports = yeoman.generators.Base.extend({
         this.templatePath("scripts/*.ts"),
         this.destinationPath("scripts/")
       );
-
-      // this.fs.copyTpl(
-      //   this.templatePath('scripts/watch.ts'),
-      //   this.destinationPath('scripts/watch.ts')
-      // );
-
-      // this.fs.copyTpl(
-      //   this.templatePath('scripts/deploy.ts'),
-      //   this.destinationPath('scripts/deploy.ts')
-      // );
     }
   },
 
