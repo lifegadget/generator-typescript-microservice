@@ -2,7 +2,6 @@ import Generator = require("yeoman-generator");
 import { IDictionary } from "common-types";
 import chalk from "chalk";
 import { kebabCase } from "lodash";
-import { isNullOrUndefined } from "util";
 import yosay = require("yosay");
 
 export interface IComplexFileConfiguration {

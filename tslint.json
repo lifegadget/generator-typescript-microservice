@@ -11,6 +11,7 @@
     "variable-name": [false],
     "arrow-parens": [false],
     "member-ordering": false,
+    "no-unused-expression": false,
     "no-namespace": [true, "allow-declarations"]
   }
 }
