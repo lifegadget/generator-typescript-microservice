@@ -119,6 +119,16 @@ class Generator extends Base {
     const buildScripts = () => {
       return new Promise(resolve => {
         const config: IFileConfiguration[] = [
+          {
+            file: "scripts/build.ts",
+            condition: isServerless(this.answers),
+            sourceFrom: "scripts/build-serverless.ts"
+          },
+          {
+            file: "scripts/build.ts",
+            condition: !isServerless(this.answers),
+            sourceFrom: "scripts/build-library.ts"
+          },
           "scripts/build.ts",
           "scripts/deploy.ts",
           "scripts/test.ts",

@@ -3,16 +3,21 @@ import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import * as rm from "rimraf";
 
-export async function transpileJavascript(scope: string = "") {
-  console.log(chalk.bold.yellow("- starting JS build process "));
+export interface IJSTranspileOptions {
+  scope?: string;
+  configFile?: string;
+}
+
+export async function transpileJavascript(options: IJSTranspileOptions={}) {
+  console.log(chalk.bold.yellow(`- starting JS build process ${options.configFile} ? "[ " +options.configFile + " ]" : ""}`));
 
   console.log(
     chalk.dim(`- transpiling typescript ( `) +
-      chalk.dim.grey(`./node_modules/.bin/tsc ${scope}`) +
+      chalk.dim.grey(`./node_modules/.bin/tsc ${options.scope}`) +
       chalk.dim(` )`)
   );
   try {
-    await asyncExec(`./node_modules/.bin/tsc ${scope}`);
+    await asyncExec(`./node_modules/.bin/tsc ${options.scope}`);
     console.log(chalk.green.bold(`- JS build completed successfully 👍`));
   } catch (e) {
     console.log(chalk.red.bold(`\n- Completed with code: ${e.code}  😡 `));
