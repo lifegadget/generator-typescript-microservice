@@ -12,6 +12,7 @@
     "arrow-parens": [false],
     "member-ordering": false,
     "no-unused-expression": false,
+    "no-implicit-dependencies": false,
     "no-namespace": [true, "allow-declarations"]
   }
 }
