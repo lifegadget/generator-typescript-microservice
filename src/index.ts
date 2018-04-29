@@ -6,9 +6,27 @@ import yosay = require("yosay");
 import * as fs from "fs";
 import * as path from "path";
 
+const TYPED_TEMPLATES_VERSION: string = "^0.5.0";
+
 function isServerless(answers: IDictionary) {
   return answers.serverless === "serverless" ? true : false;
 }
+
+function hasTemplating(answers: IDictionary) {
+  const features = new Set(answers.features);
+  return features.has("typed-template");
+}
+
+function hasFirebase(answers: IDictionary) {
+  const features = new Set(answers.features);
+  return features.has("firebase");
+}
+
+function useTravis(answers: IDictionary) {
+  const features = new Set(answers.features);
+  return features.has("travis");
+}
+
 interface IComplexFileConfiguration {
   file: string;
   condition?: boolean;
@@ -25,6 +43,7 @@ class Generator extends Base {
 
   public options: IDictionary;
   public answers: IDictionary;
+
   public initializing() {
     const graphic = fs.readFileSync(path.join(__dirname, "../../computer.txt"), {
       encoding: "utf-8"
@@ -55,31 +74,55 @@ class Generator extends Base {
         type: "input",
         name: "appName",
         message: "Your project name",
-        default: this.appname,
+        default: kebabCase(this.appname),
         store: true
       },
       {
-        type: "confirm",
-        name: "wallaby",
-        message:
-          "Include Wallaby configuration -- a real-time testing tool -- in project",
-        default: true,
-        store: true
-      },
-      {
-        type: "confirm",
-        name: "travis",
-        message: "Would you like to use Travis as part of CI solution?",
-        default: true,
+        type: "checkbox",
+        name: "features",
+        message: "Choose the features/packages you'd like to include:",
+        choices: [
+          {
+            name: `Include ${chalk.yellow.bold(
+              "Wallaby"
+            )} configuration -- a real-time testing tool -- in project`,
+            value: "wallaby"
+          },
+          {
+            name: `Add ${chalk.yellow.bold(
+              "typed-template"
+            )} and directories to support for structured templating requirements`,
+            value: "typed-template"
+          },
+          {
+            name: `${chalk.bold.yellow("firebase")} support provided via ${chalk.bold(
+              "firemodel"
+            )} and ${chalk.bold("abstracted-admin")}`,
+            value: "firebase"
+          },
+          {
+            name: `Include ${chalk.yellow.bold("Travis")} as part of CI solution?`,
+            value: "travis"
+          },
+          {
+            name: `Will be deployed to ${chalk.yellow.bold("npm")}?`,
+            value: "npm"
+          },
+          {
+            name: `Will be using  ${chalk.yellow.bold("Coveralls")} code coverage?`,
+            value: "coveralls"
+          }
+        ],
+        default: ["wallaby", "travis", "npm", "typed-template"],
         store: true
       },
       {
         type: "list",
         name: "serverless",
         choices: ["serverless", "library-function"],
-        message: `\n\n${chalk.bold(
-          "Project Type: "
-        )} although the primary function of this template is to setup for a Serverless project, you can also choose here to instead build a Typescript-driven library function`,
+        message: `${chalk.bold("Project Type: ")} \n\n${chalk.reset(
+          "although the primary function of this template is to setup for a Serverless project, you can also choose to instead build just a Typescript-driven library function: "
+        )}`,
         default: "serverless",
         store: true
       }
@@ -88,7 +131,7 @@ class Generator extends Base {
   }
 
   public async writing() {
-    this.log("writing files ...");
+    this.log("\n\nwriting files ...");
     const testResources = () => {
       return new Promise(resolve => {
         const config: IFileConfiguration[] = [
@@ -116,6 +159,25 @@ class Generator extends Base {
         resolve();
       });
     };
+    const templatingResources = () => {
+      return new Promise(resolve => {
+        const templating: IFileConfiguration[] = [
+          "templates/templates/example-template/default.hbs",
+          "templates/templates/example-template/email-html.hbs",
+          "templates/templates/example-template/email-text.hbs",
+          "templates/templates/example-template/sms.hbs",
+          "templates/layouts/email-html/default.hbs",
+          "templates/layouts/email-text/default.hbs",
+          "templates/layouts/default.hbs",
+          "templates/README.md"
+        ];
+        this._private_processFiles(
+          "templating",
+          hasTemplating(this.answers) ? templating : []
+        );
+        resolve();
+      });
+    };
     const buildScripts = () => {
       return new Promise(resolve => {
         const config: IFileConfiguration[] = [
@@ -129,7 +191,6 @@ class Generator extends Base {
             condition: !isServerless(this.answers),
             sourceFrom: "scripts/build-library.ts"
           },
-          "scripts/build.ts",
           "scripts/deploy.ts",
           "scripts/test.ts",
           {
@@ -169,8 +230,14 @@ class Generator extends Base {
               keywords: this.answers.serverless
                 ? '["serverless", "typescript"]'
                 : '["typescript"]',
-              files: this.answers.serverless ? '["lib"]' : '["lib", "esm"]',
-              module: this.answers.serverless ? "" : '"module": "esm/index.js",'
+              files: isServerless(this.answers) ? '["lib"]' : '["lib", "esm"]',
+              module: isServerless(this.answers) ? "" : '"module": "esm/index.js",'
+            }
+          },
+          {
+            file: "README.md",
+            substitute: {
+              travisBadge: useTravis(this.answers) ? this._private_addBadge("travis") : ""
             }
           },
           ".editorconfig",
@@ -181,7 +248,7 @@ class Generator extends Base {
           ".gitignore",
           {
             file: "travis.yml",
-            condition: this.answers.travis
+            condition: useTravis(this.answers)
           }
         ];
 
@@ -196,7 +263,7 @@ class Generator extends Base {
           "serverless-config/"
         ];
 
-        const config = this.answers.serverless
+        const config = isServerless(this.answers)
           ? [...rootConfigFiles, ...serverlessConfig]
           : rootConfigFiles;
 
@@ -209,8 +276,14 @@ class Generator extends Base {
       testResources(),
       projectResources(),
       buildScripts(),
-      configResources()
+      configResources(),
+      templatingResources()
     ]);
+  }
+
+  private _private_addBadge(type: string): string {
+    // TODO: complete
+    return "";
   }
 
   private _private_processFiles(name: string, config: IFileConfiguration[]) {
@@ -234,8 +307,67 @@ class Generator extends Base {
   public install() {
     this.log("Installing Yarn dependencies ...");
 
-    // return this.installDependencies({ npm: false, yarn: true, bower: false });
+    const typings = [
+      "@types/aws-sdk",
+      "@types/chai",
+      "@types/lodash",
+      "@types/mocha",
+      "@types/rimraf",
+      "@types/chance",
+      "@types/faker",
+      "@types/js-yaml"
+    ];
+
+    const globaldevDeps = [
+      "async-shelljs",
+      "chai",
+      "chance",
+      "faker",
+      "handlebars",
+      "inquirer",
+      "lodash.first",
+      "lodash.last",
+      "mocha",
+      "coveralls",
+      "nyc",
+      "prettier",
+      "rimraf",
+      "tslint",
+      "tslint-config-prettier",
+      "typescript",
+      "ts-node",
+      "test-console"
+    ];
+
+    const serverlessOnlyDevDeps = [
+      "serverless",
+      "serverless-pseudo-parameters",
+      "serverless-step-functions",
+      "js-yaml"
+    ];
+
+    let devDeps = [...typings, ...globaldevDeps];
+
+    if (isServerless(this.answers)) {
+      devDeps = [...devDeps, ...serverlessOnlyDevDeps];
+    }
+
+    let deps = ["common-types"];
+
+    if (hasTemplating(this.answers)) {
+      deps = [...deps, ...["typed-template"]];
+    }
+
+    if (hasFirebase(this.answers)) {
+      deps = [...deps, ...["abstracted-admin", "firemodel"]];
+    }
+
+    // first install what's in the package.json (which would have more rigid
+    // locking on version number)
     this.spawnCommand("yarn", []);
+    // then add the newest version of the given deps
+    this.yarnInstall(devDeps, { dev: true });
+    this.yarnInstall(deps);
   }
 
   public end() {

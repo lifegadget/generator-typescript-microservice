@@ -7,7 +7,8 @@ declare class Generator extends Base {
     answers: IDictionary;
     initializing(): void;
     prompting(): Promise<void>;
-    writing(): Promise<[{}, {}, {}, {}]>;
+    writing(): Promise<[{}, {}, {}, {}, {}]>;
+    private _private_addBadge(type);
     private _private_processFiles(name, config);
     install(): void;
     end(): void;
