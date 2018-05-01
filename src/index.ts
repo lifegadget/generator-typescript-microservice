@@ -49,6 +49,9 @@ class Generator extends Base {
         )} has been initialized and files added as an initial commit 🚀`
       );
     }
+    // tslint:disable-next-line:no-submodule-imports
+    this.log("- git status: ", require("simple-git/promise").status());
+
     this.log(yosay(`\n${chalk.bold("Success!")}\nType "yarn run help" for help.`));
   }
 }

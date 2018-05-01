@@ -42,6 +42,7 @@ exports.configResources = (context) => () => {
                     appName: context.answers.appName,
                     repo: context.answers.repo,
                     repoOrigin: context.answers.repoOrigin,
+                    repoOriginHttp: context.answers.repoOriginHttp,
                     npmBadge,
                     testBadges,
                     coverageBadges,
