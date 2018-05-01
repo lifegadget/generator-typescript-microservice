@@ -9,7 +9,11 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis at ab recusanda
 
 ### Installation
 ```
+# ssh
 git clone <%- repoOrigin %>
+## or https
+git clone <%- repoOriginHttp %>
+## install dependencies
 yarn && yarn upgrade
 ```
 

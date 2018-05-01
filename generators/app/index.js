@@ -45,6 +45,7 @@ class Generator extends Base {
                 .commit("initial commit");
             this.log(`- ${chalk_1.default.bold("git")} has been initialized and files added as an initial commit 🚀`);
         }
+        this.log("- git status: ", require("simple-git/promise").status());
         this.log(yosay(`\n${chalk_1.default.bold("Success!")}\nType "yarn run help" for help.`));
     }
 }
