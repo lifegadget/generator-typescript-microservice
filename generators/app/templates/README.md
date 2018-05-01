@@ -1,34 +1,51 @@
-[![Build Status](https://travis-ci.org/{{github-user-name}}/{{github-app-name}}.svg?branch=master)](https://travis-ci.org/{{github-user-name}}/{{github-app-name}}.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/{{github-user-name}}/{{github-app-name}}/badge.svg?branch=master)](https://coveralls.io/github/{{github-user-name}}/{{github-app-name}}?branch=master)
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+# <%- appName %>
 
-# Using this module in other modules
+<%- npmBadge %><%- testBadges %><%- coverageBadges %><%- licenseBadges %>
+<%- socialBadges %>
 
-Here is a quick example of how this module can be used in other modules. The [TypeScript Module Resolution Logic](https://www.typescriptlang.org/docs/handbook/module-resolution.html) makes it quite easy. The file `src/index.ts` is a [barrel](https://basarat.gitbooks.io/typescript/content/docs/tips/barrel.html) that re-exports selected exports from other files. The _package.json_ file contains `main` attribute that points to the generated `lib/index.js` file and `typings` attribute that points to the generated `lib/index.d.ts` file.
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis at ab recusandae fugiat, saepe molestiae doloribus assumenda rem voluptates non illum nemo dolorem architecto animi obcaecati esse eius et iure
 
-> If you are planning to have code in multiple files (which is quite natural for a NodeJS module) that users can import, make sure you update `src/index.ts` file appropriately.
+## Getting started
 
-Now assuming you have published this amazing module to _npm_ with the name `my-amazing-lib`, and installed it in the module in which you need it -
-
-- To use the `Greeter` class in a TypeScript file -
-
-```ts
-import { Greeter } from "my-amazing-lib";
-
-const greeter = new Greeter("World!");
-greeter.greet();
+### Installation
+```
+git clone <%- repoOrigin %>
+yarn && yarn upgrade
 ```
 
-- To use the `Greeter` class in a JavaScript file -
+### Deployment
 
-```js
-const Greeter = require('my-amazing-lib').Greeter;
-
-const greeter = new Greeter('World!');
-greeter.greet();
+```sh
+# deploy everything
+yarn run deploy
+# deploy a specific function or step-function
+yanr run deploy [fn]
 ```
 
-## Setting travis and coveralls badges
-1. Sign in to [travis](https://travis-ci.org/) and activate the build for your project.
-2. Sign in to [coveralls](https://coveralls.io/) and activate the build for your project.
-3. Replace {{github-user-name}}/{{github-app-name}} with your repo details like: "ospatil/generator-node-typescript".
+### Testing
+Testing leverages the `mocha` test runner and the `chai` assertions library. All tests can be found in the `/test` directory. 
+
+```sh
+# test everything
+yarn run test
+# test a subset of scripts
+yarn run test [search]
+```
+
+## Serverless
+
+Most of the service definition/configuration you will do for your serverless function will be found in the `serverless-config` directory. Please look at the various README's spread around to understand the various components better.
+
+### CLI Commands
+
+All CLI commands are based off of you using `yarn run [cmd]` and for that reason you might consider having a shell alias setup as `alias cli="yarn run"` ... it just makes the whole process more graceful. :)
+
+The commands available include:
+
+- build - tslint, transpiles, rebuilds your `serverless.yml`
+- deploy - this is for both functions and step-functions (no parameters does the whole thing)
+
+but you can always just look in the `scripts` directory for a list and to gain a better understanding of what is happening. 
+
+> Note: the `scripts/lib` directory is there for most of the heavy lifting and in some cases is not wired up by default but it more of library of _things_ which the files in the `scripts` directory can use.
+

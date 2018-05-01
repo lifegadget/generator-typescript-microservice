@@ -3,6 +3,7 @@ import path = require("path");
 import { run } from "yeoman-test";
 import * as chai from "chai";
 import "../types/chaiFiles";
+import { ls } from "async-shelljs";
 // tslint:disable-next-line:no-var-requires
 const chaiFiles = require("chai-files");
 chai.use(chaiFiles);
@@ -13,18 +14,31 @@ const dir = chaiFiles.dir;
 
 describe("generate project", () => {
   this.timeout = 5000;
+  // let tmp: string;
   before(async () => {
-    return run(path.join(__dirname, "../generators/app"))
-      .withOptions({
-        skipInstall: true
-      })
-      .withPrompts({
-        serverless: true,
-        walaby: true
-      });
+    return new Promise(resolve => {
+      run(path.join(__dirname, "../generators/app"))
+        .withOptions({
+          skipInstall: true
+        })
+        .withPrompts({
+          serverless: true,
+          walaby: true
+        })
+        .inDir(path.join(__dirname, "test-output"), () => {
+          console.log("callback reached");
+
+          const base = path.join(__dirname, "test-output/*");
+          console.log(`dir [${base}]:`, ls(JSON.stringify(base)));
+          resolve();
+        });
+    });
   });
 
-  it("creates necessary files", () => {
+  it("creates necessary files", async () => {
+    const base = path.join(__dirname, "test-output") + "/";
+    // console.log(`dir [${base}]:`, ls().map((a: any) => Object.keys(a)));
+
     expect(file(".vscode/launch.json")).to.exist;
     expect(file(".vscode/tasks.json")).to.exist;
     expect(file(".vscode/settings.json")).to.exist;

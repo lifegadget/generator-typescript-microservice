@@ -1,9 +1,9 @@
 {
-  "name": "<%= appname %>",
+  "name": "<%= appName %>",
   "version": "0.1.0",
-  "description": "<%= appname %>",
+  "description": "<%= appName %>",
   "license": "MIT",
-  "repository": "",
+  "repository": "<%- repo %>",
   "author": "<%- author %>",
   "keywords": <%- keywords %>,
   "files": <%- files %>,
@@ -25,48 +25,13 @@
     "watch": "ts-node ./scripts/watch.ts",
     "watch:test": "ts-node ./scripts/watch.ts test",
     "watch:all": "ts-node ./scripts/watch.ts all",
-    "cli": "ts-node cli/index.ts --"
+    "cli": "ts-node cli/index.ts --"<%- docsScripts %>
   },
 
-  "dependencies": {
-    "common-types": "^1.7.21"
-  },
   "devDependencies": {
-    "@types/aws-sdk": "^2.7.0",
-    "@types/node": "^8.10.0",
-    "@types/chai": "^4.1.3",
-    "@types/chance": "^1.0.0",
-    "@types/faker": "^4.1.2",
-    "@types/js-yaml": "^3.11.1",
-    "@types/mocha": "^5.2.0",
-    "@types/rimraf": "^2.0.2",
-    "@types/lodash": "^4.0.0",
-    "@types/stack-trace": "^0.0.28",
-    "chai": "^4.1.2",
-    "chalk": "^2.4.1",
-    "chance": "^1.0.16",
-    "faker": "^4.1.0",
-    "handlebars": "^4.0.11",
-    "inquirer": "^5.2.0",
-    "lodash.first": "^3.0.0",
-    "lodash.last": "^3.0.0",
-    "mocha": "^5.1.1",
-    "coveralls": "^3.0.0",
-    "nyc": "^11.7.1",
-    "prettier": "^1.12.1",
-    "rimraf": "^2.6.0",
-    "serverless": "^1.26.1",
-    "serverless-pseudo-parameters": "^1.6.0",
-    "serverless-step-functions": "^1.4.1",
-    "async-shelljs": "^0.1.2",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.12.0",
-    "js-yaml": "^3.11.0",
-    "typescript": "^2.8.3",
-    "ts-node": "^6.0.1",
-    "test-console": "^1.1.0"
+    "@types/node": "^8.10.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   }
 }
