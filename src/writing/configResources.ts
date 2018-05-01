@@ -24,7 +24,7 @@ export const configResources = (context: IGeneratorDictionary) => () => {
         substitute: {
           appName: kebabCase(context.answers.appName),
           author: `${context.user.git.name()} <${context.user.git.email()}>`,
-          repo: `${validate.gitServerURL()}${context.answers.repoGroup}/${
+          repo: `${validate.gitServerURL()}${context.answers.repoUserName}/${
             context.answers.repo
           }`,
           keywords: context.answers.serverless
@@ -90,7 +90,7 @@ const badges = (context: IDictionary, validate: IValidator) => (
     npm: `https://img.shields.io/npm/v/${context.answers.repo}.svg`
   };
   const testing = {
-    travis: `https://img.shields.io/travis/${context.answers.repoGroup}/${
+    travis: `https://img.shields.io/travis/${context.answers.repoUserName}/${
       context.answers.repo
     }.svg`
   };

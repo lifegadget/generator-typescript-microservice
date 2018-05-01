@@ -25,7 +25,7 @@ exports.configResources = (context) => () => {
                 substitute: {
                     appName: lodash_1.kebabCase(context.answers.appName),
                     author: `${context.user.git.name()} <${context.user.git.email()}>`,
-                    repo: `${validate.gitServerURL()}${context.answers.repoGroup}/${context.answers.repo}`,
+                    repo: `${validate.gitServerURL()}${context.answers.repoUserName}/${context.answers.repo}`,
                     keywords: context.answers.serverless
                         ? '["serverless", "typescript"]'
                         : '["typescript"]',
@@ -83,7 +83,7 @@ const badges = (context, validate) => (category) => {
         npm: `https://img.shields.io/npm/v/${context.answers.repo}.svg`
     };
     const testing = {
-        travis: `https://img.shields.io/travis/${context.answers.repoGroup}/${context.answers.repo}.svg`
+        travis: `https://img.shields.io/travis/${context.answers.repoUserName}/${context.answers.repo}.svg`
     };
     const coverage = {
         coveralls: `https://coveralls.io/repos/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}/badge.svg?branch=master`
