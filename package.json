@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "4.1.3",
+  "version": "4.2.0",
   "description":
     "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build": "tslint src/*.ts && tsc",
-    "test": "tsc && mocha --exit --require ts-node/register test/test-app.ts"
+    "test":
+      "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
   "files": ["generators"],
   "keywords": ["yeoman-generator", "typescript", "nodejs", "lambda", "serverless", "aws"],
@@ -35,7 +36,7 @@
     "async-shelljs": "0.1.2",
     "chai": "^4.1.2",
     "chai-files": "^1.4.0",
-    "mocha": "2.4.2",
+    "mocha": "5.1.1",
     "ts-node": "^6.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.12.0",

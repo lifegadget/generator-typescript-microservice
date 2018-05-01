@@ -1,9 +1,9 @@
 {
-  "name": "<%= appname %>",
+  "name": "<%= appName %>",
   "version": "0.1.0",
-  "description": "<%= appname %>",
+  "description": "<%= appName %>",
   "license": "MIT",
-  "repository": "",
+  "repository": "<%- repo %>",
   "author": "<%- author %>",
   "keywords": <%- keywords %>,
   "files": <%- files %>,
@@ -32,6 +32,6 @@
     "@types/node": "^8.10.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   }
 }
