@@ -43,10 +43,12 @@ export default async function(context: IDictionary, validate: IValidator) {
       }
     ]);
 
-    git2.gitOrigin =
+    git2.repoOrigin =
       context.answers.gitServer === "bitbucket"
         ? `git@bitbucket.org:${git2.repoUserName}/${context.answers.repo}.git`
         : `git@github.com:${git2.repoUserName}/${context.answers.repo}.git`;
+
+    context.log("origin: ", git2.repoOrigin);
 
     context.answers = { ...context.answers, ...git2 };
   }

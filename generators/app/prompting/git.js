@@ -43,10 +43,11 @@ function default_1(context, validate) {
                     store: true
                 }
             ]);
-            git2.gitOrigin =
+            git2.repoOrigin =
                 context.answers.gitServer === "bitbucket"
                     ? `git@bitbucket.org:${git2.repoUserName}/${context.answers.repo}.git`
                     : `git@github.com:${git2.repoUserName}/${context.answers.repo}.git`;
+            context.log("origin: ", git2.repoOrigin);
             context.answers = Object.assign({}, context.answers, git2);
         }
     });
