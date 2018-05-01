@@ -11,6 +11,7 @@ export interface IValidator {
   onBitbucket(): boolean;
   deployableToNpm(): boolean;
   twitterHandleRequired(): boolean;
+  useStaticDocs(): boolean;
   gitServerURL(): string;
 }
 
@@ -37,6 +38,10 @@ export const validatationFactory: IValidatorFactory = answers => {
 
     useTravis() {
       return has("testing", "travis");
+    },
+
+    useStaticDocs() {
+      return has("features", "vuepress");
     },
 
     onGithub() {

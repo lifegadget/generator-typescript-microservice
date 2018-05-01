@@ -6,7 +6,8 @@ import {
   projectResources,
   testResources,
   templatingResources,
-  buildScripts
+  buildScripts,
+  docs
 } from "./writing/index";
 
 export interface IGeneratorDictionary extends IDictionary {
@@ -33,8 +34,9 @@ export const writing = (
     testResources(context, validate)(),
     projectResources(context, validate)(),
     buildScripts(context, validate)(),
-    configResources(context, validate)(),
-    templatingResources(context, validate)()
+    configResources(context)(),
+    templatingResources(context, validate)(),
+    docs(context)()
   ]);
 };
 

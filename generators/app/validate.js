@@ -18,6 +18,9 @@ exports.validatationFactory = answers => {
         useTravis() {
             return has("testing", "travis");
         },
+        useStaticDocs() {
+            return has("features", "vuepress");
+        },
         onGithub() {
             return answers.gitServer === "github";
         },

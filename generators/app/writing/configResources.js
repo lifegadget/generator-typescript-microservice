@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const validate_1 = require("../validate");
 const writing_1 = require("../writing");
 const lodash_1 = require("lodash");
-exports.configResources = (context, validate) => () => {
+exports.configResources = (context) => () => {
+    const validate = validate_1.validatationFactory(context.answers);
     return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
         const npmBadge = badges(context, validate)("features");
         const testBadges = badges(context, validate)("testing");
@@ -28,7 +30,10 @@ exports.configResources = (context, validate) => () => {
                         ? '["serverless", "typescript"]'
                         : '["typescript"]',
                     files: validate.isServerless() ? '["lib"]' : '["lib", "esm"]',
-                    module: validate.isServerless() ? "" : '"module": "esm/index.js",'
+                    module: validate.isServerless() ? "" : '"module": "esm/index.js",',
+                    docsScripts: validate.useStaticDocs()
+                        ? ',\n"docs:dev": "vuepress dev docs",\n"docs:build": "vuepress build docs"'
+                        : ""
                 }
             },
             {

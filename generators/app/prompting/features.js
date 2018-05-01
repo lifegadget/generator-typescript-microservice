@@ -20,6 +20,10 @@ function default_1(context) {
                 message: `${chalk_1.default.bold("Features: ")} `,
                 choices: [
                     {
+                        name: `${chalk_1.default.yellow.bold("Vuepress")} static documentation site`,
+                        value: "vuepress"
+                    },
+                    {
                         name: `${chalk_1.default.yellow.bold("Wallaby")} configuration`,
                         value: "wallaby"
                     },

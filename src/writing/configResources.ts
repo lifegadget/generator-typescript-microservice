@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { IValidator } from "../validate";
+import { IValidator, validatationFactory } from "../validate";
 import {
   IFileConfiguration,
   processFiles,
@@ -8,10 +8,9 @@ import {
 } from "../writing";
 import { kebabCase } from "lodash";
 
-export const configResources = (
-  context: IGeneratorDictionary,
-  validate: IValidator
-) => () => {
+export const configResources = (context: IGeneratorDictionary) => () => {
+  const validate = validatationFactory(context.answers);
+
   return new Promise(async resolve => {
     const npmBadge = badges(context, validate)("features");
     const testBadges = badges(context, validate)("testing");
@@ -32,7 +31,10 @@ export const configResources = (
             ? '["serverless", "typescript"]'
             : '["typescript"]',
           files: validate.isServerless() ? '["lib"]' : '["lib", "esm"]',
-          module: validate.isServerless() ? "" : '"module": "esm/index.js",'
+          module: validate.isServerless() ? "" : '"module": "esm/index.js",',
+          docsScripts: validate.useStaticDocs()
+            ? ',\n"docs:dev": "vuepress dev docs",\n"docs:build": "vuepress build docs"'
+            : ""
         }
       },
       {

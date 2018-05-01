@@ -14,6 +14,10 @@ export default async function(context: IGeneratorDictionary) {
       message: `${chalk.bold("Features: ")} `,
       choices: [
         {
+          name: `${chalk.yellow.bold("Vuepress")} static documentation site`,
+          value: "vuepress"
+        },
+        {
           name: `${chalk.yellow.bold("Wallaby")} configuration`,
           value: "wallaby"
         },

@@ -25,7 +25,7 @@
     "watch": "ts-node ./scripts/watch.ts",
     "watch:test": "ts-node ./scripts/watch.ts test",
     "watch:all": "ts-node ./scripts/watch.ts all",
-    "cli": "ts-node cli/index.ts --"
+    "cli": "ts-node cli/index.ts --"<%- docsScripts %>
   },
 
   "devDependencies": {

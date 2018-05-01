@@ -15,8 +15,9 @@ exports.writing = (context, validate) => () => __awaiter(this, void 0, void 0, f
         index_1.testResources(context, validate)(),
         index_1.projectResources(context, validate)(),
         index_1.buildScripts(context, validate)(),
-        index_1.configResources(context, validate)(),
-        index_1.templatingResources(context, validate)()
+        index_1.configResources(context)(),
+        index_1.templatingResources(context, validate)(),
+        index_1.docs(context)()
     ]);
 });
 exports.processFiles = (context) => (name, config) => {
