@@ -86,4 +86,17 @@ Serverless is all about functions and while the normal method of defining them i
 
 For instance, you can define a function like so:
 
-
+**serverless-config/functions/foobar.ts**
+```ts
+const transportPrep: IServerlessFunction = {
+  description:
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+  handler: "lib/foobar.handler",
+  environment: "${file(env.yml):${self:custom.stage}}",
+  timeout: 10,
+  memorySize: 1024,
+  package: {
+    exclude: [...standardExclusions]
+  }
+};
+```
