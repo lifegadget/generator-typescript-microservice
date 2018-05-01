@@ -26,45 +26,7 @@ function default_1(context) {
             }
         ]);
         context.answers = Object.assign({}, context.answers, license);
-        const social = yield context.prompt([
-            {
-                type: "checkbox",
-                name: "social",
-                message: `${chalk_1.default.bold("Social: ")} ${chalk_1.default.grey(" social badges on README")} `,
-                choices: [
-                    {
-                        name: "Github forks",
-                        value: "forks"
-                    },
-                    {
-                        name: "Github stars",
-                        value: "stars"
-                    },
-                    {
-                        name: "Github watchers",
-                        value: "watchers"
-                    },
-                    {
-                        name: "Github followers",
-                        value: "followers"
-                    },
-                    {
-                        name: "Twitter",
-                        value: "twitter"
-                    },
-                    {
-                        name: "Twitter w/ follow count",
-                        value: "twitterFollow"
-                    }
-                ],
-                default() {
-                    return [];
-                },
-                store: true
-            }
-        ]);
-        context.answers = Object.assign({}, context.answers, social);
     });
 }
 exports.default = default_1;
-//# sourceMappingURL=badging.js.map
+//# sourceMappingURL=license.js.map

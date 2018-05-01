@@ -12,20 +12,6 @@ const validate_1 = require("../validate");
 const chalk_1 = require("chalk");
 function default_1(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        const validate = validate_1.validatationFactory(context.answers);
-        const license = yield context.prompt([
-            {
-                type: "list",
-                name: "license",
-                message: `${chalk_1.default.bold("License: ")}${chalk_1.default.grey("What legal license for your code ")} `,
-                choices: ["MIT", "BSD", "Apache", "GNU", "Proprietary", "none"],
-                default() {
-                    return validate.deployableToNpm() ? "MIT" : "Proprietary";
-                },
-                store: true
-            }
-        ]);
-        context.answers = Object.assign({}, context.answers, license);
         const social = yield context.prompt([
             {
                 type: "checkbox",
@@ -64,7 +50,19 @@ function default_1(context) {
             }
         ]);
         context.answers = Object.assign({}, context.answers, social);
+        const validate = validate_1.validatationFactory(context.answers);
+        if (validate.twitterHandleRequired()) {
+            const twitter = yield context.prompt([
+                {
+                    type: "input",
+                    name: "twitterHandle",
+                    message: `What is the twitter handle you want to associate to this repo?`,
+                    store: true
+                }
+            ]);
+            context.answers = Object.assign({}, context.answers, twitter);
+        }
     });
 }
 exports.default = default_1;
-//# sourceMappingURL=badging.js.map
+//# sourceMappingURL=social.js.map

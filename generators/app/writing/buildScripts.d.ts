@@ -1,3 +1,3 @@
-import { IDictionary } from "common-types";
 import { IValidator } from "../validate";
-export declare const buildScripts: (context: IDictionary<any>, validate: IValidator) => () => Promise<{}>;
+import { IGeneratorDictionary } from "../writing";
+export declare const buildScripts: (context: IGeneratorDictionary, validate: IValidator) => () => Promise<{}>;

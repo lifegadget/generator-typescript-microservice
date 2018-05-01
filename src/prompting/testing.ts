@@ -1,12 +1,12 @@
-import { IDictionary } from "common-types";
+import { IGeneratorDictionary } from "../writing";
 import { IValidator, validatationFactory } from "../validate";
 import { Answers } from "inquirer";
 import chalk from "chalk";
 import { kebabCase, camelCase } from "lodash";
 
-export default async function(context: IDictionary) {
+export default async function(context: IGeneratorDictionary) {
   const validate = validatationFactory(context.answers);
-  const badging: Answers = await context.prompt([
+  const testing: Answers = await context.prompt([
     {
       type: "checkbox",
       name: "testing",
@@ -44,7 +44,11 @@ export default async function(context: IDictionary) {
       default(): string[] {
         return validate.onGithub() ? ["travis"] : [];
       }
-    },
+    }
+  ]);
+  context.answers = { ...context.answers, ...testing };
+
+  const testing2: Answers = await context.prompt([
     {
       type: "checkbox",
       name: "coverage",
@@ -66,54 +70,10 @@ export default async function(context: IDictionary) {
         }
       ],
       default(): string[] {
-        return [];
-      }
-    },
-    {
-      type: "list",
-      name: "license",
-      message: `${chalk.bold("License: ")}${chalk.grey(
-        "What legal license for your code "
-      )} `,
-      choices: ["MIT", "BSD", "Apache", "GNU", "Proprietary", "none"],
-      default(): string {
-        return validate.deployableToNpm() ? "MIT" : "Proprietary";
-      }
-    },
-    {
-      type: "checkbox",
-      name: "social",
-      message: `${chalk.bold("Social: ")} ${chalk.grey(" social badges on README")} `,
-      choices: [
-        {
-          name: "Github forks",
-          value: "forks"
-        },
-        {
-          name: "Github stars",
-          value: "stars"
-        },
-        {
-          name: "Github watchers",
-          value: "watchers"
-        },
-        {
-          name: "Github followers",
-          value: "followers"
-        },
-        {
-          name: "Twitter",
-          value: "twitter"
-        },
-        {
-          name: "Twitter w/ follow count",
-          value: "twitter-follow"
-        }
-      ],
-      default(): string[] {
-        return [];
-      }
+        return validate.useTravis() ? ["converalls"] : [];
+      },
+      store: true
     }
   ]);
-  context.answers = { ...context.answers, ...badging };
+  context.answers = { ...context.answers, ...testing2 };
 }

@@ -9,6 +9,11 @@ import {
   buildScripts
 } from "./writing/index";
 
+export interface IGeneratorDictionary extends IDictionary {
+  /** A dictionary of answered question asked during the "prompting" phase */
+  answers: IDictionary;
+}
+
 export interface IComplexFileConfiguration {
   file: string;
   condition?: boolean;
@@ -18,7 +23,10 @@ export interface IComplexFileConfiguration {
 }
 export type IFileConfiguration = IComplexFileConfiguration | string;
 
-export const writing = (context: IDictionary, validate: IValidator) => async () => {
+export const writing = (
+  context: IGeneratorDictionary,
+  validate: IValidator
+) => async () => {
   context.log("\n\nwriting files ...");
 
   return Promise.all([

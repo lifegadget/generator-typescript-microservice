@@ -10,6 +10,7 @@ export interface IValidator {
   onGithub(): boolean;
   onBitbucket(): boolean;
   deployableToNpm(): boolean;
+  twitterHandleRequired(): boolean;
   gitServerURL(): string;
 }
 
@@ -50,6 +51,10 @@ export const validatationFactory: IValidatorFactory = answers => {
       return has("features", "npm");
     },
 
+    twitterHandleRequired() {
+      return has("social", "twitter") || has("social", "twitterFollow");
+    },
+
     gitServerURL(): string {
       const servers: IDictionary<string> = {
         github: `https://github.com/${answers.repoUserName}`,
@@ -57,7 +62,7 @@ export const validatationFactory: IValidatorFactory = answers => {
         gitlab: `https://your-server.com/`,
         other: `https://your-server.com/`
       };
-      const repoServer = this.answers.repoServer;
+      const repoServer = answers.repoServer;
       return servers[repoServer] ? servers[repoServer] : servers.other;
     }
   };

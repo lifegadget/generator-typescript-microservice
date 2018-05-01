@@ -1,11 +1,19 @@
 import { IDictionary } from "common-types";
 import { IValidator } from "../validate";
-import { IFileConfiguration, processFiles, addBadge } from "../writing";
+import {
+  IFileConfiguration,
+  processFiles,
+  addBadge,
+  IGeneratorDictionary
+} from "../writing";
 import { kebabCase } from "lodash";
 
-export const configResources = (context: IDictionary, validate: IValidator) => () => {
+export const configResources = (
+  context: IGeneratorDictionary,
+  validate: IValidator
+) => () => {
   return new Promise(async resolve => {
-    const npmBadge = badges(context, validate)("npm");
+    const npmBadge = badges(context, validate)("features");
     const testBadges = badges(context, validate)("testing");
     const coverageBadges = badges(context, validate)("coverage");
     const licenseBadges = badges(context, validate)("license");
@@ -30,6 +38,9 @@ export const configResources = (context: IDictionary, validate: IValidator) => (
       {
         file: "README.md",
         substitute: {
+          appName: context.answers.appName,
+          repo: context.answers.repo,
+          repoOrigin: context.answers.repoOrigin,
           npmBadge,
           testBadges,
           coverageBadges,
@@ -72,11 +83,19 @@ export const configResources = (context: IDictionary, validate: IValidator) => (
 const badges = (context: IDictionary, validate: IValidator) => (
   category: string
 ): string => {
-  const badgeTemplate = "[![ALT](URL)]";
+  const badgeTemplate = "![ALT](URL) ";
+  const npm = {
+    npm: `https://img.shields.io/npm/v/${context.answers.repo}.svg`
+  };
   const testing = {
     travis: `https://img.shields.io/travis/${context.answers.repoGroup}/${
       context.answers.repo
     }.svg`
+  };
+  const coverage = {
+    coveralls: `https://coveralls.io/repos/${context.answers.gitServer}/${
+      context.answers.repoUserName
+    }/${context.answers.repo}/badge.svg?branch=master`
   };
   const licenses = {
     MIT: "http://img.shields.io/badge/license-MIT-brightgreen.svg",
@@ -94,23 +113,63 @@ const badges = (context: IDictionary, validate: IValidator) => (
     watchers:
       "https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Watch",
     followers:
-      "https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Follow"
+      "https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Follow",
+    twitter: [
+      `https://img.shields.io/twitter/url/http/${
+        context.answers.twitterHandle
+      }.svg?style=social`,
+      `http://twitter.com/home?status=@${context.answers.twitterHandle} #${
+        context.answers.repo
+      }`
+    ],
+    twitterFollow: [
+      `https://img.shields.io/twitter/follow/${
+        context.answers.twitterHandle
+      }.svg?style=social&label=Follow`,
+      `https://twitter.com/intent/follow?screen_name=${context.answers.twitterHandle}`
+    ]
   };
   const badgeUrls: IDictionary = {
+    ...npm,
     ...testing,
+    ...coverage,
     ...licenses,
     ...social
   };
   let response = "";
   console.log("badges", category, context.badges[category]);
 
-  context.badges[category].map((badge: string) => {
+  let link: string;
+  if (Array.isArray(context.badges[category])) {
+    context.badges[category].map((badge: string) => {
+      if (Array.isArray(badge)) {
+        [badge, link] = badge;
+        console.log("link", link);
+      }
+      const info = {
+        name: badge,
+        url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+        link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
+      };
+      response += info.link
+        ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${
+            info.link
+          })`
+        : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
+    });
+  } else if (context.badges[category]) {
+    const badge: string = context.badges[category];
     const info = {
-      name: badge,
-      url: badgeUrls[badge]
+      name: category,
+      url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+      link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
     };
-    console.log("cat:", badge, info);
-    response += badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
-  });
+    response += link
+      ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${
+          info.link
+        })`
+      : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
+  }
+
   return response;
 };

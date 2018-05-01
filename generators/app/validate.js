@@ -27,6 +27,9 @@ exports.validatationFactory = answers => {
         deployableToNpm() {
             return has("features", "npm");
         },
+        twitterHandleRequired() {
+            return has("social", "twitter") || has("social", "twitterFollow");
+        },
         gitServerURL() {
             const servers = {
                 github: `https://github.com/${answers.repoUserName}`,
@@ -34,7 +37,7 @@ exports.validatationFactory = answers => {
                 gitlab: `https://your-server.com/`,
                 other: `https://your-server.com/`
             };
-            const repoServer = this.answers.repoServer;
+            const repoServer = answers.repoServer;
             return servers[repoServer] ? servers[repoServer] : servers.other;
         }
     };

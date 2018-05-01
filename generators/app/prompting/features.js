@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const validate_1 = require("../validate");
 const chalk_1 = require("chalk");
-function default_1(context, validate) {
+function default_1(context) {
     return __awaiter(this, void 0, void 0, function* () {
+        const validate = validate_1.validatationFactory(context.answers);
         const features = yield context.prompt([
             {
                 type: "checkbox",

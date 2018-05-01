@@ -8,6 +8,7 @@ export interface IValidator {
     onGithub(): boolean;
     onBitbucket(): boolean;
     deployableToNpm(): boolean;
+    twitterHandleRequired(): boolean;
     gitServerURL(): string;
 }
 export declare const validatationFactory: IValidatorFactory;

@@ -1,8 +1,11 @@
 import { IDictionary } from "common-types";
 import { IValidator } from "../validate";
-import { IFileConfiguration, processFiles } from "../writing";
+import { IFileConfiguration, processFiles, IGeneratorDictionary } from "../writing";
 
-export const buildScripts = (context: IDictionary, validate: IValidator) => () => {
+export const buildScripts = (
+  context: IGeneratorDictionary,
+  validate: IValidator
+) => () => {
   return new Promise(resolve => {
     const config: IFileConfiguration[] = [
       {

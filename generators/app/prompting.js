@@ -12,6 +12,7 @@ const chalk_1 = require("chalk");
 const lodash_1 = require("lodash");
 const validate_1 = require("./validate");
 const index_1 = require("./prompting/index");
+const testing_1 = require("./prompting/testing");
 function addToAnswers(source, addition) {
     source = Object.assign({}, source, addition);
 }
@@ -45,9 +46,12 @@ exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function*
     ]);
     context.answers = Object.assign({}, context.answers, projectType);
     console.log("");
-    yield index_1.features(context, validate);
+    yield index_1.features(context);
     console.log("");
-    yield index_1.badging(context);
+    yield index_1.license(context);
+    console.log("");
+    yield testing_1.default(context);
+    yield index_1.social(context);
     context.badges = {
         npm: validate.deployableToNpm() ? ["npm"] : [],
         testing: context.answers.testing,
@@ -55,7 +59,6 @@ exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function*
         social: context.answers.social,
         license: context.answers.license
     };
-    console.log("badges", context.badges);
 });
 exports.default = exports.prompting;
 //# sourceMappingURL=prompting.js.map

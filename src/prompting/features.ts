@@ -1,10 +1,12 @@
-import { IDictionary } from "common-types";
-import { IValidator } from "../validate";
+import { IGeneratorDictionary } from "../writing";
+import { IValidator, validatationFactory } from "../validate";
 import { Answers } from "inquirer";
 import chalk from "chalk";
 import { kebabCase, camelCase } from "lodash";
 
-export default async function(context: IDictionary, validate: IValidator) {
+export default async function(context: IGeneratorDictionary) {
+  const validate = validatationFactory(context.answers);
+
   const features: Answers = await context.prompt([
     {
       type: "checkbox",

@@ -1,3 +1,3 @@
-import { IDictionary } from "common-types";
-export declare const prompting: (context: IDictionary<any>) => () => Promise<void>;
+import { IGeneratorDictionary } from "./writing";
+export declare const prompting: (context: IGeneratorDictionary) => () => Promise<void>;
 export default prompting;

@@ -3,13 +3,15 @@ import { kebabCase, camelCase } from "lodash";
 import { Answers } from "inquirer";
 import { IDictionary } from "common-types";
 import { IValidatorFactory, validatationFactory } from "./validate";
-import { git, features, badging } from "./prompting/index";
+import { git, features, social, license } from "./prompting/index";
+import testing from "./prompting/testing";
+import { IGeneratorDictionary } from "./writing";
 
 function addToAnswers(source: IDictionary, addition: IDictionary) {
   source = { ...source, ...addition };
 }
 
-export const prompting = (context: IDictionary) => async () => {
+export const prompting = (context: IGeneratorDictionary) => async () => {
   const validate = validatationFactory(context.answers);
   const appName: Answers = await context.prompt([
     {
@@ -42,14 +44,16 @@ export const prompting = (context: IDictionary) => async () => {
     }
   ]);
   context.answers = { ...context.answers, ...projectType };
-
   console.log("");
 
-  await features(context, validate);
-
+  await features(context);
   console.log("");
 
-  await badging(context);
+  await license(context);
+  console.log("");
+
+  await testing(context);
+  await social(context);
 
   context.badges = {
     npm: validate.deployableToNpm() ? ["npm"] : [],
@@ -58,7 +62,6 @@ export const prompting = (context: IDictionary) => async () => {
     social: context.answers.social,
     license: context.answers.license
   };
-  console.log("badges", context.badges);
 };
 
 export default prompting;
