@@ -32,7 +32,8 @@ function install(context) {
         "tslint-config-prettier",
         "typescript",
         "ts-node",
-        "test-console"
+        "test-console",
+        "simple-git"
     ];
     const serverlessOnlyDevDeps = [
         "serverless",

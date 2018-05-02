@@ -38,15 +38,22 @@ class Generator extends Base {
         return install_1.install(this);
     }
     end() {
-        if (!async_shelljs_1.test("-d", ".git")) {
-            require("simple-git")
-                .init()
-                .add("./*")
-                .commit("initial commit");
-            this.log(`- ${chalk_1.default.bold("git")} has been initialized and files added as an initial commit 🚀`);
-        }
-        this.log("- git status: ", require("simple-git/promise").status());
-        this.log(yosay(`\n${chalk_1.default.bold("Success!")}\nType "yarn run help" for help.`));
+        return __awaiter(this, void 0, void 0, function* () {
+            const git = require("simple-git")(this.destinationPath());
+            if (!async_shelljs_1.test("-d", ".git")) {
+                git
+                    .init()
+                    .add("./*")
+                    .commit("initial commit");
+                this.log(`- ${chalk_1.default.bold("git")} has been initialized and files added as an initial commit 🚀`);
+            }
+            if (this.answers.repoOrigin) {
+                git.addRemote("origin", this.answers.repoOrigin);
+                this.log(`- a repo origin has been added to git of "${this.answers.repoOrigin}" ䷛`);
+            }
+            this.log("- git status: ", yield git.status());
+            this.log(yosay(`\n${chalk_1.default.bold("Success!")}\nType "yarn run help" for help.`));
+        });
     }
 }
 module.exports = Generator;

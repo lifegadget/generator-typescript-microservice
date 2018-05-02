@@ -42,7 +42,7 @@ async function gitRemotes(dir = __dirname) {
 }
 
 export default async function(context: IDictionary, validate: IValidator) {
-  const isRepo = await gitIsRepo();
+  const isRepo = await gitIsRepo(context.destinationPath());
   if (isRepo) {
     const remotes = await gitRemotes(context.destinationPath());
     context.answers = { ...context.answers, ...remotes };
@@ -52,7 +52,7 @@ export default async function(context: IDictionary, validate: IValidator) {
         type: "input",
         name: "repo",
         message: `${chalk.bold("Repo: ")} ${chalk.grey(
-          "what name will the GIT repo have? "
+          "what name will the GIT repo be called? "
         )}`,
         default: kebabCase(context.answers.appName),
         store: true

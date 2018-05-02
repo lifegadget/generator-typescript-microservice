@@ -6,6 +6,7 @@ import { IValidatorFactory, validatationFactory } from "./validate";
 import { git, features, social, license } from "./prompting/index";
 import testing from "./prompting/testing";
 import { IGeneratorDictionary } from "./writing";
+import { pwd } from "async-shelljs";
 
 function addToAnswers(source: IDictionary, addition: IDictionary) {
   source = { ...source, ...addition };
@@ -13,12 +14,15 @@ function addToAnswers(source: IDictionary, addition: IDictionary) {
 
 export const prompting = (context: IGeneratorDictionary) => async () => {
   const validate = validatationFactory(context.answers);
+  const dirName = pwd()
+    .split(/[\/\\]/)
+    .pop();
   const appName: Answers = await context.prompt([
     {
       type: "input",
       name: "appName",
       message: "Your project name",
-      default: kebabCase(context.appName),
+      default: kebabCase(context.appName) || kebabCase(dirName),
       store: true
     }
   ]);

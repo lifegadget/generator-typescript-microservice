@@ -37,9 +37,10 @@ class Generator extends Base {
     return install(this);
   }
 
-  public end() {
+  public async end() {
+    const git = require("simple-git")(this.destinationPath());
     if (!test("-d", ".git")) {
-      require("simple-git")
+      git
         .init()
         .add("./*")
         .commit("initial commit");
@@ -49,8 +50,10 @@ class Generator extends Base {
         )} has been initialized and files added as an initial commit 🚀`
       );
     }
-    // tslint:disable-next-line:no-submodule-imports
-    this.log("- git status: ", require("simple-git/promise").status());
+    if (this.answers.repoOrigin) {
+      git.addRemote("origin", this.answers.repoOrigin);
+      this.log(`- a repo origin has been added to git of "${this.answers.repoOrigin}" ䷛`);
+    }
 
     this.log(yosay(`\n${chalk.bold("Success!")}\nType "yarn run help" for help.`));
   }
