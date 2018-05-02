@@ -10,6 +10,7 @@ export interface IValidator {
     deployableToNpm(): boolean;
     twitterHandleRequired(): boolean;
     useStaticDocs(): boolean;
+    useWallaby(): boolean;
     gitServerURL(): string;
 }
 export declare const validatationFactory: IValidatorFactory;

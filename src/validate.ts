@@ -12,6 +12,7 @@ export interface IValidator {
   deployableToNpm(): boolean;
   twitterHandleRequired(): boolean;
   useStaticDocs(): boolean;
+  useWallaby(): boolean;
   gitServerURL(): string;
 }
 
@@ -30,6 +31,10 @@ export const validatationFactory: IValidatorFactory = answers => {
 
     hasTemplating: () => {
       return has("features", "typed-template");
+    },
+
+    useWallaby: () => {
+      return has("features", "wallaby");
     },
 
     hasFirebase() {

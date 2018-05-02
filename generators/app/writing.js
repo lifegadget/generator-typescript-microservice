@@ -22,7 +22,7 @@ exports.writing = (context, validate) => () => __awaiter(this, void 0, void 0, f
 });
 exports.processFiles = (context) => (name, config) => {
     config.map(c => {
-        if (typeof c === "object" && c.condition !== undefined && c.condition) {
+        if (typeof c === "object" && c.condition !== undefined && c.condition === false) {
             return;
         }
         const filename = typeof c === "string" ? c : c.sourceFrom || c.file;

@@ -51,6 +51,10 @@ export const configResources = (context: IGeneratorDictionary) => () => {
           socialBadges
         }
       },
+      {
+        file: "wallaby.js",
+        condition: validate.useWallaby()
+      },
       ".editorconfig",
       ".gitignore",
       ".vscode/launch.json",

@@ -45,7 +45,7 @@ export const processFiles = (context: IDictionary) => (
   config: IFileConfiguration[]
 ) => {
   config.map(c => {
-    if (typeof c === "object" && c.condition !== undefined && c.condition) {
+    if (typeof c === "object" && c.condition !== undefined && c.condition === false) {
       return;
     }
     const filename = typeof c === "string" ? c : c.sourceFrom || c.file;
