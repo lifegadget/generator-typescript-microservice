@@ -5,6 +5,7 @@ import * as rm from "rimraf";
 import * as process from "process";
 import "../test/testing/test-console";
 import { stdout, stderr } from "test-console";
+import { transpileJavascript, clearTranspiledJS, lintSource } from "./lib/js";
 
 function prepOutput(output: string) {
   return output.replace(/\t\r\n/, "").replace("undefined", "");
@@ -13,7 +14,7 @@ function prepOutput(output: string) {
 function getExecutionStage(): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const inspect = stdout.inspect();
-    exec(`npm get stage`, (code, output) => {
+    exec(`yarn get stage`, (code, output) => {
       inspect.restore();
 
       const result = prepOutput(output).trim();
@@ -22,25 +23,12 @@ function getExecutionStage(): Promise<string> {
   });
 }
 
-/**
- * No transpiled JS files should be in TEST directories
- * as testing is using ts-node; remove these files as they
- * may represent unintentional stale tests
- */
-function cleanJSTests() {
-  rm.sync("test/**/*.js");
-}
-
 function scriptNames(scripts: string[], splitter = ", ") {
   return scripts.map(script => {
     const path = script.split("/");
     const last = path.pop().replace("-spec.ts", "");
     return chalk.grey(path.join("/") + "/" + chalk.white(last));
   });
-}
-
-async function lintSource() {
-  return asyncExec(`tslint src/**/*`);
 }
 
 async function findScripts(terms: string[]) {
@@ -55,9 +43,7 @@ async function mochaTests(stg: string, searchTerms: string[]) {
   const scripts = await findScripts(searchTerms);
   process.env.AWS_STAGE = stg;
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
-  await asyncExec(
-    `mocha --compilerOptions --require ts-node/register ` + scripts.join(" ")
-  );
+  await asyncExec(`mocha --require ts-node/register ` + scripts.join(" "));
 }
 
 (async () => {
@@ -65,11 +51,12 @@ async function mochaTests(stg: string, searchTerms: string[]) {
   const searchTerms = process.argv.slice(2).filter(fn => fn[0] !== "-");
   const options = new Set(process.argv.slice(2).filter(fn => fn[0] === "-"));
   const availableScripts = await find("./test").filter(f => f.match(/-spec\.ts/));
-  const scriptsToTest = searchTerms
-    ? availableScripts.filter(s => {
-        return searchTerms.reduce((prv, script) => s.match(script) || prv, 0);
-      })
-    : availableScripts;
+  const scriptsToTest =
+    searchTerms.length > 1
+      ? availableScripts.filter(s => {
+          return searchTerms.reduce((prv, script) => s.match(script) || prv, 0);
+        })
+      : availableScripts;
 
   if (options.has("-ls") || options.has("-l") || options.has("list")) {
     console.log(chalk.yellow("- 🤓  The following test scripts are available:"));

@@ -8,8 +8,14 @@ export interface IJSTranspileOptions {
   configFile?: string;
 }
 
-export async function transpileJavascript(options: IJSTranspileOptions={}) {
-  console.log(chalk.bold.yellow(`- starting JS build process ${options.configFile} ? "[ " +options.configFile + " ]" : ""}`));
+export async function transpileJavascript(options: IJSTranspileOptions = {}) {
+  console.log(
+    chalk.bold.yellow(
+      `- starting JS build process ${
+        options.configFile
+      } ? "[ " +options.configFile + " ]" : ""}`
+    )
+  );
 
   console.log(
     chalk.dim(`- transpiling typescript ( `) +
@@ -35,4 +41,8 @@ export async function clearTranspiledJS() {
       resolve();
     });
   });
+}
+
+export async function lintSource() {
+  return asyncExec(`tslint src/**/*`);
 }
