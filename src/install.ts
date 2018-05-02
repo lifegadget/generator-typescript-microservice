@@ -34,7 +34,8 @@ export function install(context: IGeneratorDictionary) {
     "tslint-config-prettier",
     "typescript",
     "ts-node",
-    "test-console"
+    "test-console",
+    "simple-git"
   ];
 
   const serverlessOnlyDevDeps = [

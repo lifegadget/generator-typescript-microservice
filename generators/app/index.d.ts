@@ -10,6 +10,6 @@ declare class Generator extends Base {
     prompting(): Promise<void>;
     writing(): Promise<[{}, {}, {}, {}, {}, {}]>;
     install(): void;
-    end(): void;
+    end(): Promise<void>;
 }
 export = Generator;

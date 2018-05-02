@@ -15,6 +15,7 @@ exports.buildScripts = (context, validate) => () => {
                 sourceFrom: "scripts/build-library.ts"
             },
             "scripts/deploy.ts",
+            "scripts/reset.ts",
             "scripts/test.ts",
             {
                 file: "scripts/invoke.ts",

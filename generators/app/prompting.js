@@ -13,17 +13,21 @@ const lodash_1 = require("lodash");
 const validate_1 = require("./validate");
 const index_1 = require("./prompting/index");
 const testing_1 = require("./prompting/testing");
+const async_shelljs_1 = require("async-shelljs");
 function addToAnswers(source, addition) {
     source = Object.assign({}, source, addition);
 }
 exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function* () {
     const validate = validate_1.validatationFactory(context.answers);
+    const dirName = async_shelljs_1.pwd()
+        .split(/[\/\\]/)
+        .pop();
     const appName = yield context.prompt([
         {
             type: "input",
             name: "appName",
             message: "Your project name",
-            default: lodash_1.kebabCase(context.appName),
+            default: lodash_1.kebabCase(context.appName) || lodash_1.kebabCase(dirName),
             store: true
         }
     ]);

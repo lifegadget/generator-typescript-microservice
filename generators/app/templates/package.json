@@ -15,6 +15,7 @@
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "./node_modules/.bin/ts-node ./scripts/build.ts",
     "deps": "./node_modules/.bin/ts-node ./scripts/deps.ts",
+    "deps:reset": "./node_modules/.bin/ts-node ./scripts/reset.ts",
     "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
     "invoke": "./node_modules/.bin/ts-node ./scripts/invoke.ts ",
     "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",

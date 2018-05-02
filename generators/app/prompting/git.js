@@ -49,7 +49,7 @@ function gitRemotes(dir = __dirname) {
 }
 function default_1(context, validate) {
     return __awaiter(this, void 0, void 0, function* () {
-        const isRepo = yield gitIsRepo();
+        const isRepo = yield gitIsRepo(context.destinationPath());
         if (isRepo) {
             const remotes = yield gitRemotes(context.destinationPath());
             context.answers = Object.assign({}, context.answers, remotes);
@@ -59,7 +59,7 @@ function default_1(context, validate) {
                 {
                     type: "input",
                     name: "repo",
-                    message: `${chalk_1.default.bold("Repo: ")} ${chalk_1.default.grey("what name will the GIT repo have? ")}`,
+                    message: `${chalk_1.default.bold("Repo: ")} ${chalk_1.default.grey("what name will the GIT repo be called? ")}`,
                     default: lodash_1.kebabCase(context.answers.appName),
                     store: true
                 },
