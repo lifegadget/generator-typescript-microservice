@@ -50,6 +50,10 @@ exports.configResources = (context) => () => {
                     socialBadges
                 }
             },
+            {
+                file: "wallaby.js",
+                condition: validate.useWallaby()
+            },
             ".editorconfig",
             ".gitignore",
             ".vscode/launch.json",

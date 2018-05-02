@@ -12,6 +12,9 @@ exports.validatationFactory = answers => {
         hasTemplating: () => {
             return has("features", "typed-template");
         },
+        useWallaby: () => {
+            return has("features", "wallaby");
+        },
         hasFirebase() {
             return has("features", "firebase");
         },
