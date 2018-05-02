@@ -51,7 +51,6 @@ class Generator extends Base {
                 git.addRemote("origin", this.answers.repoOrigin);
                 this.log(`- a repo origin has been added to git of "${this.answers.repoOrigin}" ䷛`);
             }
-            this.log("- git status: ", yield git.status());
             this.log(yosay(`\n${chalk_1.default.bold("Success!")}\nType "yarn run help" for help.`));
         });
     }
