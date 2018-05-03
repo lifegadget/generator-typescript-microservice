@@ -12,8 +12,8 @@ export async function transpileJavascript(options: IJSTranspileOptions = {}) {
   console.log(
     chalk.bold.yellow(
       `- starting JS build process ${
-        options.configFile
-      } ? "[ " +options.configFile + " ]" : ""}`
+        options.configFile ? "[ " + options.configFile + " ]" : ""
+      }`
     )
   );
 
@@ -23,7 +23,11 @@ export async function transpileJavascript(options: IJSTranspileOptions = {}) {
       chalk.dim(` )`)
   );
   try {
-    await asyncExec(`./node_modules/.bin/tsc ${options.scope}`);
+    await asyncExec(
+      `./node_modules/.bin/tsc ${options.configFile ? "-p " + options.configFile : ""} ${
+        options.scope
+      }`
+    );
     console.log(chalk.green.bold(`- JS build completed successfully 👍`));
   } catch (e) {
     console.log(chalk.red.bold(`\n- Completed with code: ${e.code}  😡 `));

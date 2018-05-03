@@ -25,8 +25,8 @@ exports.processFiles = (context) => (name, config) => {
         if (typeof c === "object" && c.condition !== undefined && c.condition === false) {
             return;
         }
-        const filename = typeof c === "string" ? c : c.sourceFrom || c.file;
-        const from = context.templatePath(filename);
+        const filename = typeof c === "string" ? c : c.file;
+        const from = context.templatePath(typeof c === "object" ? c.sourceFrom || filename : filename);
         const to = context.destinationPath(filename);
         if (typeof c === "object" && c.substitute) {
             context.fs.copyTpl(from, to, c.substitute);

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "noImplicitAny": true,
+    "outDir": "./esm",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/*-spec.ts",
+    "node_modules/firebase-admin/lib/index.d.ts"
+  ]
+}

@@ -11,9 +11,12 @@ import Handlebars from "handlebars";
 // tslint:disable-next-line
 interface Console {
   _restored: boolean;
-  Console: typeof NodeJS.Console;
+  // Console: typeof NodeJS.Console;
   assert(value: any, message?: string, ...optionalParams: any[]): void;
-  dir(obj: any, options?: { showHidden?: boolean; depth?: number; colors?: boolean }): void;
+  dir(
+    obj: any,
+    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
+  ): void;
   error(message?: any, ...optionalParams: any[]): void;
   info(message?: any, ...optionalParams: any[]): void;
   log(message?: any, ...optionalParams: any[]): void;
@@ -24,6 +27,8 @@ interface Console {
 }
 
 declare var console: Console;
+
+export type IRestoreConsole<T = void> = () => T;
 
 export function restoreStdoutAndStderr() {
   console._restored = true;
@@ -51,7 +56,7 @@ export function setupEnv() {
 
 export function ignoreStdout() {
   const rStdout = stdout.ignore();
-  const restore = () => {
+  const restore: () => void = () => {
     rStdout();
     console._restored = true;
   };
@@ -59,9 +64,9 @@ export function ignoreStdout() {
   return restore;
 }
 
-export function captureStdout(): () => any {
+export function captureStdout() {
   const rStdout: IAsyncStreamCallback = stdout.inspect();
-  const restore = () => {
+  const restore: () => string[] = () => {
     rStdout.restore();
     console._restored = true;
     return rStdout.output;
@@ -70,9 +75,9 @@ export function captureStdout(): () => any {
   return restore;
 }
 
-export function captureStderr(): () => any {
+export function captureStderr() {
   const rStderr: IAsyncStreamCallback = stderr.inspect();
-  const restore = () => {
+  const restore: () => string[] = () => {
     rStderr.restore();
     console._restored = true;
     return rStderr.output;
@@ -83,7 +88,7 @@ export function captureStderr(): () => any {
 
 export function ignoreStderr() {
   const rStdErr = stderr.ignore();
-  const restore = () => {
+  const restore: () => void = () => {
     rStdErr();
     console._restored = true;
   };
@@ -94,7 +99,7 @@ export function ignoreStderr() {
 export function ignoreBoth() {
   const rStdOut = stdout.ignore();
   const rStdErr = stderr.ignore();
-  const restore = () => {
+  const restore: () => void = () => {
     rStdOut();
     rStdErr();
     console._restored = true;

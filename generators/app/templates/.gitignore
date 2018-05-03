@@ -2,7 +2,8 @@ coverage/
 node_modules/
 npm-debug.log
 .nyc_output
-lib
+/lib
+/esm
 lib_test
 .rpt2_cache/
 .serverless/
