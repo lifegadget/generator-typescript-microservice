@@ -11,18 +11,6 @@ function prepOutput(output: string) {
   return output.replace(/\t\r\n/, "").replace("undefined", "");
 }
 
-function getExecutionStage(): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    const inspect = stdout.inspect();
-    exec(`yarn get stage`, (code, output) => {
-      inspect.restore();
-
-      const result = prepOutput(output).trim();
-      resolve(result ? result : "test");
-    });
-  });
-}
-
 function scriptNames(scripts: string[], splitter = ", ") {
   return scripts.map(script => {
     const path = script.split("/");
@@ -47,12 +35,18 @@ async function mochaTests(stg: string, searchTerms: string[]) {
 }
 
 (async () => {
-  const stage = await getExecutionStage();
   const searchTerms = process.argv.slice(2).filter(fn => fn[0] !== "-");
-  const options = new Set(process.argv.slice(2).filter(fn => fn[0] === "-"));
+  const options = new Set(
+    process.argv
+      .slice(2)
+      .filter(fn => fn[0] === "-")
+      .map(o => o.replace(/^-/, ""))
+  );
+  const stage = options.has("dev") ? "dev" : "test";
   const availableScripts = await find("./test").filter(f => f.match(/-spec\.ts/));
+
   const scriptsToTest =
-    searchTerms.length > 1
+    searchTerms.length > 0
       ? availableScripts.filter(s => {
           return searchTerms.reduce((prv, script) => s.match(script) || prv, 0);
         })
@@ -65,7 +59,11 @@ async function mochaTests(stg: string, searchTerms: string[]) {
     return;
   }
 
-  console.log(chalk.yellow("- 🕐  Starting testing"));
+  console.log(
+    chalk.yellow(
+      `- 🕐  Starting testing ${stage !== "test" ? "[ stage:  " + stage + " ]" : ""}`
+    )
+  );
 
   try {
     await lintSource();

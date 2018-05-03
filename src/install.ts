@@ -11,6 +11,7 @@ export function install(context: IGeneratorDictionary) {
     "@types/lodash",
     "@types/mocha",
     "@types/rimraf",
+    "@types/handlebars",
     "@types/chance",
     "@types/faker",
     "@types/js-yaml"

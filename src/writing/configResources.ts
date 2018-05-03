@@ -60,12 +60,19 @@ export const configResources = (context: IGeneratorDictionary) => () => {
       ".vscode/launch.json",
       ".vscode/settings.json",
       ".vscode/tasks.json",
+      "tsconfig.json",
+      {
+        file: "tsconfig-esm.json",
+        condition: !validate.isServerless()
+      },
       ".gitignore",
       {
-        file: "travis.yml",
+        file: ".travis.yml",
         condition: validate.useTravis()
       }
     ];
+
+    const notServerless: IFileConfiguration[] = ["tsconfig-esm.json"];
 
     const serverlessConfig: IFileConfiguration[] = [
       {
@@ -80,7 +87,7 @@ export const configResources = (context: IGeneratorDictionary) => () => {
 
     const config = validate.isServerless()
       ? [...rootConfigFiles, ...serverlessConfig]
-      : rootConfigFiles;
+      : [...rootConfigFiles, ...notServerless];
 
     processFiles(context)("configuration", config);
     resolve();

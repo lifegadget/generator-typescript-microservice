@@ -42,6 +42,6 @@ async function getScope(): Promise<string> {
 (async () => {
   const scope: string = await getScope();
   await clearTranspiledJS();
-  await transpileJavascript({scope});
-  await transpileJavascript({scope, configFile: 'tsconfig-esm.json'});
+  await transpileJavascript({ scope });
+  await transpileJavascript({ scope, configFile: "tsconfig-esm.json" });
 })();
