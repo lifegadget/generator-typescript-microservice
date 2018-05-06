@@ -11,6 +11,8 @@ export interface IValidator {
     twitterHandleRequired(): boolean;
     useStaticDocs(): boolean;
     useWallaby(): boolean;
+    useCoveralls(): boolean;
+    useCodecov(): boolean;
     gitServerURL(): string;
 }
 export declare const validatationFactory: IValidatorFactory;

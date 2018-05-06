@@ -77,6 +77,7 @@ async function mochaTests(stg: string, searchTerms: string[]) {
           )}`
         )
       );
+      process.exit(1);
     } else {
       console.log(
         `- 🦄  continuing onto mocha tests because of ${chalk.bold("--ignoreLint")} flag`
@@ -105,6 +106,7 @@ async function mochaTests(stg: string, searchTerms: string[]) {
     await mochaTests(stage, scriptsToTest);
     console.log(chalk.green("- 🚀  Successful test run!\n"));
   } catch (e) {
-    console.log(chalk.red.bold(`- 😖 Error(s) in tests. ${e}\n`));
+    console.log(chalk.red.bold(`- 😖 Error(s) in tests.\n`));
+    process.exit(1);
   }
 })();

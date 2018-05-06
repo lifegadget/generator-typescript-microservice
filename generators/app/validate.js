@@ -21,6 +21,12 @@ exports.validatationFactory = answers => {
         useTravis() {
             return has("testing", "travis");
         },
+        useCoveralls() {
+            return has("coverage", "coveralls");
+        },
+        useCodecov() {
+            return has("coverage", "codecov");
+        },
         useStaticDocs() {
             return has("features", "vuepress");
         },

@@ -29,8 +29,13 @@ exports.configResources = (context) => () => {
                     keywords: context.answers.serverless
                         ? '["serverless", "typescript"]'
                         : '["typescript"]',
-                    files: validate.isServerless() ? '["lib"]' : '["lib", "esm"]',
-                    module: validate.isServerless() ? "" : '"module": "esm/index.js",',
+                    files: validate.isServerless() ? '["lib"]' : '["lib", "dist"]',
+                    module: validate.isServerless()
+                        ? ""
+                        : `"module": "dist/${lodash_1.kebabCase(context.answers.appName)}.es.js",`,
+                    browser: validate.isServerless()
+                        ? ""
+                        : `"browser": "dist/${lodash_1.kebabCase(context.answers.appName)}.min.js",`,
                     docsScripts: validate.useStaticDocs()
                         ? ',\n"docs:dev": "vuepress dev docs",\n"docs:build": "vuepress build docs"'
                         : ""
@@ -67,7 +72,23 @@ exports.configResources = (context) => () => {
             ".gitignore",
             {
                 file: ".travis.yml",
-                condition: validate.useTravis()
+                condition: validate.useTravis(),
+                substitute: {
+                    scripts: validate.useCodecov() ? `  - npm install codecov -g` : "",
+                    after_success: validate.useCodecov() ? `after_success\n  - codecov` : ""
+                }
+            },
+            {
+                file: ".coveralls.yml",
+                condition: validate.useCoveralls(),
+                substitute: {
+                    service_name: context.answers.appName,
+                    repo_token: context.answers.coverallsToken || "PLEASE FILL IN"
+                }
+            },
+            {
+                file: ".codecov.yml",
+                condition: validate.useCodecov()
             }
         ];
         const notServerless = ["tsconfig-esm.json"];
@@ -97,7 +118,14 @@ const badges = (context, validate) => (category) => {
         travis: `https://img.shields.io/travis/${context.answers.repoUserName}/${context.answers.repo}.svg`
     };
     const coverage = {
-        coveralls: `https://coveralls.io/repos/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}/badge.svg?branch=master`
+        coveralls: [
+            `https://coveralls.io/repos/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}/badge.svg?branch=master`,
+            `https://coveralls.io/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}`
+        ],
+        codecov: [
+            `https://codecov.io/gh/${context.answers.repoUserName}/${context.answers.repo}/branch/master/graph/badge.svg`,
+            `https://codecov.io/${context.answers.gitServer === "github" ? "gh" : "bb"}/${context.answers.repoUserName}/${context.answers.repo}`
+        ]
     };
     const licenses = {
         MIT: "http://img.shields.io/badge/license-MIT-brightgreen.svg",

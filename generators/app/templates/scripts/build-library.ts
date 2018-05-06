@@ -6,6 +6,7 @@ import * as process from "process";
 import "../test/testing/test-console";
 import { stdout, stderr } from "test-console";
 import { transpileJavascript, clearTranspiledJS } from "./lib/js";
+import { asyncExec } from "async-shelljs";
 
 function prepOutput(output: string) {
   return output
@@ -43,5 +44,6 @@ async function getScope(): Promise<string> {
   const scope: string = await getScope();
   await clearTranspiledJS();
   await transpileJavascript({ scope });
-  await transpileJavascript({ scope, configFile: "tsconfig-esm.json" });
+  // await transpileJavascript({ scope, configFile: "tsconfig-esm.json" });
+  await asyncExec("bili lib/index.js --format umd,umd-min,es");
 })();

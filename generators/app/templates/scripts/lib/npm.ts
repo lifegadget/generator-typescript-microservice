@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import * as rm from "rimraf";
 
-export function publish(version?: string) {
+export async function publish(version?: string) {
   try {
     await asyncExec(`ts-node scripts/build.ts --color=true`);
   } catch (e) {
@@ -43,4 +43,4 @@ export function publish(version?: string) {
       console.log(chalk.red.bold(`\n- problems publishing to npm: ${e.code}  😡 `));
     }
   }
-})();
+}

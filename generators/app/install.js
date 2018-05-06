@@ -10,6 +10,8 @@ function install(context) {
         "@types/lodash",
         "@types/mocha",
         "@types/rimraf",
+        "@types/handlebars",
+        "@types/inquirer",
         "@types/chance",
         "@types/faker",
         "@types/js-yaml"
@@ -41,10 +43,11 @@ function install(context) {
         "serverless-step-functions",
         "js-yaml"
     ];
+    const notServerlessOnlyDevDeps = ["bili"];
     let devDeps = [...typings, ...globaldevDeps];
-    if (validate.isServerless()) {
-        devDeps = [...devDeps, ...serverlessOnlyDevDeps];
-    }
+    devDeps = validate.isServerless()
+        ? [...devDeps, ...serverlessOnlyDevDeps]
+        : [...devDeps, ...notServerlessOnlyDevDeps];
     if (validate.useStaticDocs()) {
         devDeps = [...devDeps, "vuepress"];
     }
@@ -54,6 +57,9 @@ function install(context) {
     }
     if (validate.hasFirebase()) {
         deps = [...deps, ...["abstracted-admin", "firemodel"]];
+    }
+    if (validate.useCoveralls()) {
+        devDeps = [...devDeps, "coveralls"];
     }
     context.spawnCommand("yarn", []);
     context.yarnInstall(devDeps, { dev: true });

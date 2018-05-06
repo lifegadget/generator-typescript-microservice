@@ -12,6 +12,7 @@ export function install(context: IGeneratorDictionary) {
     "@types/mocha",
     "@types/rimraf",
     "@types/handlebars",
+    "@types/inquirer",
     "@types/chance",
     "@types/faker",
     "@types/js-yaml"
@@ -46,11 +47,13 @@ export function install(context: IGeneratorDictionary) {
     "js-yaml"
   ];
 
+  const notServerlessOnlyDevDeps = ["bili"];
+
   let devDeps = [...typings, ...globaldevDeps];
 
-  if (validate.isServerless()) {
-    devDeps = [...devDeps, ...serverlessOnlyDevDeps];
-  }
+  devDeps = validate.isServerless()
+    ? [...devDeps, ...serverlessOnlyDevDeps]
+    : [...devDeps, ...notServerlessOnlyDevDeps];
 
   if (validate.useStaticDocs()) {
     devDeps = [...devDeps, "vuepress"];
@@ -64,6 +67,10 @@ export function install(context: IGeneratorDictionary) {
 
   if (validate.hasFirebase()) {
     deps = [...deps, ...["abstracted-admin", "firemodel"]];
+  }
+
+  if (validate.useCoveralls()) {
+    devDeps = [...devDeps, "coveralls"];
   }
 
   // first install what's in the package.json (which would have more rigid

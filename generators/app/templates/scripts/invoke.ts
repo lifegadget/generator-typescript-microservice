@@ -5,6 +5,7 @@ import * as rm from "rimraf";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 import * as inquirer from "inquirer";
+import { IDictionary } from "common-types";
 
 async function build(fns?: string[]) {
   return asyncExec(`ts-node scripts/build.ts --color=true ${fns}`);
@@ -33,7 +34,7 @@ async function deploy(stage: string, fns: string[] = []) {
   }
 }
 
-export function invoke(fn, data) {
+export function invoke(fn: string, data: string) {
   const dataSource = {};
   try {
     console.log(chalk.yellow(`- invoking ${chalk.bold(fn)}`));
@@ -46,7 +47,7 @@ export function invoke(fn, data) {
 }
 
 export async function chooseFunctions() {
-  let config;
+  let config: IDictionary;
   try {
     config = yaml.safeLoad(fs.readFileSync("serverless.yml", { encoding: "utf-8" }));
   } catch (e) {
@@ -63,7 +64,7 @@ export async function chooseFunctions() {
     );
     throw new Error("no functions in serverless.yml");
   }
-  const chosenFunction = await inquirer.prompt([
+  const chosenFunction: IDictionary = await inquirer.prompt([
     {
       name: "which",
       type: "list",
@@ -108,7 +109,7 @@ export async function chooseDataSource() {
 
   const dataSources = await ls("test/data/*.json").concat("default");
 
-  const chosenData = await inquirer.prompt([
+  const chosenData: IDictionary = await inquirer.prompt([
     {
       name: "source",
       type: "list",

@@ -11,9 +11,9 @@ function clearOldPackageContents(dir: string) {
 (async () => {
   const args = process.argv.slice(2).filter(fn => fn[0] !== "-");
   const options = new Set(process.argv.slice(2).filter(fn => fn[0] === "-"));
-  const stage = options["--prod"] ? "prod" : "dev";
-  const region = "us-east-1";
-  const outputDir = "./serverless-package";
+  const stage: string = options.has("--prod") ? "prod" : "dev";
+  const region: string = "us-east-1";
+  const outputDir: string = "./serverless-package";
 
   console.log(chalk.yellow.bold("- 🕐  Starting packaging serverless assets"));
   try {
