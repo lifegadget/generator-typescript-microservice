@@ -32,7 +32,7 @@ export const writing = (
 
   return Promise.all([
     testResources(context, validate)(),
-    projectResources(context, validate)(),
+    projectResources(context)(),
     buildScripts(context, validate)(),
     configResources(context)(),
     templatingResources(context, validate)(),

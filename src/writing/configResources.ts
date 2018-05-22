@@ -103,6 +103,7 @@ export const configResources = (context: IGeneratorDictionary) => () => {
         }
       },
       "serverless-config/env.yml",
+      "serverless-config/README.md",
       "serverless-config/"
     ];
 

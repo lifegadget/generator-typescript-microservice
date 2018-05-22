@@ -100,6 +100,7 @@ exports.configResources = (context) => () => {
                 }
             },
             "serverless-config/env.yml",
+            "serverless-config/README.md",
             "serverless-config/"
         ];
         const config = validate.isServerless()
