@@ -146,9 +146,15 @@ const badges = (context: IDictionary, validate: IValidator) => (
     ]
   };
   const licenses = {
-    MIT: "http://img.shields.io/badge/license-MIT-brightgreen.svg",
+    MIT: [
+      "http://img.shields.io/badge/license-MIT-brightgreen.svg",
+      "https://opensource.org/licenses/MIT"
+    ],
     BSD: "http://img.shields.io/badge/license-BSD-brightgreen.svg",
-    Apache: "http://img.shields.io/badge/license-Apache-brightgreen.svg",
+    Apache: [
+      "http://img.shields.io/badge/license-Apache-brightgreen.svg",
+      "https://opensource.org/licenses/Apache-2.0"
+    ],
     GNU: "http://img.shields.io/badge/license-GNU-brightgreen.svg",
     Proprietary: "http://img.shields.io/badge/license-Proprietary-orange.svg",
     none: "http://img.shields.io/badge/license-NONE-red.svg"
