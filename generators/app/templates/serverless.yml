@@ -1,4 +1,4 @@
-service: <%= appname %>-services
+service: <%= appName %>-services
 package:
   include:
     - "lib/*"
@@ -17,7 +17,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs6.10
-  profile: <%= appname %>
+  profile: <%= appName %>
   stage: dev
   region: us-east-1
 
@@ -64,7 +64,7 @@ resources:
     accounting:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: <%= appname %>-services-${self:custom.stage}-accounting
+        RoleName: <%= appName %>-services-${self:custom.stage}-accounting
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -80,7 +80,7 @@ resources:
     logging:
       Type: AWS::IAM::Policy
       Properties:
-        PolicyName: <%= appname %>-logging
+        PolicyName: <%= appName %>-logging
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -99,13 +99,13 @@ resources:
                   - - "arn:aws:s3:::"
                     - "Ref" : "ServerlessDeploymentBucket"
         Roles:
-          - <%= appname %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
-          - <%= appname %>-services-${self:custom.stage}-accounting
+          - <%= appName %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
+          - <%= appName %>-services-${self:custom.stage}-accounting
 
     lambdaInvocation:
       Type: AWS::IAM::Policy
       Properties:
-        PolicyName: <%= appname %>-invocation
+        PolicyName: <%= appName %>-invocation
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -114,7 +114,7 @@ resources:
                 - lambda:InvokeFunction
                 - lambda:ListFunctions
               Resource:
-                - "arn:aws:lambda:${self:custom.region}:*:function:<%= appname %>-services-${self:custom.stage}-*"
+                - "arn:aws:lambda:${self:custom.region}:*:function:<%= appName %>-services-${self:custom.stage}-*"
         Roles:
-          - <%= appname %>-services-${self:custom.stage}-accounting
-          - <%= appname %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole
+          - <%= appName %>-services-${self:custom.stage}-accounting
+          - <%= appName %>-services-${self:custom.stage}-${self:provider.region}-lambdaRole

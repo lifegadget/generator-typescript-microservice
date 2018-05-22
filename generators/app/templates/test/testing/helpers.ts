@@ -6,7 +6,7 @@ import * as yaml from "js-yaml";
 import * as process from "process";
 import "./test-console"; // TS declaration
 import { stdout, stderr } from "test-console";
-import Handlebars from "handlebars";
+import Handlebars = require("handlebars");
 
 // tslint:disable-next-line
 interface Console {
@@ -43,8 +43,8 @@ export function setupEnv() {
     process.env.AWS_STAGE = "test";
   }
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
-  const combined = {
+  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+  const combined: IDictionary = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env
   };

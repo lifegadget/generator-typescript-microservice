@@ -13,6 +13,8 @@ export interface IValidator {
   twitterHandleRequired(): boolean;
   useStaticDocs(): boolean;
   useWallaby(): boolean;
+  useCoveralls(): boolean;
+  useCodecov(): boolean;
   gitServerURL(): string;
 }
 
@@ -43,6 +45,14 @@ export const validatationFactory: IValidatorFactory = answers => {
 
     useTravis() {
       return has("testing", "travis");
+    },
+
+    useCoveralls() {
+      return has("coverage", "coveralls");
+    },
+
+    useCodecov() {
+      return has("coverage", "codecov");
     },
 
     useStaticDocs() {

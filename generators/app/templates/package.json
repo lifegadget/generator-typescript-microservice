@@ -8,7 +8,7 @@
   "keywords": <%- keywords %>,
   "files": <%- files %>,
   "main": "lib/index.js",
-  <%- module %>
+  <%- module %> <%- browser %>
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
@@ -22,7 +22,11 @@
     "publish": "./node_modules/.bin/ts-node ./scripts/publish.ts ",
     "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
     "coverage":
-      "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
+      "nyc --reporter=html _mocha --require ts-node/register 'test/**/*-spec.ts' && open coverage/index.html",
+    "coverage:coveralls":
+      "nyc --reporter=text-lcov _mocha --require ts-node/register 'test/**/*-spec.ts' | coveralls",
+    "coverage:codecov":
+      "nyc _mocha --reporter=json --require ts-node/register 'test/**/*-spec.ts' > coverage/coverage.json",
     "watch": "ts-node ./scripts/watch.ts",
     "watch:test": "ts-node ./scripts/watch.ts test",
     "watch:all": "ts-node ./scripts/watch.ts all",
