@@ -64,10 +64,20 @@ exports.configResources = (context) => () => {
             ".vscode/launch.json",
             ".vscode/settings.json",
             ".vscode/tasks.json",
-            "tsconfig.json",
             {
-                file: "tsconfig-esm.json",
-                condition: !validate.isServerless()
+                file: "tsconfig.json",
+                condition: !validate.isServerless(),
+                sourceFrom: "tsconfig.json"
+            },
+            {
+                file: "tsconfig.json",
+                condition: validate.isServerless() && !validate.hasFirebase(),
+                sourceFrom: "tsconfig-esm.json"
+            },
+            {
+                file: "tsconfig.json",
+                condition: validate.isServerless() && validate.hasFirebase(),
+                sourceFrom: "tsconfig-firebase.json"
             },
             ".gitignore",
             {
@@ -100,6 +110,12 @@ exports.configResources = (context) => () => {
                 }
             },
             "serverless-config/env.yml",
+            "serverless-config/README.md",
+            "serverless-config/package.ts",
+            "serverless-config/provider.ts",
+            "serverless-config/functions/index.ts",
+            "serverless-config/stepFunctions/index.ts",
+            "serverless-config/.dep-config/README.md",
             "serverless-config/"
         ];
         const config = validate.isServerless()

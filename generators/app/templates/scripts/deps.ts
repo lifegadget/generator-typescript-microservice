@@ -8,9 +8,12 @@ import * as inquirer from "inquirer";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 
-const STATIC_DEPENDENCIES_FILE = "static-dependencies.yml";
-const QUESTIONS_MEMORY_1 = ".question1_memory.json";
-const QUESTIONS_MEMORY_2 = ".question2_memory.json";
+export const CONFIG_DIRECTORY = "serverless-config";
+export const STATIC_DEPENDENCIES_FILE = `${CONFIG_DIRECTORY}/.dep-config/static-dependencies.yml`;
+export const SERVERLESS_EXCLUDE_INCLUDE_FILE = `${CONFIG_DIRECTORY}/.dep-config/serverless-exclusions-and-inclusions.json`;
+export const DEP_ANALYSIS_FILE = `${CONFIG_DIRECTORY}/.dep-config/dep-analysis.json`;
+const QUESTIONS_MEMORY_1 = `${CONFIG_DIRECTORY}/.dep-config/1_memory.json`;
+const QUESTIONS_MEMORY_2 = `${CONFIG_DIRECTORY}/.dep-config/2_memory.json`;
 const pkg: IPackageJson = JSON.parse(cat("./package.json"));
 
 interface IAnalysis {
@@ -97,23 +100,22 @@ export async function nodeModulesDirectories() {
 }
 
 export async function depAnalysis(data: IDeps): Promise<IDictionary> {
-  let relationships = {};
+  let relationships: IDictionary = {};
   const dependencies = new Set(data.dependencies);
-  const hasAnalysis =
-    ls(".").filter(f => f === "dep-analysis.json").length > 0 ? true : false;
-  const answer = await inquirer.prompt({
+  const hasAnalysis = fs.existsSync(DEP_ANALYSIS_FILE);
+  const answer: any = await inquirer.prompt({
     name: "userStoredAnalysis",
     message: "Use the stored analysis (dep-analysis.json)?",
     type: "confirm",
     default: true,
     when: () => hasAnalysis
   });
-  const errors = [];
+  const errors: any[] = [];
   if (answer.userStoredAnalysis) {
-    relationships = JSON.parse(
-      fs.readFileSync("./dep-analysis.json", { encoding: "utf-8" })
-    );
+    relationships = JSON.parse(fs.readFileSync(DEP_ANALYSIS_FILE, { encoding: "utf-8" }));
   } else {
+    console.log(`- Didn't find existing analysis file at: ${DEP_ANALYSIS_FILE}`);
+
     process.stdout.write("- Starting analysis of deps in node_modules:\n");
     const blockSize = 30;
     for (let index = 0; index < data.nodeModules.length; index = index + blockSize) {
@@ -122,20 +124,22 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       let firstResponder = true;
       for (let offset = 0; offset < blockSize - 1; offset++) {
         const nm = data.nodeModules[index + offset];
-        promises.push(
-          getYarnWhy(nm, dependencies, errors).then(why => {
-            if (firstResponder) {
-              firstResponder = false;
-              process.stdout.write("\b\b");
-            }
-            if (why.length > 0) {
-              process.stdout.write(` .`);
-            } else {
-              process.stdout.write(chalk.grey.dim(" ."));
-            }
-            relationships[nm] = why;
-          })
-        );
+        if (nm !== "undefined" && nm) {
+          promises.push(
+            getYarnWhy(nm, dependencies, errors).then(why => {
+              if (firstResponder) {
+                firstResponder = false;
+                process.stdout.write("\b\b");
+              }
+              if (why.length > 0) {
+                process.stdout.write(` .`);
+              } else {
+                process.stdout.write(chalk.grey.dim(" ."));
+              }
+              relationships[nm] = why;
+            })
+          );
+        }
       }
       await Promise.all(promises);
     }
@@ -160,11 +164,11 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
   const onlyDevDep: string[] = [];
   const multiDep: string[] = [];
   const singleNamedDep: string[] = [];
-  const dependencyGraph = {};
-  const singleNamedDepInDep = [];
-  const singleNamedDepNotInDep = [];
-  const multiDepNotInTopLevelDep = [];
-  const multiDepInTopLevelDep = [];
+  const dependencyGraph: IDictionary = {};
+  const singleNamedDepInDep: any[] = [];
+  const singleNamedDepNotInDep: any[] = [];
+  const multiDepNotInTopLevelDep: any[] = [];
+  const multiDepInTopLevelDep: any[] = [];
 
   Object.keys(relationships).map(key => {
     if (relationships[key].length === 0) {
@@ -198,7 +202,7 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
     }
   });
   multiDep.forEach(key => {
-    const deps = relationships[key];
+    const deps: any[] = relationships[key];
     if (deps.every(d => !dependencies.has(d) && d !== "in dependencies")) {
       multiDepNotInTopLevelDep.push(key);
     } else {
@@ -218,7 +222,7 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
   console.log(
     `- There were ${chalk.yellow(String(noDeps.length))} modules with NO dependencies`
   );
-  const show = await inquirer.prompt([
+  const show: IDictionary = await inquirer.prompt([
     {
       name: "details",
       message: "show details?",
@@ -237,7 +241,7 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       "only"
     )} a top-level project development dependency on them (aka, not required): `
   );
-  const show1 = await inquirer.prompt([
+  const show1: IDictionary = await inquirer.prompt([
     {
       name: "details",
       message: "show details?",
@@ -257,7 +261,7 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       String(singleNamedDepNotInDep.length)
     )} have no dependency on top-level "dependencies" of the project: `
   );
-  const show2 = await inquirer.prompt([
+  const show2: IDictionary = await inquirer.prompt([
     {
       name: "details",
       message: "show details?",
@@ -278,7 +282,7 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
       String(multiDepNotInTopLevelDep.length)
     )} had no dependency on top-level "dependencies" of the project: `
   );
-  const show3 = await inquirer.prompt([
+  const show3: IDictionary = await inquirer.prompt([
     {
       name: "details",
       message: "show details?",
@@ -307,8 +311,8 @@ export async function depAnalysis(data: IDeps): Promise<IDictionary> {
   return { relationships, analysis };
 }
 
-export async function getYarnWhy(dep: string, dependencies, errors: IDictionary[]) {
-  let why;
+export async function getYarnWhy(dep: string, dependencies: any, errors: IDictionary[]) {
+  let why: any;
   try {
     const yarn = await asyncExec(`yarn why ${dep} 2> /dev/null`, { silent: true });
     why = extractWhy(dep, yarn, dependencies, errors);
@@ -330,7 +334,7 @@ export async function getYarnWhy(dep: string, dependencies, errors: IDictionary[
 function extractWhy(
   moduleName: string,
   data: string,
-  dependencies,
+  dependencies: any,
   errors: IDictionary[]
 ): string[] {
   const singleNamedDep = data.match(/This module exists because/gm);
@@ -338,10 +342,11 @@ function extractWhy(
   if (singleNamedDep) {
     const [devnull, depInfo] = /.*This module exists because (.*)(\n.*)/g.exec(data);
     const namedDep = depInfo.replace(/.*\"(.*)\".*/g, "$1").replace(/\#.*/, "");
-    // console.log(`${depInfo} => ${namedDep}`);
 
     return data.match(/in /)
-      ? depInfo.match(/"dependencies"/) ? ["in dependencies"] : ["in devDependencies"]
+      ? depInfo.match(/"dependencies"/)
+        ? ["in dependencies"]
+        : ["in devDependencies"]
       : [namedDep];
   } else if (multiDep) {
     const deps = uniq(
@@ -396,7 +401,7 @@ async function buildGlobalExcludeFile(results: IDeps) {
   const atTypes = ls("-d", "node_modules/*")
     .map(d => d.replace("node_modules/", ""))
     .filter(d => d[0] === "@");
-  const isModule = thingy => !thingy.match(/\[/);
+  const isModule = (thingy: any) => !thingy.match(/\[/);
   let submoduleExclusions = 0;
   let staticDependencies: IStaticDependencies;
   let excludeCount: number;
@@ -404,15 +409,13 @@ async function buildGlobalExcludeFile(results: IDeps) {
     staticDependencies = yaml.safeLoad(
       fs.readFileSync(STATIC_DEPENDENCIES_FILE, { encoding: "utf-8" })
     );
-    if (!staticDependencies.exclude) {
-      throw new Error(
-        `The ${STATIC_DEPENDENCIES_FILE} did not have an "exclude" property`
-      );
-    }
     excludeCount = staticDependencies.exclude.length;
   } catch (e) {
-    console.log(e);
-    staticDependencies = undefined;
+    console.log(
+      `\n- The "${STATIC_DEPENDENCIES_FILE}" file didn't exist. This is fine and we will move forward with no static inclusions or exclusions.\n`
+    );
+
+    staticDependencies = {};
     excludeCount = 0;
   }
   let memory: IDictionary;
@@ -425,7 +428,7 @@ async function buildGlobalExcludeFile(results: IDeps) {
     memory = undefined;
   }
 
-  const answer = await inquirer.prompt([
+  const answer: any = await inquirer.prompt([
     {
       name: "onlyDevDep",
       message: `Exclude top-level devDeps? [ ${
@@ -460,11 +463,11 @@ async function buildGlobalExcludeFile(results: IDeps) {
     },
     {
       name: "staticDependencies",
-      message: `You have an 'always-exclude.yaml' file with ${chalk.bold(
+      message: `You have an '${STATIC_DEPENDENCIES_FILE}' file with ${chalk.bold(
         String(excludeCount)
       )} exclusions. Should we add this?`,
       type: "confirm",
-      when: staticDependencies ? true : false,
+      when: staticDependencies.exclude ? true : false,
       default: memory ? memory.staticDependencies : true
     }
   ]);
@@ -474,7 +477,7 @@ async function buildGlobalExcludeFile(results: IDeps) {
     `\nWhen library authors do not specify "files" in their package.json you get a lot of junk, the next few questions are ways in which we might be able to carve out some of this dead-code.\n`
   );
 
-  const excluded = [];
+  const excluded: any[] = [];
   if (answer.onlyDevDep) {
     excluded.push(...results.analysis.onlyDevDep);
   }
@@ -489,7 +492,7 @@ async function buildGlobalExcludeFile(results: IDeps) {
     excluded.push(...staticDependencies.exclude);
     submoduleExclusions = submoduleExclusions + fileTypes.length;
   }
-  const remainingModules = results.nodeModules.filter(m => {
+  const remainingModules: any[] = results.nodeModules.filter(m => {
     return !excluded.includes(m);
   });
 
@@ -546,13 +549,14 @@ async function buildGlobalExcludeFile(results: IDeps) {
     .filter(m => {
       return pkg.main.match(/src/);
     });
+
   let memory2: IDictionary;
   try {
     memory2 = JSON.parse(fs.readFileSync(QUESTIONS_MEMORY_2, { encoding: "utf-8" }));
   } catch (e) {
     memory2 = undefined;
   }
-  const answer2 = await inquirer.prompt([
+  const answer2: any = await inquirer.prompt([
     {
       name: "nodeModules",
       message: `Some library authors don't exclude "node_modules" in ".gitignore" and these directories\n  can be quite full of junk. There are ${chalk.yellow(
@@ -587,20 +591,14 @@ async function buildGlobalExcludeFile(results: IDeps) {
       type: "confirm",
       default: memory2 ? memory2.src : false,
       when: srcDirs.length > 0
-    },
-    {
-      name: "format",
-      message: "What format should the output file be?",
-      type: "list",
-      choices: ["inline to serverless.yml", "json", "yaml"],
-      default: memory2 ? memory2.format : "inline to serverless.yml"
     }
   ]);
   fs.writeFileSync(QUESTIONS_MEMORY_2, JSON.stringify(answer2), { encoding: "utf-8" });
 
-  const filename = "exclude-by-default." + answer2.format;
   process.stdout.write(
-    chalk.bold(`\n- writing serverless config (${chalk.grey(filename)}) `)
+    chalk.bold(
+      `\n- writing serverless config (${chalk.grey(SERVERLESS_EXCLUDE_INCLUDE_FILE)}) `
+    )
   );
   let data: string[] = [];
   if (answer.onlyDevDep) {
@@ -613,7 +611,7 @@ async function buildGlobalExcludeFile(results: IDeps) {
     data = data.concat(results.analysis.multiDepNotInTopLevelDep);
   }
   if (answer.atDependencies) {
-    answer.atDependencies.forEach(type => {
+    answer.atDependencies.forEach((type: any) => {
       data = data.concat(type);
     });
   }
@@ -638,32 +636,25 @@ async function buildGlobalExcludeFile(results: IDeps) {
   }
 
   data = uniq(
-    data.map(
-      d =>
-        isModule(d) ? `node_modules/${d}/**` : `**/${d.replace("[", "").replace("]", "")}`
-    )
-  ).filter(d => !staticDependencies.include.includes(d));
+    data
+      .filter(
+        d => (staticDependencies.include ? !staticDependencies.include.includes(d) : true)
+      )
+      .map(
+        d =>
+          isModule(d) ? `node_modules/${d}/**` : `${d.replace("[", "").replace("]", "")}`
+      )
+  );
   // Always exclude the possible "package" directory
   data = data.concat("serverless-package/**");
-
-  const output =
-    answer2.format === "json"
-      ? JSON.stringify(data)
-      : yaml.dump({ package: { exclude: data } });
-  if (answer2.format === "inline to serverless.yml") {
-    console.log(chalk.grey("- loading serverless.yml"));
-    const configFile: IServerlessConfig = yaml.safeLoad(
-      fs.readFileSync("serverless.yml", { encoding: "utf-8" })
-    );
-    configFile.package.exclude = data;
-    fs.writeFileSync("serverless.yml", yaml.dump(configFile), { encoding: "utf-8" });
-    console.log(chalk.green(`- serverless.yml updated with global exclusions 🚀\n`));
-  } else {
-    fs.writeFileSync(filename, output, { encoding: "utf-8" });
-    console.log(
-      chalk.green(`- ${chalk.bold("serverless.yml")} created with global exclusions`)
-    );
-  }
+  // WRITE FILE
+  fs.writeFileSync(
+    SERVERLESS_EXCLUDE_INCLUDE_FILE,
+    JSON.stringify({ exclude: data, include: [] }),
+    {
+      encoding: "utf-8"
+    }
+  );
 
   console.log(
     `There are now ${chalk.bold.green(

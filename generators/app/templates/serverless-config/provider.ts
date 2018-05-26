@@ -1,15 +1,10 @@
 // tslint:disable:no-invalid-template-strings
 import { IServerlessProvider, IServerlessIAMRole } from "common-types";
 
+const ACCOUNT_ID = "xxxxxxxxxx";
+const REGION = "us-east-1";
+
 const iamRoleStatements: IServerlessIAMRole[] = [
-  {
-    // PERMISSIONS FOR SNS PUBLISHING
-    Effect: "Allow",
-    Action: ["SNS:Publish"],
-    Resource: [
-      "arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:transport-${self:custom.stage}"
-    ]
-  },
   {
     // PERMISSIONS FOR X-RAY TRACING
     Effect: "Allow",
@@ -29,8 +24,8 @@ const iamRoleStatements: IServerlessIAMRole[] = [
       "states:GetExecutionHistory"
     ],
     Resource: [
-      "arn:aws:states:us-east-1:#{AWS::AccountId}:stateMachine:*",
-      "arn:aws:states:us-east-1:#{AWS::AccountId}:execution:*:*"
+      `arn:aws:states:${REGION}:${ACCOUNT_ID}:stateMachine:*`,
+      `arn:aws:states:${REGION}:${ACCOUNT_ID}:execution:*:*`
     ]
   }
 ];
@@ -38,9 +33,10 @@ const iamRoleStatements: IServerlessIAMRole[] = [
 const provider: IServerlessProvider = {
   name: "aws",
   runtime: "nodejs8.10",
-  profile: "my-app",
-  stage: "dev",
+  profile: "vuejs",
+  stage: "prod",
   region: "us-east-1",
+  environment: "${file(serverless-config/env.yml):${self:custom.stage}}",
   iamRoleStatements
 };
 

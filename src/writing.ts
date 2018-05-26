@@ -24,18 +24,15 @@ export interface IComplexFileConfiguration {
 }
 export type IFileConfiguration = IComplexFileConfiguration | string;
 
-export const writing = (
-  context: IGeneratorDictionary,
-  validate: IValidator
-) => async () => {
+export const writing = (context: IGeneratorDictionary) => async () => {
   context.log("\n\nwriting files ...");
 
   return Promise.all([
-    testResources(context, validate)(),
-    projectResources(context, validate)(),
-    buildScripts(context, validate)(),
+    testResources(context)(),
+    projectResources(context)(),
+    buildScripts(context)(),
     configResources(context)(),
-    templatingResources(context, validate)(),
+    templatingResources(context)(),
     docs(context)()
   ]);
 };

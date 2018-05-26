@@ -30,7 +30,7 @@ class Generator extends Base {
   }
 
   public async writing() {
-    return writing(this, validatationFactory(this))();
+    return writing(this)();
   }
 
   public install() {

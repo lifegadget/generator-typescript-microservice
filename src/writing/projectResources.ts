@@ -1,8 +1,10 @@
 import { IDictionary } from "common-types";
-import { IValidator } from "../validate";
+import { IValidator, validatationFactory } from "../validate";
 import { IFileConfiguration, processFiles } from "../writing";
 
-export const projectResources = (context: IDictionary, validate: IValidator) => () => {
+export const projectResources = (context: IDictionary) => () => {
+  const validate = validatationFactory(context.answers);
+
   return new Promise(resolve => {
     const serverlessConfig: IFileConfiguration[] = [
       "src/handlers/ping.ts",

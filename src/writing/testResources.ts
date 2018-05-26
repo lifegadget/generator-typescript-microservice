@@ -1,11 +1,9 @@
 import { IDictionary } from "common-types";
-import { IValidator } from "../validate";
+import { IValidator, validatationFactory } from "../validate";
 import { IFileConfiguration, processFiles, IGeneratorDictionary } from "../writing";
 
-export const testResources = (
-  context: IGeneratorDictionary,
-  validator: IValidator
-) => () => {
+export const testResources = (context: IGeneratorDictionary) => () => {
+  const validate = validatationFactory(context.answers);
   return new Promise(resolve => {
     const config: IFileConfiguration[] = [
       "test/ping-spec.ts",
