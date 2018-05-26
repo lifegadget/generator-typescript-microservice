@@ -14,7 +14,6 @@ const initializing_1 = require("./initializing");
 const prompting_1 = require("./prompting");
 const install_1 = require("./install");
 const writing_1 = require("./writing");
-const validate_1 = require("./validate");
 const async_shelljs_1 = require("async-shelljs");
 class Generator extends Base {
     constructor(args, opts) {
@@ -31,7 +30,7 @@ class Generator extends Base {
     }
     writing() {
         return __awaiter(this, void 0, void 0, function* () {
-            return writing_1.writing(this, validate_1.validatationFactory(this))();
+            return writing_1.writing(this)();
         });
     }
     install() {

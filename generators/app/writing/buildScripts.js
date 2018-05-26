@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const validate_1 = require("../validate");
 const writing_1 = require("../writing");
-exports.buildScripts = (context, validate) => () => {
+exports.buildScripts = (context) => () => {
+    const validate = validate_1.validatationFactory(context.answers);
     return new Promise(resolve => {
         const config = [
             {

@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./writing/index");
-exports.writing = (context, validate) => () => __awaiter(this, void 0, void 0, function* () {
+exports.writing = (context) => () => __awaiter(this, void 0, void 0, function* () {
     context.log("\n\nwriting files ...");
     return Promise.all([
-        index_1.testResources(context, validate)(),
+        index_1.testResources(context)(),
         index_1.projectResources(context)(),
-        index_1.buildScripts(context, validate)(),
+        index_1.buildScripts(context)(),
         index_1.configResources(context)(),
-        index_1.templatingResources(context, validate)(),
+        index_1.templatingResources(context)(),
         index_1.docs(context)()
     ]);
 });

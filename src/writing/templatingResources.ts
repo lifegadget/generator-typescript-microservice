@@ -1,11 +1,9 @@
 import { IDictionary } from "common-types";
-import { IValidator } from "../validate";
+import { IValidator, validatationFactory } from "../validate";
 import { IFileConfiguration, processFiles, IGeneratorDictionary } from "../writing";
 
-export const templatingResources = (
-  context: IGeneratorDictionary,
-  validate: IValidator
-) => () => {
+export const templatingResources = (context: IGeneratorDictionary) => () => {
+  const validate = validatationFactory(context.answers);
   return new Promise(resolve => {
     const templating: IFileConfiguration[] = [
       "templates/templates/example-template/default.hbs",
