@@ -16,6 +16,7 @@ export const buildScripts = (context: IGeneratorDictionary) => () => {
         condition: !validate.isServerless(),
         sourceFrom: "scripts/build-library.ts"
       },
+      "scripts/index.ts",
       "scripts/deploy.ts",
       "scripts/reset.ts",
       "scripts/test.ts",
