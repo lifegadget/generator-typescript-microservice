@@ -7,13 +7,13 @@ import { IDictionary, IPackageJson } from "common-types";
 import * as inquirer from "inquirer";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
+import { SLS_CONFIG_DIRECTORY } from ".";
 
-export const CONFIG_DIRECTORY = "serverless-config";
-export const STATIC_DEPENDENCIES_FILE = `${CONFIG_DIRECTORY}/.dep-config/static-dependencies.yml`;
-export const SERVERLESS_EXCLUDE_INCLUDE_FILE = `${CONFIG_DIRECTORY}/.dep-config/serverless-exclusions-and-inclusions.json`;
-export const DEP_ANALYSIS_FILE = `${CONFIG_DIRECTORY}/.dep-config/dep-analysis.json`;
-const QUESTIONS_MEMORY_1 = `${CONFIG_DIRECTORY}/.dep-config/1_memory.json`;
-const QUESTIONS_MEMORY_2 = `${CONFIG_DIRECTORY}/.dep-config/2_memory.json`;
+export const STATIC_DEPENDENCIES_FILE = `${SLS_CONFIG_DIRECTORY}/.dep-config/static-dependencies.yml`;
+export const SERVERLESS_EXCLUDE_INCLUDE_FILE = `${SLS_CONFIG_DIRECTORY}/.dep-config/serverless-exclusions-and-inclusions.json`;
+export const DEP_ANALYSIS_FILE = `${SLS_CONFIG_DIRECTORY}/.dep-config/dep-analysis.json`;
+const QUESTIONS_MEMORY_1 = `${SLS_CONFIG_DIRECTORY}/.dep-config/1_memory.json`;
+const QUESTIONS_MEMORY_2 = `${SLS_CONFIG_DIRECTORY}/.dep-config/2_memory.json`;
 const pkg: IPackageJson = JSON.parse(cat("./package.json"));
 
 interface IAnalysis {

@@ -7,6 +7,10 @@ import * as process from "process";
 import "./test-console"; // TS declaration
 import { stdout, stderr } from "test-console";
 import Handlebars = require("handlebars");
+import { SLS_CONFIG_DIRECTORY } from "../../scripts";
+import * as path from "path";
+
+const ENV_FILE = path.join(SLS_CONFIG_DIRECTORY, "env.yml");
 
 // tslint:disable-next-line
 interface Console {
@@ -43,7 +47,7 @@ export function setupEnv() {
     process.env.AWS_STAGE = "test";
   }
   const current = process.env;
-  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync(ENV_FILE, "utf8"));
   const combined: IDictionary = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env
