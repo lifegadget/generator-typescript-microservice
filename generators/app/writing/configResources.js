@@ -113,6 +113,7 @@ exports.configResources = (context) => () => {
             "serverless-config/README.md",
             "serverless-config/package.ts",
             "serverless-config/provider.ts",
+            "serverless-config/plugins.ts",
             "serverless-config/functions/index.ts",
             "serverless-config/stepFunctions/index.ts",
             "serverless-config/.dep-config/README.md",

@@ -16,6 +16,7 @@ exports.buildScripts = (context) => () => {
                 condition: !validate.isServerless(),
                 sourceFrom: "scripts/build-library.ts"
             },
+            "scripts/index.ts",
             "scripts/deploy.ts",
             "scripts/reset.ts",
             "scripts/test.ts",
