@@ -31,7 +31,7 @@ async function mochaTests(stg: string, searchTerms: string[]) {
   const scripts = await findScripts(searchTerms);
   process.env.AWS_STAGE = stg;
   process.env.TS_NODE_COMPILER_OPTIONS = '{ "noImplicitAny": false }';
-  await asyncExec(`mocha --require ts-node/register ` + scripts.join(" "));
+  await asyncExec(`mocha --require ts-node/register --exit ` + scripts.join(" "));
 }
 
 (async () => {
