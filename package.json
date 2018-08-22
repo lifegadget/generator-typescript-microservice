@@ -1,10 +1,9 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "4.3.1",
+  "version": "4.3.3",
   "description":
     "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
-  "main": "app/index.js",
   "repository": "lifegadget/generator-typescript-microservice",
   "author": {
     "name": "Ken Snyder",
@@ -16,13 +15,13 @@
     "test":
       "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
-  "files": ["generators"],
   "keywords": ["yeoman-generator", "typescript", "nodejs", "lambda", "serverless", "aws"],
   "dependencies": {
     "@types/yeoman-generator": "^2.0.3",
     "async-shelljs": "^0.1.2",
     "chalk": "^2.4.1",
     "common-types": "^1.7.31",
+    "handlebars": "^4.0.11",
     "lodash": "^4.17.10",
     "yeoman-generator": "^2.0.5",
     "yosay": "^2.0.2"
@@ -39,7 +38,6 @@
     "chance": "^1.0.16",
     "coveralls": "^3.0.0",
     "faker": "^4.1.0",
-    "handlebars": "^4.0.11",
     "inquirer": "^5.2.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
