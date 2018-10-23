@@ -3,6 +3,7 @@ module.exports = function(w) {
     // runAllTestsInAffectedTestFile: true,
     files: [
       "src/**/*.ts",
+      "scripts/**/*.ts",
       { pattern: "env.yml", instrument: false },
       { pattern: "test/testing/helpers.ts", instrument: false },
       { pattern: "test/testing/test-console.ts", instrument: false },

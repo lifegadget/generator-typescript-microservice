@@ -1,13 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import chalk from "chalk";
-import * as moment from "moment";
-import { exec, asyncExec, find, ls } from "async-shelljs";
-import * as rm from "rimraf";
-import * as fs from "fs";
-// import * as process from "process";
 import "../test/testing/test-console";
-import { stdout, stderr } from "test-console";
-import * as yaml from "js-yaml";
 import {
   IStateMachine,
   IDictionary,

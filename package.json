@@ -1,8 +1,7 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "4.3.3",
-  "description":
-    "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
+  "version": "4.4.6",
+  "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "lifegadget/generator-typescript-microservice",
   "author": {
@@ -12,16 +11,23 @@
   },
   "scripts": {
     "build": "tslint src/*.ts && tsc",
-    "test":
-      "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
+    "test": "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
-  "keywords": ["yeoman-generator", "typescript", "nodejs", "lambda", "serverless", "aws"],
+  "keywords": [
+    "yeoman-generator",
+    "typescript",
+    "nodejs",
+    "lambda",
+    "serverless",
+    "aws"
+  ],
   "dependencies": {
     "@types/yeoman-generator": "^2.0.3",
     "async-shelljs": "^0.1.2",
     "chalk": "^2.4.1",
     "common-types": "^1.7.31",
     "handlebars": "^4.0.11",
+    "simple-git": "^1.92.0",
     "lodash": "^4.17.10",
     "yeoman-generator": "^2.0.5",
     "yosay": "^2.0.2"
@@ -45,7 +51,6 @@
     "nyc": "^11.7.1",
     "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
-    "simple-git": "^1.92.0",
     "test-console": "^1.1.0",
     "ts-node": "^6.0.2",
     "tslint": "^5.9.1",

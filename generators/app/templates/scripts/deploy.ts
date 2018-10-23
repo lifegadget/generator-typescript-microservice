@@ -1,10 +1,10 @@
 // tslint:disable:no-implicit-dependencies
 import chalk from "chalk";
-import { asyncExec } from "async-shelljs";
+import { asyncExec, exit } from "async-shelljs";
 import { IServerlessConfig } from "common-types";
 import * as yaml from "js-yaml";
 import * as fs from "fs";
-import * as rm from "rimraf";
+import { parseArgv } from "./lib/util";
 
 let _serverlessConfig: IServerlessConfig = null;
 function serverlessConfig(): IServerlessConfig {
@@ -33,8 +33,9 @@ function findFunctions(input: string[]): string[] {
 function findSteps(input: string[]): string[] {
   const steps: string[] = [];
   const stepFunctions = new Set(
-    Object.keys(serverlessConfig().stepFunctions.stateMachines)
+    Object.keys(serverlessConfig().stepFunctions.stateMachines || [])
   );
+
   input.map(i => {
     if (stepFunctions.has(i)) {
       steps.push(i);
@@ -44,13 +45,20 @@ function findSteps(input: string[]): string[] {
 }
 
 async function build(fns?: string[]) {
-  return asyncExec(
-    `ts-node scripts/build.ts --color=true ${fns} ${fns ? "--skip-java" : ""}`
-  );
+  try {
+    await asyncExec(`ts-node scripts/build.ts --color=true ${fns}}`);
+  } catch (e) {
+    console.error(chalk.red("- 🤯 build failed, deployment stopped"));
+    process.exit();
+  }
+  console.log(chalk.green("- Build step completed successfully 🚀"));
+
+  return;
 }
 
 async function deploy(stage: string, fns: string[] = []) {
   const msg = fns.length !== 0 ? `` : ``;
+
   try {
     if (fns.length === 0) {
       console.log(
@@ -64,6 +72,7 @@ async function deploy(stage: string, fns: string[] = []) {
     } else {
       const functions: string[] = findFunctions(fns);
       const steps: string[] = findSteps(fns);
+
       if (functions.length > 0) {
         console.log(
           chalk.yellow(
@@ -106,22 +115,18 @@ function getFunctionIfScoped(): string | undefined {
 // MAIN
 
 (async () => {
-  const fns = process.argv.slice(2).filter(fn => fn[0] !== "-");
+  const { params, options } = parseArgv()("--help", "--profile", "--key");
   const sls = await serverlessConfig();
-  const options = new Set(
-    process.argv
-      .slice(2)
-      .filter(fn => fn[0] === "-")
-      .map(p => p.replace(/^-+/g, ""))
-  );
 
-  const stage = options.has("prod") ? "prod" : sls.provider.stage || "dev";
-  if (!options.has("skip")) {
+  const stage = options.prod ? "prod" : sls.provider.stage || "dev";
+  if (!options.skip) {
     try {
-      await build(fns);
+      await build(params);
     } catch (e) {
+      console.error(`failed to execute build`);
+
       throw e;
     }
   }
-  await deploy(stage, fns);
+  await deploy(stage, params);
 })();
