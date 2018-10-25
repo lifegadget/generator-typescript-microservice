@@ -33,7 +33,11 @@ function findFunctions(input: string[]): string[] {
 function findSteps(input: string[]): string[] {
   const steps: string[] = [];
   const stepFunctions = new Set(
-    Object.keys(serverlessConfig().stepFunctions.stateMachines || [])
+    Object.keys(
+      serverlessConfig().stepFunctions
+        ? serverlessConfig().stepFunctions.stateMachines
+        : []
+    )
   );
 
   input.map(i => {
