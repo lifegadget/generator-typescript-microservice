@@ -43,6 +43,10 @@ export const buildScripts = (context: IGeneratorDictionary) => () => {
       "scripts/lib/util.ts",
       "scripts/lib/aws-ssm.ts",
       {
+        file: "scripts/fns.ts",
+        condition: validate.isServerless()
+      },
+      {
         file: "scripts/lib/serverless.ts",
         condition: validate.isServerless()
       }
