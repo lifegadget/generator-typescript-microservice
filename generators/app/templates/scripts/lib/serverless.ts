@@ -18,10 +18,6 @@ export interface IServerlessCliOptions {
   quiet?: boolean;
 }
 
-const OFFSET_DIR = SLS_CONFIG_DIRECTORY;
-const BASE_DIR = process.cwd();
-const CONFIG_DIR = path.join(BASE_DIR, OFFSET_DIR);
-
 export async function buildServerlessConfig(options: IDictionary = { quiet: false }) {
   await serverless("package", `serverless ${chalk.bold("Package")}`, options);
   await serverless("provider", `serverless ${chalk.bold("Provider")} definition`, {
@@ -45,14 +41,12 @@ export async function serverless(
   name: string,
   options: IServerlessCliOptions = { required: false, singular: false }
 ) {
-  console.log("CWD", process.cwd());
-  console.log("PWD", process.env.PWD);
-  const existsAsIndex = fs.existsSync(`${CONFIG_DIR}/${where}/index.ts`);
-  const existsAsFile = fs.existsSync(`${CONFIG_DIR}/${where}.ts`);
+  const existsAsIndex = fs.existsSync(`${SLS_CONFIG_DIRECTORY}/${where}/index.ts`);
+  const existsAsFile = fs.existsSync(`${SLS_CONFIG_DIRECTORY}/${where}.ts`);
   const exists = existsAsIndex || existsAsFile;
 
   if (exists) {
-    let configSection: IDictionary = require(`${CONFIG_DIR}/${where}`).default;
+    let configSection: IDictionary = require(`${SLS_CONFIG_DIRECTORY}/${where}`).default;
     if (!configSection) {
       console.log(
         `- The ${where} configuration does not export anything on default so skipping`
@@ -60,7 +54,7 @@ export async function serverless(
       return;
     }
     const serverlessConfig: IServerlessConfig = yaml.safeLoad(
-      fs.readFileSync("serverless.yml", {
+      fs.readFileSync(`${process.env.PWD}/serverless.yml`, {
         encoding: "utf-8"
       })
     ) as IServerlessConfig;
@@ -71,7 +65,7 @@ export async function serverless(
     if (!isDefined && options.required) {
       console.log(
         chalk.magenta(
-          `- Warning: there exist ${name} configuration at "${CONFIG_DIR}/${where} but its export is empty!`
+          `- Warning: there exist ${name} configuration at "${SLS_CONFIG_DIRECTORY}/${where} but its export is empty!`
         )
       );
 
@@ -111,7 +105,9 @@ export async function serverless(
     fs.writeFileSync(`${process.env.PWD}/serverless.yml`, yaml.dump(serverlessConfig));
   } else {
     console.error(
-      chalk.grey(`- No ${name} found in ${CONFIG_DIR}/${where}/index.ts so ignoring`)
+      chalk.grey(
+        `- No ${name} found in ${SLS_CONFIG_DIRECTORY}/${where}/index.ts so ignoring`
+      )
     );
   }
 }
