@@ -683,9 +683,10 @@ commander@^2.12.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
 
-common-types@^1.7.31:
-  version "1.8.11"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.8.11.tgz#880ff2357a74d03cbdd771c2bc75d032b4638878"
+common-types@^1.9.6:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.9.6.tgz#ec94d6466e4bd2876fb734297d7f8abf665f4aa3"
+  integrity sha512-JyMYuxDJgrhgqBh1D+A0C7ghCiVw+vxrxwNt/FcgoMhGzh/KqX8vOVwQBA6no5onsXAYcepAwUxrYYjpvrBChA==
 
 commondir@^1.0.1:
   version "1.0.1"

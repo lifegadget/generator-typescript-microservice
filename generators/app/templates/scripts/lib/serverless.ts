@@ -8,9 +8,7 @@ import {
 import chalk from "chalk";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
-import * as path from "path";
 import { SLS_CONFIG_DIRECTORY, STATIC_DEPENDENCIES_FILE } from "..";
-import { readFileSync } from "fs";
 
 export interface IServerlessCliOptions {
   required?: boolean;
@@ -19,6 +17,7 @@ export interface IServerlessCliOptions {
 }
 
 export async function buildServerlessConfig(options: IDictionary = { quiet: false }) {
+  await serverless("custom", `serverless ${chalk.bold("Custom")}`, options);
   await serverless("package", `serverless ${chalk.bold("Package")}`, options);
   await serverless("provider", `serverless ${chalk.bold("Provider")} definition`, {
     singular: true,
@@ -121,7 +120,7 @@ export async function includeStaticDependencies() {
   let staticDeps;
   try {
     staticDeps = yaml.safeLoad(
-      readFileSync(STATIC_DEPENDENCIES_FILE, { encoding: "utf-8" })
+      fs.readFileSync(STATIC_DEPENDENCIES_FILE, { encoding: "utf-8" })
     );
   } catch (e) {
     // ignore
@@ -131,7 +130,7 @@ export async function includeStaticDependencies() {
     console.log(`- Adding static dependencies to list of inclusions/exclusions`);
 
     const config: IServerlessConfig = yaml.safeLoad(
-      readFileSync(`${process.env.PWD}/serverless.yml`, { encoding: "utf-8" })
+      fs.readFileSync(`${process.env.PWD}/serverless.yml`, { encoding: "utf-8" })
     );
     if (staticDeps.include && Array.isArray(staticDeps.include)) {
       config.package.include = [...config.package.include, ...staticDeps.include];
