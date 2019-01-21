@@ -25,10 +25,10 @@
     "@types/yeoman-generator": "^2.0.3",
     "async-shelljs": "^0.1.2",
     "chalk": "^2.4.1",
-    "common-types": "^1.7.31",
+    "common-types": "^1.9.6",
     "handlebars": "^4.0.11",
-    "simple-git": "^1.92.0",
     "lodash": "^4.17.10",
+    "simple-git": "^1.92.0",
     "yeoman-generator": "^2.0.5",
     "yosay": "^2.0.2"
   },
