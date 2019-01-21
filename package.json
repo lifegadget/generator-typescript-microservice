@@ -1,13 +1,13 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "4.4.10",
+  "version": "4.4.12",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
-  "repository": "lifegadget/generator-typescript-microservice",
+  "repository": "https://github.com/lifegadget/generator-typescript-microservice",
   "author": {
     "name": "Ken Snyder",
     "email": "ken@ken.net",
-    "url": "https://github.com/lifegadget"
+    "url": "https://github.com/ksnyde"
   },
   "scripts": {
     "build": "tslint src/*.ts && tsc",
