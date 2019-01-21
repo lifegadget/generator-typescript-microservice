@@ -61,7 +61,10 @@ export const configResources = (context: IGeneratorDictionary) => () => {
         condition: validate.useWallaby()
       },
       ".editorconfig",
-      ".gitignore",
+      {
+        sourceFrom: "gitignore",
+        file: ".gitignore",
+      },
       ".vscode/launch.json",
       ".vscode/settings.json",
       ".vscode/tasks.json",
@@ -80,7 +83,10 @@ export const configResources = (context: IGeneratorDictionary) => () => {
         condition: validate.isServerless() && validate.hasFirebase(),
         sourceFrom: "tsconfig-firebase.json"
       },
-      ".gitignore",
+      {
+        sourceFrom: "gitignore",
+        file: ".gitignore",
+      },
       {
         file: ".travis.yml",
         condition: validate.useTravis(),

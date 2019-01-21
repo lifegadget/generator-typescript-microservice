@@ -33,9 +33,9 @@ const iamRoleStatements: IServerlessIAMRole[] = [
 const provider: IServerlessProvider = {
   name: "aws",
   runtime: "nodejs8.10",
-  profile: "vuejs",
+  profile: "PROFILE",
   stage: "prod",
-  region: "us-east-1",
+  region: REGION,
   environment: "${file(serverless-config/env.yml):${self:custom.stage}}",
   iamRoleStatements
 };

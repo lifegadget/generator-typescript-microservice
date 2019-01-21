@@ -1,10 +1,21 @@
 import * as fs from "fs";
 import { IServerlessPackage } from "common-types";
-import { SERVERLESS_EXCLUDE_INCLUDE_FILE } from "../scripts/deps";
+import { SERVERLESS_EXCLUDE_INCLUDE_FILE } from "../scripts";
+import chalk from "chalk";
 
-const serverless = JSON.parse(
-  fs.readFileSync(SERVERLESS_EXCLUDE_INCLUDE_FILE, { encoding: "utf-8" })
-);
+let serverless;
+try {
+  serverless = JSON.parse(
+    fs.readFileSync(SERVERLESS_EXCLUDE_INCLUDE_FILE, { encoding: "utf-8" })
+  );
+} catch (e) {
+  console.log(
+    chalk.grey(
+      `- didn't find deps analysis file; not adding global inclusions/excludions`
+    )
+  );
+  serverless = {};
+}
 
 const pkg: IServerlessPackage = {
   individually: true,

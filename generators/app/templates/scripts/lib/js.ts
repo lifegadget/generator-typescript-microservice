@@ -19,14 +19,13 @@ export async function transpileJavascript(options: IJSTranspileOptions = {}) {
 
   console.log(
     chalk.dim(`- transpiling typescript ( `) +
-      chalk.dim.grey(`./node_modules/.bin/tsc ${options.scope}`) +
+      chalk.dim.grey(`./node_modules/.bin/tsc ${options.scope ? options.scope : ""}`) +
       chalk.dim(` )`)
   );
   try {
     await asyncExec(
-      `./node_modules/.bin/tsc ${options.configFile ? "-p " + options.configFile : ""} ${
-        options.scope
-      }`
+      `./node_modules/.bin/tsc ${options.configFile ? "-p " + options.configFile : ""}
+        ${options.scope ? options.scope : ""}`
     );
     console.log(chalk.green.bold(`- JS build completed successfully 👍`));
   } catch (e) {

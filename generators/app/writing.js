@@ -32,7 +32,9 @@ exports.processFiles = (context) => (name, config) => {
             context.fs.copyTpl(from, to, c.substitute);
         }
         else {
-            context.fs.copy(from, to);
+            if (from && to) {
+                context.fs.copy(from, to);
+            }
         }
     });
     context.log(`  ✔ Completed copying ${name} files`);

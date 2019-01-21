@@ -1,4 +1,3 @@
-/// <reference types="yeoman-generator" />
 import Base = require("yeoman-generator");
 import { IDictionary } from "common-types";
 declare class Generator extends Base {

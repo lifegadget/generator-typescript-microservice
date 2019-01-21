@@ -4,10 +4,10 @@ import * as path from "path";
 import chalk from "chalk";
 
 export const initializing = (context: IDictionary) => () => {
-  const graphic = fs.readFileSync(path.join(__dirname, "../../computer.txt"), {
-    encoding: "utf-8"
-  });
-  context.log(graphic);
+  // const graphic = fs.readFileSync(path.join(__dirname, "../../computer.txt"), {
+  //   encoding: "utf-8"
+  // });
+  context.log(computerText);
   context.log(
     chalk.bold(
       "\nWelcome to the " + chalk.green("TypeScript for Serverless") + " generator!\n"
@@ -28,3 +28,20 @@ export const initializing = (context: IDictionary) => () => {
     )
   );
 };
+
+
+const computerText = `
+    ┌──────────────────────┐
+    │......................│
+    │......................│
+    │......................│
+    │......................│
+    │......................│
+    │......................│
+    │......................│
+    │......................│
+    └──────────────────────┘
+     **********************
+    ***                  ***
+    **              *******
+    ****************\n`;

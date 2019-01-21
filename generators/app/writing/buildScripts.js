@@ -20,6 +20,10 @@ exports.buildScripts = (context) => () => {
             "scripts/deploy.ts",
             "scripts/reset.ts",
             "scripts/test.ts",
+            "scripts/get-secret.ts",
+            "scripts/set-secret.ts",
+            "scripts/list-secrets.ts",
+            "scripts/remove-secret.ts",
             {
                 file: "scripts/invoke.ts",
                 condition: validate.isServerless()
@@ -36,6 +40,12 @@ exports.buildScripts = (context) => () => {
             "scripts/lib/java.ts",
             "scripts/lib/js.ts",
             "scripts/lib/npm.ts",
+            "scripts/lib/util.ts",
+            "scripts/lib/aws-ssm.ts",
+            {
+                file: "scripts/fns.ts",
+                condition: validate.isServerless()
+            },
             {
                 file: "scripts/lib/serverless.ts",
                 condition: validate.isServerless()

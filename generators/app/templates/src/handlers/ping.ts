@@ -1,9 +1,8 @@
 import {
-  IAWSGatewayResponse,
   LambdaCallback,
   IAWSLambdaProxyIntegrationRequest,
   getBodyFromPossibleLambdaProxyRequest,
-  AWSGatewayStatusCode
+  APIGatewayStatusCode
 } from "common-types";
 
 /**
@@ -24,7 +23,7 @@ export function handler(
   console.log("EVENT\n", JSON.stringify(event, null, 2));
   const message = getBodyFromPossibleLambdaProxyRequest(event);
   callback(null, {
-    statusCode: AWSGatewayStatusCode.Success,
+    statusCode: APIGatewayStatusCode.Success,
     body: {
       foo: 'bar'
     }
