@@ -25,6 +25,7 @@
     "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
     "publish": "./node_modules/.bin/ts-node ./scripts/publish.ts ",
     "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
+    "help": "./node_modules/.bin/ts-node ./scripts/help.ts",
     "coverage":
       "nyc --reporter=html _mocha --require ts-node/register 'test/**/*-spec.ts' && open coverage/index.html",
     "coverage:coveralls":
@@ -33,8 +34,7 @@
       "nyc _mocha --reporter=json --require ts-node/register 'test/**/*-spec.ts' > coverage/coverage.json",
     "watch": "ts-node ./scripts/watch.ts",
     "watch:test": "ts-node ./scripts/watch.ts test",
-    "watch:all": "ts-node ./scripts/watch.ts all",
-    "cli": "ts-node cli/index.ts --"<%- docsScripts %>
+    "watch:all": "ts-node ./scripts/watch.ts all"<%- docsScripts %>
   },
 
   "devDependencies": {
