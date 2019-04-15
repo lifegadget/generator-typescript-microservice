@@ -37,7 +37,11 @@ export function install(context: IGeneratorDictionary) {
     "typescript",
     "ts-node",
     "test-console",
-    "simple-git"
+    "simple-git",
+    "webpack-cli",
+    "webpack-node-externals",
+    "webpack",
+    "serverless-webpack"
   ];
 
   const serverlessOnlyDevDeps = [
