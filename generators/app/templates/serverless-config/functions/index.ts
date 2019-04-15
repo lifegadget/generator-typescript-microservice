@@ -1,8 +1,12 @@
 // tslint:disable:no-invalid-template-strings
 import { IServerlessFunction, IDictionary } from "common-types";
 
+const ping: IServerlessFunction = {
+  handler: "lib/handlers/ping.handler"
+};
+
 const functions: IDictionary<IServerlessFunction> = {
-  // add your functions
+  ping
 };
 
 export default functions;

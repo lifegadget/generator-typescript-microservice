@@ -1,16 +1,9 @@
 // tslint:disable:no-invalid-template-strings
 import {
   IStepFunction,
-  IStepFunctionTask,
-  IStepFunctionWait,
-  IStepFunctionFail,
   IStateMachine,
   IStepFunctionStep,
   IDictionary,
-  IStepFunctionChoice,
-  IStepFunctionPass,
-  IStepFunctionSucceed,
-  IStepFunctionParallel
 } from "common-types";
 
 const States: IDictionary<IStepFunctionStep> = {
@@ -21,8 +14,7 @@ const steps: IStepFunction = {
   Comment: "",
   StartAt: "",
   States
-}
-
+};
 
 const stateMachines: IDictionary<IStateMachine> = {
   nameOfStateMachine: {
@@ -40,4 +32,4 @@ const stateMachines: IDictionary<IStateMachine> = {
   }
 };
 
-export default { stateMachines };
+export default {};
