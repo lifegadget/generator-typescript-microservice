@@ -63,11 +63,12 @@ export const configResources = (context: IGeneratorDictionary) => () => {
       ".editorconfig",
       {
         sourceFrom: "gitignore",
-        file: ".gitignore",
+        file: ".gitignore"
       },
       ".vscode/launch.json",
       ".vscode/settings.json",
       ".vscode/tasks.json",
+      "webpack.config.js",
       {
         file: "tsconfig.json",
         condition: !validate.isServerless(),
@@ -85,7 +86,7 @@ export const configResources = (context: IGeneratorDictionary) => () => {
       },
       {
         sourceFrom: "gitignore",
-        file: ".gitignore",
+        file: ".gitignore"
       },
       {
         file: ".travis.yml",
