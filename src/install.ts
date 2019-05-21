@@ -13,18 +13,16 @@ export function install(context: IGeneratorDictionary) {
     "@types/rimraf",
     "@types/handlebars",
     "@types/inquirer",
-    "@types/chance",
-    "@types/faker",
     "@types/js-yaml"
   ];
 
   const globaldevDeps = [
     "async-shelljs",
     "chai",
-    "chance",
-    "faker",
+    "chalk",
     "handlebars",
     "inquirer",
+    "js-yaml",
     "lodash.first",
     "lodash.last",
     "mocha",
@@ -36,18 +34,21 @@ export function install(context: IGeneratorDictionary) {
     "tslint-config-prettier",
     "typescript",
     "ts-node",
+    "ts-loader",
     "test-console",
     "simple-git",
     "webpack-cli",
     "webpack-node-externals",
-    "webpack",
-    "serverless-webpack"
+    "webpack"
   ];
 
   const serverlessOnlyDevDeps = [
     "serverless",
     "serverless-pseudo-parameters",
     "serverless-step-functions",
+    "serverless-webpack",
+    "serverless-offline",
+    "aws-log",
     "js-yaml"
   ];
 

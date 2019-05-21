@@ -4,6 +4,7 @@ import {
   IStateMachine,
   IStepFunctionStep,
   IDictionary,
+// tslint:disable-next-line:no-implicit-dependencies
 } from "common-types";
 
 const States: IDictionary<IStepFunctionStep> = {
@@ -32,4 +33,5 @@ const stateMachines: IDictionary<IStateMachine> = {
   }
 };
 
-export default {};
+// tslint:disable-next-line:no-object-literal-type-assertion
+export default {} as IDictionary;
