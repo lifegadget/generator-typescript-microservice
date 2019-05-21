@@ -12,17 +12,15 @@ function install(context) {
         "@types/rimraf",
         "@types/handlebars",
         "@types/inquirer",
-        "@types/chance",
-        "@types/faker",
         "@types/js-yaml"
     ];
     const globaldevDeps = [
         "async-shelljs",
         "chai",
-        "chance",
-        "faker",
+        "chalk",
         "handlebars",
         "inquirer",
+        "js-yaml",
         "lodash.first",
         "lodash.last",
         "mocha",
@@ -34,13 +32,20 @@ function install(context) {
         "tslint-config-prettier",
         "typescript",
         "ts-node",
+        "ts-loader",
         "test-console",
-        "simple-git"
+        "simple-git",
+        "webpack-cli",
+        "webpack-node-externals",
+        "webpack"
     ];
     const serverlessOnlyDevDeps = [
         "serverless",
         "serverless-pseudo-parameters",
         "serverless-step-functions",
+        "serverless-webpack",
+        "serverless-offline",
+        "aws-log",
         "js-yaml"
     ];
     const notServerlessOnlyDevDeps = ["bili"];
@@ -61,7 +66,10 @@ function install(context) {
     if (validate.useCoveralls()) {
         devDeps = [...devDeps, "coveralls"];
     }
+    // first install what's in the package.json (which would have more rigid
+    // locking on version number)
     context.spawnCommand("yarn", []);
+    // then add the newest version of the given deps
     context.yarnInstall(devDeps, { dev: true });
     context.yarnInstall(deps);
 }

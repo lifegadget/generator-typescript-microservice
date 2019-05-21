@@ -1,19 +1,11 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
 const writing_1 = require("../writing");
 const lodash_1 = require("lodash");
 exports.configResources = (context) => () => {
     const validate = validate_1.validatationFactory(context.answers);
-    return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+    return new Promise(async (resolve) => {
         const npmBadge = badges(context, validate)("features");
         const testBadges = badges(context, validate)("testing");
         const coverageBadges = badges(context, validate)("coverage");
@@ -62,11 +54,12 @@ exports.configResources = (context) => () => {
             ".editorconfig",
             {
                 sourceFrom: "gitignore",
-                file: ".gitignore",
+                file: ".gitignore"
             },
             ".vscode/launch.json",
             ".vscode/settings.json",
             ".vscode/tasks.json",
+            "webpack.config.js",
             {
                 file: "tsconfig.json",
                 condition: !validate.isServerless(),
@@ -84,7 +77,7 @@ exports.configResources = (context) => () => {
             },
             {
                 sourceFrom: "gitignore",
-                file: ".gitignore",
+                file: ".gitignore"
             },
             {
                 file: ".travis.yml",
@@ -117,9 +110,16 @@ exports.configResources = (context) => () => {
             },
             "serverless-config/env.yml",
             "serverless-config/README.md",
-            "serverless-config/package.ts",
-            "serverless-config/provider.ts",
-            "serverless-config/plugins.ts",
+            "serverless-config/config.ts",
+            "serverless-config/config-sections/provider.ts",
+            "serverless-config/config-sections/custom.ts",
+            "serverless-config/config-sections/iam.ts",
+            "serverless-config/config-sections/index.ts",
+            "serverless-config/config-sections/packaging.ts",
+            "serverless-config/config-sections/plugins.ts",
+            "serverless-config/config-sections/resources.ts",
+            "serverless-config/config-sections/service.ts",
+            "serverless-config/config-sections/types.ts",
             "serverless-config/functions/index.ts",
             "serverless-config/stepFunctions/index.ts",
             "serverless-config/.dep-config/README.md",
@@ -130,7 +130,7 @@ exports.configResources = (context) => () => {
             : [...rootConfigFiles, ...notServerless];
         writing_1.processFiles(context)("configuration", config);
         resolve();
-    }));
+    });
 };
 const badges = (context, validate) => (category) => {
     const badgeTemplate = "![ALT](URL) ";

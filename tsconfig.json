@@ -9,9 +9,9 @@
     "noImplicitAny": true,
     "outDir": "./generators/app",
     "removeComments": false,
-    "experimentalDecorators": false,
-    "emitDecoratorMetadata": false
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*", "generators/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*-spec.ts"]
 }

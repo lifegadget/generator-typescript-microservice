@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = require("chalk");
 const lodash_1 = require("lodash");
@@ -17,12 +9,12 @@ const async_shelljs_1 = require("async-shelljs");
 function addToAnswers(source, addition) {
     source = Object.assign({}, source, addition);
 }
-exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function* () {
+exports.prompting = (context) => async () => {
     const validate = validate_1.validatationFactory(context.answers);
     const dirName = async_shelljs_1.pwd()
         .split(/[\/\\]/)
         .pop();
-    const appName = yield context.prompt([
+    const appName = await context.prompt([
         {
             type: "input",
             name: "appName",
@@ -33,9 +25,9 @@ exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function*
     ]);
     context.answers = appName;
     console.log("");
-    yield index_1.git(context, validate);
+    await index_1.git(context, validate);
     console.log("");
-    const projectType = yield context.prompt([
+    const projectType = await context.prompt([
         {
             type: "list",
             name: "serverless",
@@ -50,12 +42,12 @@ exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function*
     ]);
     context.answers = Object.assign({}, context.answers, projectType);
     console.log("");
-    yield index_1.features(context);
+    await index_1.features(context);
     console.log("");
-    yield index_1.license(context);
+    await index_1.license(context);
     console.log("");
-    yield testing_1.default(context);
-    yield index_1.social(context);
+    await testing_1.default(context);
+    await index_1.social(context);
     context.badges = {
         npm: validate.deployableToNpm() ? ["npm"] : [],
         testing: context.answers.testing,
@@ -63,6 +55,6 @@ exports.prompting = (context) => () => __awaiter(this, void 0, void 0, function*
         social: context.answers.social,
         license: context.answers.license
     };
-});
+};
 exports.default = exports.prompting;
 //# sourceMappingURL=prompting.js.map

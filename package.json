@@ -27,6 +27,7 @@
     "chalk": "^2.4.2",
     "common-types": "^1.10.23",
     "handlebars": "^4.1.2",
+    "js-yaml": "^3.13.1",
     "lodash": "^4.17.11",
     "simple-git": "^1.113.0",
     "yeoman-generator": "^4.0.0",
