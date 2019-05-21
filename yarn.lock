@@ -717,10 +717,10 @@ commander@^2.12.1, commander@~2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
 
-common-types@^1.10.23:
-  version "1.10.23"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.10.23.tgz#7485ed44f6947fcfba5762223e7eb4e025c51192"
-  integrity sha512-eFyoV6yZwY/UkGOciLxc94O9DIxhcD2eF4xovkaLHdOMQYiSfIJr807pUW6fmvJSK0ZzckUQfyrviqsvtshCbQ==
+common-types@^1.10.25:
+  version "1.10.25"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.10.25.tgz#668e89d2dfc99ccd7dc8e1ae32694ead914e1e85"
+  integrity sha512-EchLnyy89vuVtlVTekNVzXzmHLUvymmwNvGyQdg+Qhug6eMyjXwnETezY6s3EBPf/lZu7SFQkzs8HHNbrRekjQ==
 
 commondir@^1.0.1:
   version "1.0.1"
