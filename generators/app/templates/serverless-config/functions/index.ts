@@ -1,4 +1,4 @@
-// tslint:disable:no-invalid-template-strings
+// tslint:disable-next-line:no-implicit-dependencies
 import { IServerlessFunction, IDictionary } from "common-types";
 
 const ping: IServerlessFunction = {
