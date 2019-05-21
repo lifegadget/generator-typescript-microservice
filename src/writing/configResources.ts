@@ -133,8 +133,6 @@ export const configResources = (context: IGeneratorDictionary) => () => {
       "serverless-config/config-sections/types.ts",
       "serverless-config/functions/index.ts",
       "serverless-config/stepFunctions/index.ts",
-
-      "serverless-config/.dep-config/README.md",
       "serverless-config/"
     ];
 
