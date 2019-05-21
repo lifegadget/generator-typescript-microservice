@@ -1,31 +1,46 @@
 import {
-  LambdaCallback,
-  IAWSLambdaProxyIntegrationRequest,
   getBodyFromPossibleLambdaProxyRequest,
-  APIGatewayStatusCode
+  IAwsHandlerFunction,
+  ApiGatewayStatusCode,
+  LambdaEventParser
 } from "common-types";
+import { logger } from "aws-log";
+
+export interface IPingRequest {
+  system: string;
+}
+
+export interface IPingResponse {
+  statusCode: ApiGatewayStatusCode;
+  body: string;
+}
 
 /**
  * Ping
  *
- * The ping handler provides some basic health data back to the API Gateway and serves as
- * simple API health test
+ * The ping function is an "example function" but it demonstrates some best practices
+ * in it's structure and typing.
  *
- * @param event a Lambda Proxied event from AWS Gateway
+ * @param event a event that may have come from API Gateway but could have come from another Lambda or other source
  * @param context contextual information about the execution environment
- * @param callback Lambda callback to indicate completion
  */
-export function handler(
-  event: IAWSLambdaProxyIntegrationRequest,
-  context: IDBArrayKey,
-  callback: LambdaCallback
-) {
-  console.log("EVENT\n", JSON.stringify(event, null, 2));
-  const message = getBodyFromPossibleLambdaProxyRequest(event);
-  callback(null, {
-    statusCode: APIGatewayStatusCode.Success,
-    body: {
-      foo: 'bar'
-    }
-  })
-}
+export const handler: IAwsHandlerFunction<IPingRequest, IPingResponse> = async (
+  event,
+  context
+) => {
+  const log = logger().lambda(event, context);
+  context.callbackWaitsForEmptyEventLoop = false;
+  try {
+    const { request, apiGateway } = LambdaEventParser.parse(event);
+    log.info("Ping handler called", { request });
+    const message = getBodyFromPossibleLambdaProxyRequest(event);
+    return {
+      statusCode: ApiGatewayStatusCode.Success,
+      body: {
+        foo: "bar"
+      }
+    };
+  } catch (e) {
+    throw new Error("Bad Ping!");
+  }
+};
