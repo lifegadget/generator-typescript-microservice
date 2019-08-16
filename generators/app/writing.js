@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./writing/index");
 exports.writing = (context) => async () => {
-    context.log("\n\nwriting files ...");
+    console.log("\n\nwriting files ...");
     return Promise.all([
         index_1.testResources(context)(),
         index_1.projectResources(context)(),
@@ -14,7 +14,9 @@ exports.writing = (context) => async () => {
 };
 exports.processFiles = (context) => (name, config) => {
     config.map(c => {
-        if (typeof c === "object" && c.condition !== undefined && c.condition === false) {
+        if (typeof c === "object" &&
+            c.condition !== undefined &&
+            c.condition === false) {
             return;
         }
         const filename = typeof c === "string" ? c : c.file;

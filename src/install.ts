@@ -39,7 +39,8 @@ export function install(context: IGeneratorDictionary) {
     "simple-git",
     "webpack-cli",
     "webpack-node-externals",
-    "webpack"
+    "webpack",
+    "do-devops"
   ];
 
   const serverlessOnlyDevDeps = [

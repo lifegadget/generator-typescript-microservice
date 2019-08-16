@@ -25,7 +25,7 @@ export interface IComplexFileConfiguration {
 export type IFileConfiguration = IComplexFileConfiguration | string;
 
 export const writing = (context: IGeneratorDictionary) => async () => {
-  context.log("\n\nwriting files ...");
+  console.log("\n\nwriting files ...");
 
   return Promise.all([
     testResources(context)(),
@@ -42,7 +42,11 @@ export const processFiles = (context: IDictionary) => (
   config: IFileConfiguration[]
 ) => {
   config.map(c => {
-    if (typeof c === "object" && c.condition !== undefined && c.condition === false) {
+    if (
+      typeof c === "object" &&
+      c.condition !== undefined &&
+      c.condition === false
+    ) {
       return;
     }
     const filename = typeof c === "string" ? c : c.file;
@@ -54,7 +58,7 @@ export const processFiles = (context: IDictionary) => (
     if (typeof c === "object" && c.substitute) {
       context.fs.copyTpl(from, to, c.substitute);
     } else {
-      if(from && to) {
+      if (from && to) {
         context.fs.copy(from, to);
       }
     }
