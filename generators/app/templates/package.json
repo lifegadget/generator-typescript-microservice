@@ -13,13 +13,7 @@
   "scripts": {
     "clean": "rimraf lib",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
-    "build": "./node_modules/.bin/ts-node ./scripts/build.ts",
-    "deps": "./node_modules/.bin/ts-node ./scripts/deps.ts",
-    "deps:reset": "./node_modules/.bin/ts-node ./scripts/reset.ts",
-    "set-secret": "./node_modules/.bin/ts-node ./scripts/set-secret.ts",
-    "get-secret": "./node_modules/.bin/ts-node ./scripts/get-secret.ts",
-    "list-secrets": "./node_modules/.bin/ts-node ./scripts/list-secrets.ts",
-    "remove-secret": "./node_modules/.bin/ts-node ./scripts/remove-secret.ts",
+    "build": "do build",
     "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
     "invoke": "./node_modules/.bin/ts-node ./scripts/invoke.ts ",
     "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
@@ -32,15 +26,13 @@
       "nyc --reporter=text-lcov _mocha --require ts-node/register 'test/**/*-spec.ts' | coveralls",
     "coverage:codecov":
       "nyc _mocha --reporter=json --require ts-node/register 'test/**/*-spec.ts' > coverage/coverage.json",
-    "watch": "ts-node ./scripts/watch.ts",
-    "watch:test": "ts-node ./scripts/watch.ts test",
-    "watch:all": "ts-node ./scripts/watch.ts all"<%- docsScripts %>
+    "watch": "tsc -w"
   },
 
   "devDependencies": {
-    "@types/node": "^8.10.0"
+    "@types/node": "^10.14.15"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   }
 }
