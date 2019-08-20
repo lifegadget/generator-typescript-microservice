@@ -18,14 +18,12 @@ function install(context) {
         "async-shelljs",
         "chai",
         "chalk",
-        "handlebars",
+        // "handlebars",
         "inquirer",
         "js-yaml",
         "lodash.first",
         "lodash.last",
         "mocha",
-        "coveralls",
-        "nyc",
         "prettier",
         "rimraf",
         "tslint",
@@ -58,6 +56,9 @@ function install(context) {
         devDeps = [...devDeps, "vuepress"];
     }
     let deps = ["common-types"];
+    if (validate.isServerless()) {
+        deps = [...deps, ...["aws-orchestrate"]];
+    }
     if (validate.hasTemplating()) {
         deps = [...deps, ...["typed-template"]];
     }
@@ -65,7 +66,7 @@ function install(context) {
         deps = [...deps, ...["abstracted-admin", "firemodel"]];
     }
     if (validate.useCoveralls()) {
-        devDeps = [...devDeps, "coveralls"];
+        devDeps = [...devDeps, ...["nyc", "coveralls"]];
     }
     // first install what's in the package.json (which would have more rigid
     // locking on version number)

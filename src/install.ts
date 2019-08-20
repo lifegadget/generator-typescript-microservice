@@ -20,14 +20,12 @@ export function install(context: IGeneratorDictionary) {
     "async-shelljs",
     "chai",
     "chalk",
-    "handlebars",
+    // "handlebars",
     "inquirer",
     "js-yaml",
     "lodash.first",
     "lodash.last",
     "mocha",
-    "coveralls",
-    "nyc",
     "prettier",
     "rimraf",
     "tslint",
@@ -40,7 +38,8 @@ export function install(context: IGeneratorDictionary) {
     "webpack-cli",
     "webpack-node-externals",
     "webpack",
-    "do-devops"
+    "do-devops",
+    "fast-glob"
   ];
 
   const serverlessOnlyDevDeps = [
@@ -67,6 +66,10 @@ export function install(context: IGeneratorDictionary) {
 
   let deps = ["common-types"];
 
+  if (validate.isServerless()) {
+    deps = [...deps, ...["aws-orchestrate"]];
+  }
+
   if (validate.hasTemplating()) {
     deps = [...deps, ...["typed-template"]];
   }
@@ -76,7 +79,7 @@ export function install(context: IGeneratorDictionary) {
   }
 
   if (validate.useCoveralls()) {
-    devDeps = [...devDeps, "coveralls"];
+    devDeps = [...devDeps, ...["nyc", "coveralls"]];
   }
 
   // first install what's in the package.json (which would have more rigid

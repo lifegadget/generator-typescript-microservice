@@ -1,2 +1,2 @@
 import { IGeneratorDictionary } from "../writing";
-export declare const configResources: (context: IGeneratorDictionary) => () => Promise<{}>;
+export declare const configResources: (context: IGeneratorDictionary) => () => Promise<unknown>;

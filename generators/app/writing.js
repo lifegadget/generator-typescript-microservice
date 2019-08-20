@@ -27,6 +27,7 @@ exports.processFiles = (context) => (name, config) => {
         }
         else {
             if (from && to) {
+                console.log(`${from} => ${to}`);
                 context.fs.copy(from, to);
             }
         }

@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = require("chalk");
+const chalk_1 = __importDefault(require("chalk"));
 const lodash_1 = require("lodash");
 const async_shelljs_1 = require("async-shelljs");
 async function gitStatus(dir = __dirname) {

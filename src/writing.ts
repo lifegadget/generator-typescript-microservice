@@ -1,6 +1,4 @@
 import { IDictionary } from "common-types";
-import { kebabCase } from "lodash";
-import { validatationFactory, IValidator } from "./validate";
 import {
   configResources,
   projectResources,
@@ -59,6 +57,8 @@ export const processFiles = (context: IDictionary) => (
       context.fs.copyTpl(from, to, c.substitute);
     } else {
       if (from && to) {
+        console.log(`${from} => ${to}`);
+
         context.fs.copy(from, to);
       }
     }

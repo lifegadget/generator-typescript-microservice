@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = require("chalk");
+const chalk_1 = __importDefault(require("chalk"));
 exports.initializing = (context) => () => {
     // const graphic = fs.readFileSync(path.join(__dirname, "../../computer.txt"), {
     //   encoding: "utf-8"
