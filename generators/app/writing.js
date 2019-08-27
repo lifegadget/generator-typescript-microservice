@@ -6,7 +6,7 @@ exports.writing = (context) => async () => {
     return Promise.all([
         index_1.testResources(context)(),
         index_1.projectResources(context)(),
-        index_1.buildScripts(context)(),
+        // buildScripts(context)(),
         index_1.configResources(context)(),
         index_1.templatingResources(context)(),
         index_1.docs(context)()

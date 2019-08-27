@@ -84,7 +84,9 @@ exports.configResources = (context) => () => {
                 condition: validate.useTravis(),
                 substitute: {
                     scripts: validate.useCodecov() ? `  - npm install codecov -g` : "",
-                    after_success: validate.useCodecov() ? `after_success\n  - codecov` : ""
+                    after_success: validate.useCodecov()
+                        ? `after_success\n  - codecov`
+                        : ""
                 }
             },
             {
@@ -119,9 +121,10 @@ exports.configResources = (context) => () => {
             "serverless-config/config-sections/plugins.ts",
             "serverless-config/config-sections/resources.ts",
             "serverless-config/config-sections/service.ts",
-            "serverless-config/config-sections/types.ts",
             "serverless-config/functions/index.ts",
+            "serverless-config/functions/inline.ts",
             "serverless-config/stepFunctions/index.ts",
+            "serverless-config/stepFunctions/example.ts",
             "serverless-config/"
         ];
         const config = validate.isServerless()
@@ -189,11 +192,15 @@ const badges = (context, validate) => (category) => {
             }
             const info = {
                 name: badge,
-                url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+                url: Array.isArray(badgeUrls[badge])
+                    ? badgeUrls[badge][0]
+                    : badgeUrls[badge],
                 link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
             };
             response += info.link
-                ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${info.link})`
+                ? `[${badgeTemplate
+                    .replace("ALT", info.name)
+                    .replace("URL", info.url)}](${info.link})`
                 : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
         });
     }
@@ -201,11 +208,15 @@ const badges = (context, validate) => (category) => {
         const badge = context.badges[category];
         const info = {
             name: category,
-            url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+            url: Array.isArray(badgeUrls[badge])
+                ? badgeUrls[badge][0]
+                : badgeUrls[badge],
             link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
         };
         response += link
-            ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${info.link})`
+            ? `[${badgeTemplate
+                .replace("ALT", info.name)
+                .replace("URL", info.url)}](${info.link})`
             : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
     }
     return response;

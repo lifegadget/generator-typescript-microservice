@@ -1,8 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// tslint:disable-next-line:one-variable-per-declaration
 exports.validatationFactory = answers => {
-    //
+    /**
+     * Validates whether the category/feature is present in the config
+     *
+     * @param category
+     * @param feature
+     */
     const has = (category, feature) => {
         const features = new Set(answers[category]);
         return features.has(feature);

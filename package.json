@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "https://github.com/lifegadget/generator-typescript-microservice",
@@ -10,7 +10,7 @@
     "url": "https://github.com/ksnyde"
   },
   "scripts": {
-    "build": "tslint src/*.ts && tsc",
+    "build": "tsc",
     "test": "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
   "keywords": [
@@ -24,11 +24,11 @@
   "dependencies": {
     "async-shelljs": "^0.1.2",
     "chalk": "^2.4.2",
-    "common-types": "^1.11.15",
+    "common-types": "^1.11.21",
     "handlebars": "^4.1.2",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.11",
-    "simple-git": "^1.113.0",
+    "lodash": "^4.17.15",
+    "simple-git": "^1.124.0",
     "yeoman-generator": "^4.0.1",
     "yosay": "^2.0.2"
   },
@@ -42,24 +42,20 @@
     "@types/yosay": "^0.0.29",
     "chai": "^4.2.0",
     "chai-files": "^1.4.0",
-    "chance": "^1.0.18",
     "coveralls": "^3.0.0",
-    "debug": ">=2.6.9",
-    "deep-extend": ">=0.5.1",
     "faker": "^4.1.0",
-    "growl": ">=1.10.0",
     "inquirer": "^6.5.1",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "prettier": "^1.16.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "test-console": "^1.1.0",
-    "ts-node": "^8.0.0",
-    "tslint": "^5.12.1",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.2.4",
+    "typescript": "^3.5.3",
     "yeoman-test": "^2.0.0"
   },
   "preferGlobal": true,

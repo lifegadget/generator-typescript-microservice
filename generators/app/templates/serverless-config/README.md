@@ -1,6 +1,11 @@
 # Serverless Config
 
-This directory is used to configure your serverless deployment. As part of the build process (aka, `/scripts/build.ts`) your master `serverless.yml` file will be composed from the various files contained here. For that reason it is best **not** to directly modify the `serverless.yml` file directly.
+This directory is used to configure your serverless deployment. As part of the build process (aka, `./build.ts`) your master `serverless.yml` file will be composed from the various files contained here. For that reason it is best **not** to directly modify the `serverless.yml` file. It is also generally a good idea to use this setup with the `do-devops` repo:
+
+```sh
+# run a build with do-devops
+yarn do build
+```
 
 ## Sections
 
@@ -10,45 +15,27 @@ This directory is used to configure your serverless deployment. As part of the b
 
 - **Functions**
 
-  This is probably the most import section and will define all the functions in your project. In smaller projects you may decide to define all of these functions in a single `serverless-config/functions.ts` file
-  but often further decomposition is desirable so the directory configuration is the default.
+  Typically in a serverless project you write "handler functions" and then _also_ write a function configuration for that function. With modern versions of `do-devops` you can now write both in a single file. How? Just export your handler function as `handler` and then separately export your configuration as `config`:
 
-  In general it recommended that you define functions at the root level:
+  `src/handlers/foobar.ts`
 
   ```typescript
   import { IServerlessFunction, IDictionary } from 'common-types';
-  const myFunction: IServerlessFunction = {
+  export const config: IServerlessFunction = {
     description: "Do incredible things in a non-descript, almost abstract way",
-    handler: "lib/handlers/myFunc.handler",
-    environment: "${file(env.yml):${self:custom.stage}}",
     timeout: 10,
     memorySize: 1024,
-    package: {
-      exclude: [...standardExclusions]
-    }
   }
 
-  const myOtherFunction: IServerlessFunction = { ... }
+  export const handler: (event, context) => { ... }
   ```
 
-  And then once you've defined your functions you will need to export a dictionary of functions as your default export:
-
-  ```typescript
-  const functions: IDictionary<IServerlessFunction> = {
-    myFunction,
-    myOtherFunction
-  };
-
-  export default functions;
-  ```
-
+  Note that this convention implies that any given file should define and export only _one_ function. This should not be a limitation though as this is generally a good practice more broadly (similar to JS and Java's one class per file rule).
 
 - **Step Functions**
 
-  Obviously not all projects will use step functions but for those that do you can see this as a corralary to the functions definition but for your state machines.
-
+  Step functions are not always used but if they are then the build process will automatically add the `serverless-step-functions` plugin for you. What is left for you to do is to define the various step-functions. For an example of that see the `index.ts` and `example.ts` files.
 
 ## Serverless Typings
 
-All the _typings_ for serverless functions come from the `common-types` library and can be found here: [typings](https://github.com/lifegadget/common-types/blob/master/src/serverless.ts). The library is **tiny** (almost all just typings) but it is exported as both CommonJS and ES2015 so you should be able to import just the named exports that you're using and tree-shaking will exclude the rest (if you're into that kind of stuff ... arguably in this case it's worth saving a few bytes but heyho).
-
+All the _typings_ for serverless functions come from the `common-types` library and can be found here: [typings](https://github.com/lifegadget/common-types/blob/master/src/serverless.ts). The library is **tiny** (almost all just typings) but it is exported as both CommonJS and ES2015 so you should be able to import just the named exports that you're using and tree-shaking will exclude the rest (if you're into that sort of stuff).

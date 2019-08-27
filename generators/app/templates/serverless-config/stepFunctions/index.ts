@@ -1,37 +1,15 @@
-// tslint:disable:no-invalid-template-strings
-import {
-  IStepFunction,
-  IStateMachine,
-  IStepFunctionStep,
-  IDictionary,
-// tslint:disable-next-line:no-implicit-dependencies
-} from "common-types";
-
-const States: IDictionary<IStepFunctionStep> = {
-  // add your states here
-};
-
-const steps: IStepFunction = {
-  Comment: "",
-  StartAt: "",
-  States
-};
+import { IStateMachine, IDictionary } from "common-types";
+// import doSomething from './example'
 
 const stateMachines: IDictionary<IStateMachine> = {
-  nameOfStateMachine: {
-    events: [
-      {
-        schedule: {
-          rate: "rate(240 minutes)",
-          enabled: true,
-          input: { foo: "bar" }
-        }
-      }
-    ],
-    name: "[nameOfStateMachine]-${self:custom.stage}-steps",
-    definition: steps
-  }
+  /**
+   * add your step-functions here ... typically you will just import
+   * a step-function per file (aka, a `state-machine`) above
+   * where the file exports (as a default export)
+   *
+   */
 };
 
-// tslint:disable-next-line:no-object-literal-type-assertion
-export default {} as IDictionary;
+export default {
+  stateMachines
+} as IDictionary;

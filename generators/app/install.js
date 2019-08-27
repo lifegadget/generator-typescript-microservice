@@ -12,7 +12,8 @@ function install(context) {
         "@types/rimraf",
         "@types/handlebars",
         "@types/inquirer",
-        "@types/js-yaml"
+        "@types/js-yaml",
+        "@types/webpack-node-externals"
     ];
     const globaldevDeps = [
         "async-shelljs",
@@ -36,7 +37,8 @@ function install(context) {
         "webpack-cli",
         "webpack-node-externals",
         "webpack",
-        "do-devops"
+        "do-devops",
+        "fast-glob"
     ];
     const serverlessOnlyDevDeps = [
         "serverless",
@@ -44,8 +46,8 @@ function install(context) {
         "serverless-step-functions",
         "serverless-webpack",
         "serverless-offline",
-        "aws-log",
-        "js-yaml"
+        "js-yaml",
+        "fork-ts-checker-webpack-plugin"
     ];
     const notServerlessOnlyDevDeps = ["bili"];
     let devDeps = [...typings, ...globaldevDeps];
@@ -57,7 +59,7 @@ function install(context) {
     }
     let deps = ["common-types"];
     if (validate.isServerless()) {
-        deps = [...deps, ...["aws-orchestrate"]];
+        deps = [...deps, ...["aws-orchestrate", "aws-log", "aws-ssm", "aws-sdk"]];
     }
     if (validate.hasTemplating()) {
         deps = [...deps, ...["typed-template"]];

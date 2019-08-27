@@ -14,12 +14,11 @@
     "clean": "rimraf lib",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "do build",
-    "test": "./node_modules/.bin/ts-node ./scripts/test.ts ",
-    "invoke": "./node_modules/.bin/ts-node ./scripts/invoke.ts ",
-    "deploy": "./node_modules/.bin/ts-node ./scripts/deploy.ts ",
-    "publish": "./node_modules/.bin/ts-node ./scripts/publish.ts ",
-    "package": "./node_modules/.bin/ts-node ./scripts/package.ts ",
-    "help": "./node_modules/.bin/ts-node ./scripts/help.ts",
+    "test": "do test ",
+    "invoke": "do invoke ",
+    "deploy": "do deploy ",
+    "package": "do package ",
+    "help": "yarn do --help",
     "coverage":
       "nyc --reporter=html _mocha --require ts-node/register 'test/**/*-spec.ts' && open coverage/index.html",
     "coverage:coveralls":

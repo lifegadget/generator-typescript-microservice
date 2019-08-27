@@ -28,7 +28,7 @@ export const writing = (context: IGeneratorDictionary) => async () => {
   return Promise.all([
     testResources(context)(),
     projectResources(context)(),
-    buildScripts(context)(),
+    // buildScripts(context)(),
     configResources(context)(),
     templatingResources(context)(),
     docs(context)()

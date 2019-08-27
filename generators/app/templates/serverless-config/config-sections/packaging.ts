@@ -1,11 +1,12 @@
-// tslint:disable-next-line:no-implicit-dependencies
-import { IServerlessPackage } from 'common-types'
-import { IServerlessAccountInfo } from './types'
+import { IServerlessPackage } from "common-types";
+type IServerlessAccountInfo = import("do-devops").IServerlessAccountInfo;
 
-export const packaging: (config: IServerlessAccountInfo) => { package: IServerlessPackage } = config => ({
+export const packaging: (
+  config: IServerlessAccountInfo
+) => { package: IServerlessPackage } = config => ({
   package: {
     individually: true,
-    excludeDevDependencies: false,
-    browser: false,
-  },
-})
+    excludeDevDependencies: true,
+    browser: false
+  }
+});

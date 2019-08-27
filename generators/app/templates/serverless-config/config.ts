@@ -1,8 +1,15 @@
-// tslint:disable-next-line:no-implicit-dependencies
-import { IServerlessConfig } from 'common-types'
-import { packaging, custom, plugins, provider, service, resources, IServerlessAccountInfo } from './config-sections'
-import functions from './functions'
-import stateMachines from './stepFunctions'
+import {
+  packaging,
+  custom,
+  plugins,
+  provider,
+  service,
+  resources
+} from "./config-sections";
+import functions from "./functions/index";
+import stateMachines from "./stepFunctions/index";
+import { IServerlessConfig } from "common-types";
+type IServerlessAccountInfo = import("do-devops").IServerlessAccountInfo;
 
 export default (accountInfo: IServerlessAccountInfo): IServerlessConfig => {
   return {
@@ -13,6 +20,6 @@ export default (accountInfo: IServerlessAccountInfo): IServerlessConfig => {
     ...provider(accountInfo),
     ...resources(accountInfo),
     ...{ functions },
-    ...{ stateMachines },
-  }
-}
+    ...{ stateMachines }
+  };
+};

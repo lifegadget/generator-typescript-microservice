@@ -18,9 +18,13 @@ export interface IValidator {
   gitServerURL(): string;
 }
 
-// tslint:disable-next-line:one-variable-per-declaration
 export const validatationFactory: IValidatorFactory = answers => {
-  //
+  /**
+   * Validates whether the category/feature is present in the config
+   *
+   * @param category
+   * @param feature
+   */
   const has = (category: string, feature: string): boolean => {
     const features = new Set(answers[category]);
     return features.has(feature);

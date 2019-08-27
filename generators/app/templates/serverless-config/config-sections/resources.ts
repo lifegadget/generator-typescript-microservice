@@ -1,7 +1,11 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import { IServerlessBindDeploymentIdPlugin, createBindDeploymentConfig, IServerlessStage } from 'common-types'
-import { IServerlessAccountInfo } from './types'
-import { plugins } from './plugins'
+import {
+  IServerlessBindDeploymentIdPlugin,
+  createBindDeploymentConfig,
+  IServerlessStage
+} from "common-types";
+import { plugins } from "./plugins";
+type IServerlessAccountInfo = import("do-devops").IServerlessAccountInfo;
 
 /**
  * **resources**
@@ -12,11 +16,14 @@ import { plugins } from './plugins'
 export function resources(accountInfo: IServerlessAccountInfo) {
   const config: IServerlessBindDeploymentIdPlugin = createBindDeploymentConfig({
     service: accountInfo.name,
-    stage: (process.env.NODE_ENV as IServerlessStage) || 'dev',
-  })
-  const pluginsUsed = plugins(accountInfo).plugins
-  const usingDeploymentIdPlugin = pluginsUsed.includes('serverless-plugin-bind-deployment-id')
-  const apiGatewayLogging = usingDeploymentIdPlugin ? config : {}
+    stage: (process.env.NODE_ENV as IServerlessStage) || "dev"
+  });
+  const pluginsUsed = plugins(accountInfo).plugins;
+  const usingDeploymentIdPlugin = pluginsUsed.includes(
+    "serverless-plugin-bind-deployment-id"
+  );
+  const apiGatewayLogging = usingDeploymentIdPlugin ? config : {};
 
-  return { ...apiGatewayLogging, ...config }
+  // TODO: investigate whether we need the bind-deployment functionality and cleanup based on that outcome.
+  return { ...apiGatewayLogging /**  , ...config */ };
 }

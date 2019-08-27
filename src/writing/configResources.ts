@@ -93,7 +93,9 @@ export const configResources = (context: IGeneratorDictionary) => () => {
         condition: validate.useTravis(),
         substitute: {
           scripts: validate.useCodecov() ? `  - npm install codecov -g` : "",
-          after_success: validate.useCodecov() ? `after_success\n  - codecov` : ""
+          after_success: validate.useCodecov()
+            ? `after_success\n  - codecov`
+            : ""
         }
       },
       {
@@ -130,9 +132,10 @@ export const configResources = (context: IGeneratorDictionary) => () => {
       "serverless-config/config-sections/plugins.ts",
       "serverless-config/config-sections/resources.ts",
       "serverless-config/config-sections/service.ts",
-      "serverless-config/config-sections/types.ts",
       "serverless-config/functions/index.ts",
+      "serverless-config/functions/inline.ts",
       "serverless-config/stepFunctions/index.ts",
+      "serverless-config/stepFunctions/example.ts",
       "serverless-config/"
     ];
 
@@ -153,26 +156,18 @@ const badges = (context: IDictionary, validate: IValidator) => (
     npm: `https://img.shields.io/npm/v/${context.answers.repo}.svg`
   };
   const testing = {
-    travis: `https://img.shields.io/travis/${context.answers.repoUserName}/${
-      context.answers.repo
-    }.svg`
+    travis: `https://img.shields.io/travis/${context.answers.repoUserName}/${context.answers.repo}.svg`
   };
   const coverage = {
     coveralls: [
-      `https://coveralls.io/repos/${context.answers.gitServer}/${
-        context.answers.repoUserName
-      }/${context.answers.repo}/badge.svg?branch=master`,
-      `https://coveralls.io/${context.answers.gitServer}/${
-        context.answers.repoUserName
-      }/${context.answers.repo}`
+      `https://coveralls.io/repos/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}/badge.svg?branch=master`,
+      `https://coveralls.io/${context.answers.gitServer}/${context.answers.repoUserName}/${context.answers.repo}`
     ],
     codecov: [
-      `https://codecov.io/gh/${context.answers.repoUserName}/${
-        context.answers.repo
-      }/branch/master/graph/badge.svg`,
-      `https://codecov.io/${context.answers.gitServer === "github" ? "gh" : "bb"}/${
-        context.answers.repoUserName
-      }/${context.answers.repo}`
+      `https://codecov.io/gh/${context.answers.repoUserName}/${context.answers.repo}/branch/master/graph/badge.svg`,
+      `https://codecov.io/${
+        context.answers.gitServer === "github" ? "gh" : "bb"
+      }/${context.answers.repoUserName}/${context.answers.repo}`
     ]
   };
   const licenses = {
@@ -199,17 +194,11 @@ const badges = (context: IDictionary, validate: IValidator) => (
     followers:
       "https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Follow",
     twitter: [
-      `https://img.shields.io/twitter/url/http/${
-        context.answers.twitterHandle
-      }.svg?style=social`,
-      `http://twitter.com/home?status=@${context.answers.twitterHandle} #${
-        context.answers.repo
-      }`
+      `https://img.shields.io/twitter/url/http/${context.answers.twitterHandle}.svg?style=social`,
+      `http://twitter.com/home?status=@${context.answers.twitterHandle} #${context.answers.repo}`
     ],
     twitterFollow: [
-      `https://img.shields.io/twitter/follow/${
-        context.answers.twitterHandle
-      }.svg?style=social&label=Follow`,
+      `https://img.shields.io/twitter/follow/${context.answers.twitterHandle}.svg?style=social&label=Follow`,
       `https://twitter.com/intent/follow?screen_name=${context.answers.twitterHandle}`
     ]
   };
@@ -232,26 +221,30 @@ const badges = (context: IDictionary, validate: IValidator) => (
       }
       const info = {
         name: badge,
-        url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+        url: Array.isArray(badgeUrls[badge])
+          ? badgeUrls[badge][0]
+          : badgeUrls[badge],
         link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
       };
       response += info.link
-        ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${
-            info.link
-          })`
+        ? `[${badgeTemplate
+            .replace("ALT", info.name)
+            .replace("URL", info.url)}](${info.link})`
         : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
     });
   } else if (context.badges[category]) {
     const badge: string = context.badges[category];
     const info = {
       name: category,
-      url: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][0] : badgeUrls[badge],
+      url: Array.isArray(badgeUrls[badge])
+        ? badgeUrls[badge][0]
+        : badgeUrls[badge],
       link: Array.isArray(badgeUrls[badge]) ? badgeUrls[badge][1] : undefined
     };
     response += link
-      ? `[${badgeTemplate.replace("ALT", info.name).replace("URL", info.url)}](${
-          info.link
-        })`
+      ? `[${badgeTemplate
+          .replace("ALT", info.name)
+          .replace("URL", info.url)}](${info.link})`
       : badgeTemplate.replace("ALT", info.name).replace("URL", info.url);
   }
 

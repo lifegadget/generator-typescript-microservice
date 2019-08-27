@@ -13,7 +13,8 @@ export function install(context: IGeneratorDictionary) {
     "@types/rimraf",
     "@types/handlebars",
     "@types/inquirer",
-    "@types/js-yaml"
+    "@types/js-yaml",
+    "@types/webpack-node-externals"
   ];
 
   const globaldevDeps = [
@@ -48,8 +49,8 @@ export function install(context: IGeneratorDictionary) {
     "serverless-step-functions",
     "serverless-webpack",
     "serverless-offline",
-    "aws-log",
-    "js-yaml"
+    "js-yaml",
+    "fork-ts-checker-webpack-plugin"
   ];
 
   const notServerlessOnlyDevDeps = ["bili"];
@@ -67,7 +68,7 @@ export function install(context: IGeneratorDictionary) {
   let deps = ["common-types"];
 
   if (validate.isServerless()) {
-    deps = [...deps, ...["aws-orchestrate"]];
+    deps = [...deps, ...["aws-orchestrate", "aws-log", "aws-ssm", "aws-sdk"]];
   }
 
   if (validate.hasTemplating()) {

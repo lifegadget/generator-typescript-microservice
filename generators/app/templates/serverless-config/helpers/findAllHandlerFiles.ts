@@ -30,5 +30,6 @@ export async function findAllHandlerFiles(): Promise<Array<IHandlerReference>> {
       console.log(`- failed to import "${file}": ${e.message}`);
     }
   }
+
   return handlers;
 }
