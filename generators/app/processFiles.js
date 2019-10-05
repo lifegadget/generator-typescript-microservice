@@ -32,13 +32,12 @@ exports.processFiles = (context) =>
             }
             else {
                 if (from && to) {
-                    console.log(`${from} => ${to}`);
                     context.fs.copy(from, to);
                 }
             }
         }
         catch (e) {
-            console.log(chalk_1.default `{red - Problem copying file: } "${from}" wasn't copied due to error: {red ${e.message}}`);
+            console.log(chalk_1.default `{red - Problem: } {blue ${from}} wasn't copied to {blue ${to}} because:\n{grey ${e.message}}.\n`);
         }
     });
     context.log(chalk_1.default `  - Completed copying {yellow ${name}} files`);

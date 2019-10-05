@@ -1,14 +1,12 @@
 import chalk from "chalk";
 import yosay = require("yosay");
-import * as git from "./git/git";
 import { IGeneratorDictionary } from "./@types";
+import simplegit from "simple-git/promise";
 
 export async function closure(context: IGeneratorDictionary) {
-  // const git = require("simple-git")(context.destinationPath());
+  const git = simplegit(context.destinationPath());
   try {
-    const checkIsRepo = await git.checkIsRepo(context)();
-    const initializeRepo = git.initializeRepo(context);
-    const addRemote = git.addRemote(context);
+    const checkIsRepo = await git.checkIsRepo();
 
     if (checkIsRepo) {
       console.log(
@@ -16,16 +14,16 @@ export async function closure(context: IGeneratorDictionary) {
       );
     } else {
       console.log(
-        chalk`{grey - this project has {italic not yet} been setup as a }`
+        chalk`{grey - this project has {italic not yet} been setup as a git repository}`
       );
 
-      await initializeRepo();
+      await git.init();
       console.log(
         chalk`- This project has been registered as a {bold git} project`
       );
 
       if (context.answers.repoOrigin) {
-        await addRemote("origin", context.answers.repoOrigin);
+        await git.addRemote("origin", context.answers.repoOrigin);
         console.log(
           chalk`- added "remote" for git repo: {italic grey ${context.answers.repoOrigin}}`
         );

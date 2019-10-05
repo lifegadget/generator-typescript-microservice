@@ -35,14 +35,12 @@ export const processFiles = (context: IGeneratorDictionary) =>
           context.fs.copyTpl(from, to, f.substitute);
         } else {
           if (from && to) {
-            console.log(`${from} => ${to}`);
-
             context.fs.copy(from, to);
           }
         }
       } catch (e) {
         console.log(
-          chalk`{red - Problem copying file: } "${from}" wasn't copied due to error: {red ${e.message}}`
+          chalk`{red - Problem: } {blue ${from}} wasn't copied to {blue ${to}} because:\n{grey ${e.message}}.\n`
         );
       }
     });

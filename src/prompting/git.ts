@@ -1,4 +1,4 @@
-import { IDictionary } from "common-types";
+// tslint:disable:no-submodule-imports
 import { IValidator } from "../validate";
 import { Answers } from "inquirer";
 import chalk from "chalk";
@@ -7,7 +7,6 @@ import { asyncExec } from "async-shelljs";
 import { IGeneratorDictionary } from "../@types";
 
 async function gitStatus(dir: string = __dirname) {
-  // tslint:disable-next-line:no-submodule-imports
   const git = require("simple-git/promise")(dir);
 
   let statusSummary = null;
@@ -21,7 +20,6 @@ async function gitStatus(dir: string = __dirname) {
 }
 
 async function gitIsRepo(dir = __dirname) {
-  // tslint:disable-next-line:no-submodule-imports
   const git = require("simple-git/promise")(dir);
   const isRepo = await git.checkIsRepo();
   return isRepo;
