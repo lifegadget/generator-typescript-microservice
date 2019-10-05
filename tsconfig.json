@@ -10,7 +10,8 @@
     "outDir": "./generators/app",
     "removeComments": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*-spec.ts"]

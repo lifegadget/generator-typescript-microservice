@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const validate_1 = require("../validate");
-const writing_1 = require("../writing");
-exports.testResources = (context) => () => {
-    const validate = validate_1.validatationFactory(context.answers);
-    return new Promise(resolve => {
-        const config = [
-            "test/ping-spec.ts",
-            "test/data/README.md",
-            "test/testing/helpers.ts",
-            "test/testing/test-console.ts"
-        ];
-        writing_1.processFiles(context)("test", config);
-        resolve();
-    });
+const processFiles_1 = require("../processFiles");
+/**
+ * Adds in some basic test files along with the test helper script
+ */
+exports.testResources = (context) => async () => {
+    const config = [
+        "test/ping-spec.ts",
+        "test/data/README.md",
+        "test/testing/helpers.ts",
+        "test/testing/test-console.ts"
+    ];
+    processFiles_1.processFiles(context)("test", config);
 };
 //# sourceMappingURL=testResources.js.map

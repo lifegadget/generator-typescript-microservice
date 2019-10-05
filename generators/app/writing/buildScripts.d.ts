@@ -1,2 +1,2 @@
-import { IGeneratorDictionary } from "../writing";
-export declare const buildScripts: (context: IGeneratorDictionary) => () => Promise<{}>;
+import { IGeneratorDictionary } from "../@types";
+export declare const buildScripts: (context: IGeneratorDictionary) => () => Promise<void>;

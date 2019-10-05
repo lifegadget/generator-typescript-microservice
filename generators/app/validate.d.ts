@@ -15,4 +15,13 @@ export interface IValidator {
     useCodecov(): boolean;
     gitServerURL(): string;
 }
+/**
+ * Provides a bunch of characteristics of the project based on the
+ * interactive session that the user was brought through.
+ *
+ * Examples are:
+ *  - isServerless
+ *  - hasTemplating
+ *  - useWallaby
+ */
 export declare const validatationFactory: IValidatorFactory;

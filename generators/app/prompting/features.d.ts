@@ -1,2 +1,2 @@
-import { IGeneratorDictionary } from "../writing";
+import { IGeneratorDictionary } from "../@types";
 export default function (context: IGeneratorDictionary): Promise<void>;

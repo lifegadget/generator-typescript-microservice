@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "https://github.com/lifegadget/generator-typescript-microservice",
@@ -10,7 +10,10 @@
     "url": "https://github.com/ksnyde"
   },
   "scripts": {
-    "build": "tslint src/*.ts && tsc",
+    "build": "yarn sync-glob 'templates/**' 'generators/app/templates' && tsc",
+    "watch": "yarn parallelshell  \"sync-glob --watch 'template/**' 'generators/app/templates'\" \"tsc -w\"",
+    "watch:templates": "yarn sync-glob --watch 'templates/**' 'generators/app/templates'",
+    "watch:code": "tsc -w",
     "test": "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
   "keywords": [
@@ -22,15 +25,16 @@
     "aws"
   ],
   "dependencies": {
-    "@types/yeoman-generator": "^3.1.2",
     "async-shelljs": "^0.1.2",
     "chalk": "^2.4.2",
-    "common-types": "^1.10.25",
+    "common-types": "^1.11.21",
     "handlebars": "^4.1.2",
+    "inquirer": "^6.5.1",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.11",
-    "simple-git": "^1.113.0",
-    "yeoman-generator": "^4.0.0",
+    "lodash": "^4.17.15",
+    "simple-git": "^1.124.0",
+    "sync-glob": "^1.4.0",
+    "yeoman-generator": "^4.0.1",
     "yosay": "^2.0.2"
   },
   "devDependencies": {
@@ -38,29 +42,26 @@
     "@types/lodash": "^4.14.120",
     "@types/mocha": "^5.2.5",
     "@types/rimraf": "^0.0.28",
+    "@types/yeoman-generator": "^3.1.4",
     "@types/yeoman-test": "^1.7.4",
     "@types/yosay": "^0.0.29",
     "chai": "^4.2.0",
     "chai-files": "^1.4.0",
-    "chance": "^1.0.18",
     "coveralls": "^3.0.0",
-    "debug": ">=2.6.9",
-    "deep-extend": ">=0.5.1",
     "faker": "^4.1.0",
-    "growl": ">=1.10.0",
-    "inquirer": "^5.2.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "prettier": "^1.16.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "parallelshell": "3.0.1",
+    "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "test-console": "^1.1.0",
-    "ts-node": "^8.0.0",
-    "tslint": "^5.12.1",
-    "tslint-config-prettier": "^1.17.0",
-    "typescript": "^3.2.4",
-    "yeoman-test": "^1.9.1"
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.3",
+    "yeoman-test": "^2.0.0"
   },
   "preferGlobal": true,
   "publishConfig": {

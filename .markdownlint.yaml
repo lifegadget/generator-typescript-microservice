@@ -1,0 +1,7 @@
+no-duplicate-header: false
+line-length: false
+no-inline-html: false
+no-space-in-links: false
+no-trailing-punctuation:
+punctuation: ".,;:"
+ul-style: "consistent"

@@ -2,10 +2,10 @@ import chalk from "chalk";
 import { kebabCase, camelCase } from "lodash";
 import { Answers } from "inquirer";
 import { IDictionary } from "common-types";
-import { IValidatorFactory, validatationFactory } from "./validate";
+import { validatationFactory } from "./validate";
 import { git, features, social, license } from "./prompting/index";
 import testing from "./prompting/testing";
-import { IGeneratorDictionary } from "./writing";
+import { IGeneratorDictionary } from "./@types";
 import { pwd } from "async-shelljs";
 
 function addToAnswers(source: IDictionary, addition: IDictionary) {
@@ -22,7 +22,7 @@ export const prompting = (context: IGeneratorDictionary) => async () => {
       type: "input",
       name: "appName",
       message: "Your project name",
-      default: kebabCase(context.appName) || kebabCase(dirName),
+      default: kebabCase(context.appname) || kebabCase(dirName),
       store: true
     }
   ]);

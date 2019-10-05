@@ -1,7 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var buildScripts_1 = require("./buildScripts");
-exports.buildScripts = buildScripts_1.buildScripts;
 var configResources_1 = require("./configResources");
 exports.configResources = configResources_1.configResources;
 var projectResources_1 = require("./projectResources");

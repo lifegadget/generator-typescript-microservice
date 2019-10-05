@@ -12,20 +12,19 @@ function install(context) {
         "@types/rimraf",
         "@types/handlebars",
         "@types/inquirer",
-        "@types/js-yaml"
+        "@types/js-yaml",
+        "@types/webpack-node-externals"
     ];
     const globaldevDeps = [
         "async-shelljs",
         "chai",
         "chalk",
-        "handlebars",
+        // "handlebars",
         "inquirer",
         "js-yaml",
         "lodash.first",
         "lodash.last",
         "mocha",
-        "coveralls",
-        "nyc",
         "prettier",
         "rimraf",
         "tslint",
@@ -38,7 +37,8 @@ function install(context) {
         "webpack-cli",
         "webpack-node-externals",
         "webpack",
-        "do-devops"
+        "do-devops",
+        "fast-glob"
     ];
     const serverlessOnlyDevDeps = [
         "serverless",
@@ -46,8 +46,8 @@ function install(context) {
         "serverless-step-functions",
         "serverless-webpack",
         "serverless-offline",
-        "aws-log",
-        "js-yaml"
+        "js-yaml",
+        "fork-ts-checker-webpack-plugin"
     ];
     const notServerlessOnlyDevDeps = ["bili"];
     let devDeps = [...typings, ...globaldevDeps];
@@ -58,6 +58,9 @@ function install(context) {
         devDeps = [...devDeps, "vuepress"];
     }
     let deps = ["common-types"];
+    if (validate.isServerless()) {
+        deps = [...deps, ...["aws-orchestrate", "aws-log", "aws-ssm", "aws-sdk"]];
+    }
     if (validate.hasTemplating()) {
         deps = [...deps, ...["typed-template"]];
     }
@@ -65,7 +68,7 @@ function install(context) {
         deps = [...deps, ...["abstracted-admin", "firemodel"]];
     }
     if (validate.useCoveralls()) {
-        devDeps = [...devDeps, "coveralls"];
+        devDeps = [...devDeps, ...["nyc", "coveralls"]];
     }
     // first install what's in the package.json (which would have more rigid
     // locking on version number)

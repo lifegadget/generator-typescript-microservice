@@ -1,4 +1,4 @@
-import { IGeneratorDictionary } from "./writing";
+import { IGeneratorDictionary } from "./@types";
 import { validatationFactory } from "./validate";
 
 export function install(context: IGeneratorDictionary) {
@@ -13,21 +13,20 @@ export function install(context: IGeneratorDictionary) {
     "@types/rimraf",
     "@types/handlebars",
     "@types/inquirer",
-    "@types/js-yaml"
+    "@types/js-yaml",
+    "@types/webpack-node-externals"
   ];
 
   const globaldevDeps = [
     "async-shelljs",
     "chai",
     "chalk",
-    "handlebars",
+    // "handlebars",
     "inquirer",
     "js-yaml",
     "lodash.first",
     "lodash.last",
     "mocha",
-    "coveralls",
-    "nyc",
     "prettier",
     "rimraf",
     "tslint",
@@ -40,7 +39,8 @@ export function install(context: IGeneratorDictionary) {
     "webpack-cli",
     "webpack-node-externals",
     "webpack",
-    "do-devops"
+    "do-devops",
+    "fast-glob"
   ];
 
   const serverlessOnlyDevDeps = [
@@ -49,8 +49,8 @@ export function install(context: IGeneratorDictionary) {
     "serverless-step-functions",
     "serverless-webpack",
     "serverless-offline",
-    "aws-log",
-    "js-yaml"
+    "js-yaml",
+    "fork-ts-checker-webpack-plugin"
   ];
 
   const notServerlessOnlyDevDeps = ["bili"];
@@ -67,6 +67,10 @@ export function install(context: IGeneratorDictionary) {
 
   let deps = ["common-types"];
 
+  if (validate.isServerless()) {
+    deps = [...deps, ...["aws-orchestrate", "aws-log", "aws-ssm", "aws-sdk"]];
+  }
+
   if (validate.hasTemplating()) {
     deps = [...deps, ...["typed-template"]];
   }
@@ -76,7 +80,7 @@ export function install(context: IGeneratorDictionary) {
   }
 
   if (validate.useCoveralls()) {
-    devDeps = [...devDeps, "coveralls"];
+    devDeps = [...devDeps, ...["nyc", "coveralls"]];
   }
 
   // first install what's in the package.json (which would have more rigid
