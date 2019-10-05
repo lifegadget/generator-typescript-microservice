@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
-const writing_1 = require("../writing");
+const processFiles_1 = require("../processFiles");
 exports.projectResources = (context) => () => {
     const validate = validate_1.validatationFactory(context.answers);
     return new Promise(resolve => {
@@ -11,7 +11,7 @@ exports.projectResources = (context) => () => {
             "src/shared/README.md"
         ];
         const libraryConfig = ["src/index.ts"];
-        writing_1.processFiles(context)("project", validate.isServerless() ? serverlessConfig : libraryConfig);
+        processFiles_1.processFiles(context)("project", validate.isServerless() ? serverlessConfig : libraryConfig);
         resolve();
     });
 };

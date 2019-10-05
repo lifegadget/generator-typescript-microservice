@@ -7,7 +7,7 @@ declare class Generator extends Base {
     badges: IDictionary;
     initializing(): Promise<void>;
     prompting(): Promise<void>;
-    writing(): Promise<[unknown, unknown, unknown, unknown, unknown]>;
+    writing(): Promise<void>;
     install(): Promise<void>;
     end(): Promise<void>;
 }

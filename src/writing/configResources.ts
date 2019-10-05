@@ -1,14 +1,10 @@
 import { IDictionary } from "common-types";
 import { IValidator, validatationFactory } from "../validate";
-import {
-  IFileConfiguration,
-  processFiles,
-  addBadge,
-  IGeneratorDictionary
-} from "../writing";
 import { kebabCase } from "lodash";
+import { IGeneratorDictionary, IFileConfiguration } from "../@types";
+import { processFiles } from "../processFiles";
 
-export const configResources = (context: IGeneratorDictionary) => () => {
+export const configResources = (context: IGeneratorDictionary) => async () => {
   const validate = validatationFactory(context.answers);
 
   return new Promise(async resolve => {
@@ -210,14 +206,12 @@ const badges = (context: IDictionary, validate: IValidator) => (
     ...social
   };
   let response = "";
-  console.log("badges", category, context.badges[category]);
 
   let link: string;
   if (Array.isArray(context.badges[category])) {
     context.badges[category].map((badge: string) => {
       if (Array.isArray(badge)) {
         [badge, link] = badge;
-        console.log("link", link);
       }
       const info = {
         name: badge,

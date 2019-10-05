@@ -1,8 +1,9 @@
 import { IDictionary } from "common-types";
-import { IValidator, validatationFactory } from "../validate";
-import { IFileConfiguration, processFiles } from "../writing";
+import { validatationFactory } from "../validate";
+import { IFileConfiguration, IGeneratorDictionary } from "../@types";
+import { processFiles } from "../processFiles";
 
-export const projectResources = (context: IDictionary) => () => {
+export const projectResources = (context: IGeneratorDictionary) => () => {
   const validate = validatationFactory(context.answers);
 
   return new Promise(resolve => {

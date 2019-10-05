@@ -22,7 +22,7 @@ exports.prompting = (context) => async () => {
             type: "input",
             name: "appName",
             message: "Your project name",
-            default: lodash_1.kebabCase(context.appName) || lodash_1.kebabCase(dirName),
+            default: lodash_1.kebabCase(context.appname) || lodash_1.kebabCase(dirName),
             store: true
         }
     ]);

@@ -23,11 +23,11 @@ class Generator extends Base {
     await prompting(this)();
   }
 
-  public async writing() {
+  public async writing(): Promise<void> {
     return writing(this)();
   }
 
-  public async install() {
+  public async install(): Promise<void> {
     return install(this);
   }
 

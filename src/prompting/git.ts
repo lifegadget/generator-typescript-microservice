@@ -4,6 +4,7 @@ import { Answers } from "inquirer";
 import chalk from "chalk";
 import { kebabCase, camelCase } from "lodash";
 import { asyncExec } from "async-shelljs";
+import { IGeneratorDictionary } from "../@types";
 
 async function gitStatus(dir: string = __dirname) {
   // tslint:disable-next-line:no-submodule-imports
@@ -41,7 +42,10 @@ async function gitRemotes(dir = __dirname) {
   return { repo, repoUserName, gitServer };
 }
 
-export default async function(context: IDictionary, validate: IValidator) {
+export default async function(
+  context: IGeneratorDictionary,
+  validate: IValidator
+) {
   const isRepo = await gitIsRepo(context.destinationPath());
   if (isRepo) {
     const remotes = await gitRemotes(context.destinationPath());
@@ -95,11 +99,7 @@ export default async function(context: IDictionary, validate: IValidator) {
 
     context.answers.repoOriginHttp =
       context.answers.gitServer === "bitbucket"
-        ? `https://bitbucket.org/${context.answers.repoUserName}/${
-            context.answers.repo
-          }.git`
-        : `https://github.com/${context.answers.repoUserName}/${
-            context.answers.repo
-          }.git`;
+        ? `https://bitbucket.org/${context.answers.repoUserName}/${context.answers.repo}.git`
+        : `https://github.com/${context.answers.repoUserName}/${context.answers.repo}.git`;
   }
 }

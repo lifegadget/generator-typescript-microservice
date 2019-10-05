@@ -1,2 +1,5 @@
-import { IGeneratorDictionary } from "../writing";
-export declare const testResources: (context: IGeneratorDictionary) => () => Promise<unknown>;
+import { IGeneratorDictionary } from "../@types";
+/**
+ * Adds in some basic test files along with the test helper script
+ */
+export declare const testResources: (context: IGeneratorDictionary) => () => Promise<void>;

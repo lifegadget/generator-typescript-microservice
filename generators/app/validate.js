@@ -1,5 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Provides a bunch of characteristics of the project based on the
+ * interactive session that the user was brought through.
+ *
+ * Examples are:
+ *  - isServerless
+ *  - hasTemplating
+ *  - useWallaby
+ */
 exports.validatationFactory = answers => {
     /**
      * Validates whether the category/feature is present in the config

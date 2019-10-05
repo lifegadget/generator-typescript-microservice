@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
-const writing_1 = require("../writing");
+const processFiles_1 = require("../processFiles");
 exports.buildScripts = (context) => () => {
     const validate = validate_1.validatationFactory(context.answers);
     return new Promise(resolve => {
@@ -51,7 +51,7 @@ exports.buildScripts = (context) => () => {
                 condition: validate.isServerless()
             }
         ];
-        writing_1.processFiles(context)("build/devops", config);
+        processFiles_1.processFiles(context)("build/devops", config);
         resolve();
     });
 };

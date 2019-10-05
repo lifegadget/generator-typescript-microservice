@@ -1,6 +1,7 @@
 import { IDictionary } from "common-types";
 import { IValidator, validatationFactory } from "../validate";
-import { IFileConfiguration, processFiles, IGeneratorDictionary } from "../writing";
+import { IGeneratorDictionary, IFileConfiguration } from "../@types";
+import { processFiles } from "../processFiles";
 
 export const templatingResources = (context: IGeneratorDictionary) => () => {
   const validate = validatationFactory(context.answers);
@@ -15,7 +16,10 @@ export const templatingResources = (context: IGeneratorDictionary) => () => {
       "templates/layouts/default.hbs",
       "templates/README.md"
     ];
-    processFiles(context)("templating", validate.hasTemplating() ? templating : []);
+    processFiles(context)(
+      "templating",
+      validate.hasTemplating() ? templating : []
+    );
     resolve();
   });
 };

@@ -1,4 +1,4 @@
-import { IGeneratorDictionary } from "./writing";
+import { IGeneratorDictionary } from "./@types";
 import { validatationFactory } from "./validate";
 
 export function install(context: IGeneratorDictionary) {

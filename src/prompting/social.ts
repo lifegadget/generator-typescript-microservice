@@ -1,15 +1,17 @@
-import { IGeneratorDictionary } from "../writing";
-import { IValidator, validatationFactory } from "../validate";
+import { validatationFactory } from "../validate";
 import { Answers } from "inquirer";
 import chalk from "chalk";
 import { kebabCase, camelCase } from "lodash";
+import { IGeneratorDictionary } from "../@types";
 
 export default async function(context: IGeneratorDictionary) {
   const social: Answers = await context.prompt([
     {
       type: "checkbox",
       name: "social",
-      message: `${chalk.bold("Social: ")} ${chalk.grey(" social badges on README")} `,
+      message: `${chalk.bold("Social: ")} ${chalk.grey(
+        " social badges on README"
+      )} `,
       choices: [
         {
           name: "Github forks",

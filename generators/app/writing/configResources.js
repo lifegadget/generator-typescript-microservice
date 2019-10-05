@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
-const writing_1 = require("../writing");
 const lodash_1 = require("lodash");
-exports.configResources = (context) => () => {
+const processFiles_1 = require("../processFiles");
+exports.configResources = (context) => async () => {
     const validate = validate_1.validatationFactory(context.answers);
     return new Promise(async (resolve) => {
         const npmBadge = badges(context, validate)("features");
@@ -130,7 +130,7 @@ exports.configResources = (context) => () => {
         const config = validate.isServerless()
             ? [...rootConfigFiles, ...serverlessConfig]
             : [...rootConfigFiles, ...notServerless];
-        writing_1.processFiles(context)("configuration", config);
+        processFiles_1.processFiles(context)("configuration", config);
         resolve();
     });
 };
@@ -182,13 +182,11 @@ const badges = (context, validate) => (category) => {
     };
     const badgeUrls = Object.assign({}, npm, testing, coverage, licenses, social);
     let response = "";
-    console.log("badges", category, context.badges[category]);
     let link;
     if (Array.isArray(context.badges[category])) {
         context.badges[category].map((badge) => {
             if (Array.isArray(badge)) {
                 [badge, link] = badge;
-                console.log("link", link);
             }
             const info = {
                 name: badge,

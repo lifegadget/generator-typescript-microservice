@@ -18,6 +18,15 @@ export interface IValidator {
   gitServerURL(): string;
 }
 
+/**
+ * Provides a bunch of characteristics of the project based on the
+ * interactive session that the user was brought through.
+ *
+ * Examples are:
+ *  - isServerless
+ *  - hasTemplating
+ *  - useWallaby
+ */
 export const validatationFactory: IValidatorFactory = answers => {
   /**
    * Validates whether the category/feature is present in the config
