@@ -1,4 +1,4 @@
-import { IGeneratorDictionary } from "../writing";
+import { IGeneratorDictionary } from "../@types";
 import { IValidator, validatationFactory } from "../validate";
 import { Answers } from "inquirer";
 import chalk from "chalk";

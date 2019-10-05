@@ -1,2 +1,2 @@
-import { IDictionary } from "common-types";
-export declare const projectResources: (context: IDictionary<any>) => () => Promise<{}>;
+import { IGeneratorDictionary } from "../@types";
+export declare const projectResources: (context: IGeneratorDictionary) => () => Promise<void>;

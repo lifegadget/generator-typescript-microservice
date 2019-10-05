@@ -1,3 +1,3 @@
-import { IDictionary } from "common-types";
 import { IValidator } from "../validate";
-export default function (context: IDictionary, validate: IValidator): Promise<void>;
+import { IGeneratorDictionary } from "../@types";
+export default function (context: IGeneratorDictionary, validate: IValidator): Promise<void>;

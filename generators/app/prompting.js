@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = require("chalk");
+const chalk_1 = __importDefault(require("chalk"));
 const lodash_1 = require("lodash");
 const validate_1 = require("./validate");
 const index_1 = require("./prompting/index");
-const testing_1 = require("./prompting/testing");
+const testing_1 = __importDefault(require("./prompting/testing"));
 const async_shelljs_1 = require("async-shelljs");
 function addToAnswers(source, addition) {
     source = Object.assign({}, source, addition);
@@ -19,7 +22,7 @@ exports.prompting = (context) => async () => {
             type: "input",
             name: "appName",
             message: "Your project name",
-            default: lodash_1.kebabCase(context.appName) || lodash_1.kebabCase(dirName),
+            default: lodash_1.kebabCase(context.appname) || lodash_1.kebabCase(dirName),
             store: true
         }
     ]);

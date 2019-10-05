@@ -1,15 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const social_1 = require("./social");
+const social_1 = __importDefault(require("./social"));
 exports.social = social_1.default;
-const license_1 = require("./license");
+const license_1 = __importDefault(require("./license"));
 exports.license = license_1.default;
-const testing_1 = require("./testing");
+const testing_1 = __importDefault(require("./testing"));
 exports.testing = testing_1.default;
-const features_1 = require("./features");
+const features_1 = __importDefault(require("./features"));
 exports.features = features_1.default;
-const git_1 = require("./git");
+const git_1 = __importDefault(require("./git"));
 exports.git = git_1.default;
-const project_1 = require("./project");
+const project_1 = __importDefault(require("./project"));
 exports.project = project_1.default;
 //# sourceMappingURL=index.js.map

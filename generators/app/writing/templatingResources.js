@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
-const writing_1 = require("../writing");
+const processFiles_1 = require("../processFiles");
 exports.templatingResources = (context) => () => {
     const validate = validate_1.validatationFactory(context.answers);
     return new Promise(resolve => {
@@ -15,7 +15,7 @@ exports.templatingResources = (context) => () => {
             "templates/layouts/default.hbs",
             "templates/README.md"
         ];
-        writing_1.processFiles(context)("templating", validate.hasTemplating() ? templating : []);
+        processFiles_1.processFiles(context)("templating", validate.hasTemplating() ? templating : []);
         resolve();
     });
 };

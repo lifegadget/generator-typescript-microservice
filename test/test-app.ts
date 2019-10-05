@@ -1,10 +1,8 @@
-// tslint:disable:no-implicit-dependencies
 import path = require("path");
 import { run } from "yeoman-test";
 import * as chai from "chai";
 import "../types/chaiFiles";
 import { ls } from "async-shelljs";
-// tslint:disable-next-line:no-var-requires
 const chaiFiles = require("chai-files");
 chai.use(chaiFiles);
 
@@ -13,7 +11,6 @@ const file = chaiFiles.file;
 const dir = chaiFiles.dir;
 
 describe("generate project", () => {
-  this.timeout = 5000;
   // let tmp: string;
   before(async () => {
     return new Promise(resolve => {
