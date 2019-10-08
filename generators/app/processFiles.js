@@ -27,6 +27,9 @@ exports.processFiles = (context) =>
         const from = context.templatePath(typeof f === "object" ? f.sourceFrom || filename : filename);
         const to = context.destinationPath(filename);
         try {
+            if (to.includes("editorconfig")) {
+                console.log(`${from} may have problem with ${to}`);
+            }
             if (typeof f === "object" && f.substitute) {
                 context.fs.copyTpl(from, to, f.substitute);
             }

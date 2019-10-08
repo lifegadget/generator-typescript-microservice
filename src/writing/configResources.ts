@@ -130,7 +130,7 @@ export const configResources = (context: IGeneratorDictionary) => async () => {
     "serverless-config/functions/inline.ts",
     "serverless-config/stepFunctions/index.ts",
     "serverless-config/stepFunctions/example.ts",
-    "serverless-config/"
+    "serverless-config/helpers/*"
   ];
 
   const config = validate.isServerless()

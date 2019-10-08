@@ -47,7 +47,8 @@ function install(context) {
         "serverless-webpack",
         "serverless-offline",
         "js-yaml",
-        "fork-ts-checker-webpack-plugin"
+        "fork-ts-checker-webpack-plugin",
+        "serverless-log-forwarding"
     ];
     const notServerlessOnlyDevDeps = ["bili"];
     let devDeps = [...typings, ...globaldevDeps];

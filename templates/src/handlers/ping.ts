@@ -1,46 +1,42 @@
-import {
-  getBodyFromPossibleLambdaProxyRequest,
-  IAwsHandlerFunction,
-  ApiGatewayStatusCode,
-  LambdaEventParser
-} from "common-types";
-import { logger } from "aws-log";
+import { IHandlerFunction, wrapper, IWrapperFunction } from "aws-orchestrate";
+
+export const config: IWrapperFunction = {
+  description: `This is a test function to demonstrate how you might write your own.`
+};
 
 export interface IPingRequest {
-  system: string;
+  /** the URLs to test */
+  urls: string[];
+}
+
+export interface IPingStatus {
+  /** the URL that was tested */
+  url: string;
+  /** the ms it took to load the resource */
+  loadtime: number;
 }
 
 export interface IPingResponse {
-  statusCode: ApiGatewayStatusCode;
-  body: string;
+  urlResponses: IPingStatus[];
 }
 
 /**
- * Ping
+ * This is a test handler function that gets wrapped up by the `aws-orchestrate`'s
+ * **wrapper** function.
  *
- * The ping function is an "example function" but it demonstrates some best practices
- * in it's structure and typing.
- *
- * @param event a event that may have come from API Gateway but could have come from another Lambda or other source
- * @param context contextual information about the execution environment
+ * @param request the typed request object defined by `IPingRequest`
+ * @param context the AWS context object enhanced with a number of new features
  */
-export const handler: IAwsHandlerFunction<IPingRequest, IPingResponse> = async (
-  event,
+export const fn: IHandlerFunction<IPingRequest, IPingResponse> = async (
+  request,
   context
 ) => {
-  const log = logger().lambda(event, context);
-  context.callbackWaitsForEmptyEventLoop = false;
-  try {
-    const { request, apiGateway } = LambdaEventParser.parse(event);
-    log.info("Ping handler called", { request });
-    const message = getBodyFromPossibleLambdaProxyRequest(event);
-    return {
-      statusCode: ApiGatewayStatusCode.Success,
-      body: {
-        foo: "bar"
-      }
-    };
-  } catch (e) {
-    throw new Error("Bad Ping!");
-  }
+  const { log, sequence, apiGateway } = context;
+  log.info("this is just a test; but what a test it is :)", request);
+
+  return {
+    urlResponses: []
+  };
 };
+
+export const handler = wrapper(fn);

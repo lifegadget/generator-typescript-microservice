@@ -1,5 +1,4 @@
-import { IServerlessIAMRole } from "common-types";
-import { IServerlessAccountInfo } from "./types";
+import { IServerlessIAMRole, IServerlessAccountInfo } from "common-types";
 import stateMachines from "../stepFunctions";
 
 export function iamRoleStatements(

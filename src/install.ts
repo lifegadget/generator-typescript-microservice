@@ -50,7 +50,8 @@ export function install(context: IGeneratorDictionary) {
     "serverless-webpack",
     "serverless-offline",
     "js-yaml",
-    "fork-ts-checker-webpack-plugin"
+    "fork-ts-checker-webpack-plugin",
+    "serverless-log-forwarding"
   ];
 
   const notServerlessOnlyDevDeps = ["bili"];
