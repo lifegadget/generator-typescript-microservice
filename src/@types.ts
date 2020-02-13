@@ -1,7 +1,7 @@
 import { IDictionary } from "common-types";
-import Generator = require(".");
+import { Generator } from "./index";
 
-export type Generator = import("yeoman-generator");
+// export type Generator = import("yeoman-generator");
 
 export interface IGeneratorDictionary extends Generator {
   /** A dictionary of answered question asked during the "prompting" phase */

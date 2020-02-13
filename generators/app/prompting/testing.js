@@ -44,7 +44,7 @@ async function default_1(context) {
             }
         }
     ]);
-    context.answers = Object.assign({}, context.answers, testing);
+    context.answers = Object.assign(Object.assign({}, context.answers), testing);
     const testing2 = await context.prompt([
         {
             type: "checkbox",
@@ -70,7 +70,7 @@ async function default_1(context) {
             store: true
         }
     ]);
-    context.answers = Object.assign({}, context.answers, testing2);
+    context.answers = Object.assign(Object.assign({}, context.answers), testing2);
 }
 exports.default = default_1;
 //# sourceMappingURL=testing.js.map

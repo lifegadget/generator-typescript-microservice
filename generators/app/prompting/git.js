@@ -40,7 +40,7 @@ async function default_1(context, validate) {
     const isRepo = await gitIsRepo(context.destinationPath());
     if (isRepo) {
         const remotes = await gitRemotes(context.destinationPath());
-        context.answers = Object.assign({}, context.answers, remotes);
+        context.answers = Object.assign(Object.assign({}, context.answers), remotes);
     }
     else {
         const git = await context.prompt([
@@ -60,7 +60,7 @@ async function default_1(context, validate) {
                 store: true
             }
         ]);
-        context.answers = Object.assign({}, context.answers, git);
+        context.answers = Object.assign(Object.assign({}, context.answers), git);
         if (new Set(["bitbucket", "github"]).has(context.answers.gitServer)) {
             const git2 = await context.prompt([
                 {
@@ -74,7 +74,7 @@ async function default_1(context, validate) {
                     store: true
                 }
             ]);
-            context.answers = Object.assign({}, context.answers, git2);
+            context.answers = Object.assign(Object.assign({}, context.answers), git2);
         }
         context.answers.repoOrigin =
             context.answers.gitServer === "bitbucket"

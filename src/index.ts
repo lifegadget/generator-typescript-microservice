@@ -6,7 +6,7 @@ import { install } from "./install";
 import { writing } from "./writing";
 import { closure } from "./closure";
 
-class Generator extends Base {
+export class Generator extends Base {
   constructor(args: any[], opts: any) {
     super(args, opts);
   }
@@ -35,5 +35,3 @@ class Generator extends Base {
     await closure(this);
   }
 }
-
-export = Generator;
