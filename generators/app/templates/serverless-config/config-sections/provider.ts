@@ -18,9 +18,7 @@ export const provider = (
       SERVICE_NAME: "${self:service.name}"
     },
     ...iamRoleStatements(config),
-    aliasStage: {
-      loggingLevel: "INFO",
-      dataTraceEnabled: true
-    }
+
+    tracing: config.tracing || false
   }
 });
