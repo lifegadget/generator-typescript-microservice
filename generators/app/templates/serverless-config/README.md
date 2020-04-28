@@ -1,11 +1,22 @@
 # Serverless Config
 
-This directory is used to configure your serverless deployment. As part of the build process (aka, `./build.ts`) your master `serverless.yml` file will be composed from the various files contained here. For that reason it is best **not** to directly modify the `serverless.yml` file. It is also generally a good idea to use this setup with the `do-devops` repo:
+This directory is used to configure your serverless deployment. As part of the build process (aka, `./build.ts`) your master `serverless.yml` file will be composed from the various files contained here. For that reason it is best **not** to directly modify the `serverless.yml` file. For this to work seemlessly you will need to have the `do-devops` repo configured and run:
 
 ```sh
-# run a build with do-devops
 yarn do build
 ```
+
+Although because this is already added as a "script" in the `package.json` file you only really need to type:
+
+```sh
+yarn build
+```
+
+The `do-devops` repo will prep the build process by:
+
+- Searching through the `/src/handlers` folders for handler functions and building a `./functions/inline.ts` file
+- It will also build some useful Typescript typings in `/src/@types/functions.ts`
+- It will then handoff responsibility to the local `./build.ts` file to convert the serverless config into a `serverless.yml` file.
 
 ## Sections
 

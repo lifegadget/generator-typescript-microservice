@@ -43,7 +43,7 @@ async function default_1(context) {
             store: true
         }
     ]);
-    context.answers = Object.assign({}, context.answers, social);
+    context.answers = Object.assign(Object.assign({}, context.answers), social);
     const validate = validate_1.validatationFactory(context.answers);
     if (validate.twitterHandleRequired()) {
         const twitter = await context.prompt([
@@ -54,7 +54,7 @@ async function default_1(context) {
                 store: true
             }
         ]);
-        context.answers = Object.assign({}, context.answers, twitter);
+        context.answers = Object.assign(Object.assign({}, context.answers), twitter);
     }
 }
 exports.default = default_1;

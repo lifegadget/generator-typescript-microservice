@@ -2,6 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const yeoman_generator_1 = __importDefault(require("yeoman-generator"));
 const initializing_1 = require("./initializing");
 const prompting_1 = require("./prompting");
@@ -29,5 +30,5 @@ class Generator extends yeoman_generator_1.default {
         await closure_1.closure(this);
     }
 }
-module.exports = Generator;
+exports.Generator = Generator;
 //# sourceMappingURL=index.js.map

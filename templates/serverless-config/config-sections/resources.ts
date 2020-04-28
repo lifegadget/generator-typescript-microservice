@@ -1,6 +1,10 @@
-import { IServerlessBindDeploymentIdPlugin, createBindDeploymentConfig, IServerlessStage } from 'common-types'
-import { IServerlessAccountInfo } from './types'
-import { plugins } from './plugins'
+import {
+  IServerlessBindDeploymentIdPlugin,
+  createBindDeploymentConfig,
+  IServerlessStage,
+  IServerlessAccountInfo
+} from "common-types";
+import { plugins } from "./plugins";
 
 /**
  * **resources**
@@ -11,28 +15,30 @@ import { plugins } from './plugins'
 export function resources(accountInfo: IServerlessAccountInfo) {
   const config: IServerlessBindDeploymentIdPlugin = createBindDeploymentConfig({
     service: accountInfo.name,
-    stage: (process.env.NODE_ENV as IServerlessStage) || 'dev',
-  })
+    stage: (process.env.NODE_ENV as IServerlessStage) || "dev"
+  });
   const resources = {
     Resources: {
       GatewayResponseDefault4XX: {
-        Type: 'AWS::ApiGateway::GatewayResponse',
+        Type: "AWS::ApiGateway::GatewayResponse",
         Properties: {
           ResponseParameters: {
-            'gatewayresponse.header.Access-Control-Allow-Origin': `'*'`,
-            'gatewayresponse.header.Access-Control-Allow-Headers': `'*'`,
+            "gatewayresponse.header.Access-Control-Allow-Origin": `'*'`,
+            "gatewayresponse.header.Access-Control-Allow-Headers": `'*'`
           },
-          ResponseType: 'DEFAULT_4XX',
+          ResponseType: "DEFAULT_4XX",
           RestApiId: {
-            Ref: 'ApiGatewayRestApi',
-          },
-        },
-      },
-    },
-  }
-  const pluginsUsed = plugins(accountInfo).plugins
-  const usingDeploymentIdPlugin = pluginsUsed.includes('serverless-plugin-bind-deployment-id')
-  const apiGatewayLogging = usingDeploymentIdPlugin ? config : {}
+            Ref: "ApiGatewayRestApi"
+          }
+        }
+      }
+    }
+  };
+  const pluginsUsed = plugins(accountInfo).plugins;
+  const usingDeploymentIdPlugin = pluginsUsed.includes(
+    "serverless-plugin-bind-deployment-id"
+  );
+  const apiGatewayLogging = usingDeploymentIdPlugin ? config : {};
 
-  return { ...apiGatewayLogging, ...resources }
+  return { ...apiGatewayLogging, ...resources };
 }

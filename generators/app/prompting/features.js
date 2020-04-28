@@ -36,7 +36,7 @@ async function default_1(context) {
             store: true
         }
     ]);
-    context.answers = Object.assign({}, context.answers, features);
+    context.answers = Object.assign(Object.assign({}, context.answers), features);
 }
 exports.default = default_1;
 //# sourceMappingURL=features.js.map

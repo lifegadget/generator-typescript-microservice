@@ -1,6 +1,6 @@
 import Base from "yeoman-generator";
 import { IDictionary } from "common-types";
-declare class Generator extends Base {
+export declare class Generator extends Base {
     constructor(args: any[], opts: any);
     options: IDictionary;
     answers: IDictionary;
@@ -11,4 +11,3 @@ declare class Generator extends Base {
     install(): Promise<void>;
     end(): Promise<void>;
 }
-export = Generator;

@@ -31,6 +31,9 @@ export const processFiles = (context: IGeneratorDictionary) =>
       const to = context.destinationPath(filename);
 
       try {
+        if (to.includes("editorconfig")) {
+          console.log(`${from} may have problem with ${to}`);
+        }
         if (typeof f === "object" && f.substitute) {
           context.fs.copyTpl(from, to, f.substitute);
         } else {

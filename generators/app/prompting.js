@@ -10,7 +10,7 @@ const index_1 = require("./prompting/index");
 const testing_1 = __importDefault(require("./prompting/testing"));
 const async_shelljs_1 = require("async-shelljs");
 function addToAnswers(source, addition) {
-    source = Object.assign({}, source, addition);
+    source = Object.assign(Object.assign({}, source), addition);
 }
 exports.prompting = (context) => async () => {
     const validate = validate_1.validatationFactory(context.answers);
@@ -43,7 +43,7 @@ exports.prompting = (context) => async () => {
             store: true
         }
     ]);
-    context.answers = Object.assign({}, context.answers, projectType);
+    context.answers = Object.assign(Object.assign({}, context.answers), projectType);
     console.log("");
     await index_1.features(context);
     console.log("");

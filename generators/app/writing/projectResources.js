@@ -5,7 +5,7 @@ const processFiles_1 = require("../processFiles");
 exports.projectResources = (context) => async () => {
     const validate = validate_1.validatationFactory(context.answers);
     const serverlessConfig = [
-        "src/handlers/ping.ts",
+        "src/handlers/example/*",
         "src/models/README.md",
         "src/shared/README.md"
     ];

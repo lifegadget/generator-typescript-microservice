@@ -46,7 +46,7 @@ exports.badges = (context, validate) => (category) => {
             `https://twitter.com/intent/follow?screen_name=${context.answers.twitterHandle}`
         ]
     };
-    const badgeUrls = Object.assign({}, npm, testing, coverage, licenses, social);
+    const badgeUrls = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, npm), testing), coverage), licenses), social);
     let response = "";
     let link;
     if (Array.isArray(context.badges[category])) {

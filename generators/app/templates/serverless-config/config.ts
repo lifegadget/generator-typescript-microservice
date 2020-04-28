@@ -8,10 +8,13 @@ import {
 } from "./config-sections";
 import functions from "./functions/index";
 import stateMachines from "./stepFunctions/index";
-import { IServerlessConfig } from "common-types";
-type IServerlessAccountInfo = import("do-devops").IServerlessAccountInfo;
+import { IServerlessConfig, IServerlessAccountInfo } from "common-types";
 
 export default (accountInfo: IServerlessAccountInfo): IServerlessConfig => {
+  const hasStepFunctions = accountInfo.devDependencies.includes(
+    "serverless-step-functions"
+  );
+
   return {
     ...service(accountInfo),
     ...packaging(accountInfo),
@@ -20,6 +23,6 @@ export default (accountInfo: IServerlessAccountInfo): IServerlessConfig => {
     ...provider(accountInfo),
     ...resources(accountInfo),
     ...{ functions },
-    ...{ stateMachines }
+    ...(hasStepFunctions ? stateMachines : {})
   };
 };

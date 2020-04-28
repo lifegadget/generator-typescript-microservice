@@ -1,34 +1,29 @@
-import { IServerlessAccountInfo } from './types'
-import { IDictionary } from 'common-types'
+import { IServerlessConfigCustom, IServerlessAccountInfo } from "common-types";
 
-export const custom = (config: IServerlessAccountInfo): IServerlessCustomConfig => ({
-  custom: {
-    stage: '${opt:stage, self:provider.stage}',
-    region: '${opt:region, self:provider.region}',
-    accountId: config.accountId,
-    webpack: {
-      webpackConfig: './webpack.config.js',
-      includeModules: {
-        forceExclude: ['aws-sdk', 'faker'],
-      },
-      packager: 'yarn',
-    },
-    logForwarding: {
-      destinationARN:
-        'arn:aws:lambda:${self:custom.region}:${self:custom.accountId}:function:logzio-shipper-${self:custom.stage}-logzioShipper',
-    },
-    authorizer: {
-      name: 'customAuthorizer',
-      resultTtlInSeconds: 0,
-      identitySource: 'method.request.header.Authorization',
-      type: 'token',
-    },
-  } as IServerlessCustomConfig,
-})
+export const custom = (
+  config: IServerlessAccountInfo
+): IServerlessConfigCustom => {
+  const output = {
+    custom: {
+      stage: "${opt:stage, self:provider.stage}",
+      region: "${opt:region, self:provider.region}",
+      accountId: config.accountId,
+      webpack: {
+        webpackConfig: "./webpack.config.js",
+        includeModules: {
+          forceExclude: ["aws-sdk", "firemock", "faker"]
+        },
+        packager: "yarn"
+      }
+    } as IServerlessConfigCustom
+  };
+  // Add log forwarding if the plugin exists and there is an ARN to point at
+  if (
+    config.logForwarding &&
+    config.devDependencies.includes("serverless-log-forwarding")
+  ) {
+    output.custom.logForwarding = { destinationARN: config.logForwarding };
+  }
 
-export interface IServerlessCustomConfig extends IDictionary {
-  stage?: string
-  region?: string
-  accountId?: string
-  webpack?: any
-}
+  return output;
+};

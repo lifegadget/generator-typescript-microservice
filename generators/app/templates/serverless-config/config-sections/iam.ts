@@ -1,5 +1,5 @@
-import { IServerlessIAMRole } from "common-types";
-import { IServerlessAccountInfo } from "./types";
+// tslint:disable-next-line:no-implicit-dependencies
+import { IServerlessIAMRole, IServerlessAccountInfo } from "common-types";
 import stateMachines from "../stepFunctions";
 
 export function iamRoleStatements(
@@ -9,9 +9,22 @@ export function iamRoleStatements(
     ssmPermissions(config),
     xRayPermissions(config),
     stepFunctions(config),
+    cloudwatchLogging(config),
     invokePermissions(config)
   ].filter(i => i !== false);
-  return { iamRoleStatements: iam as IServerlessIAMRole[] };
+  return {
+    iamRoleStatements: iam as IServerlessIAMRole[],
+    ...(config.tracing
+      ? {
+          tracing: {
+            apiGateway: [true, "api-gateway"].includes(config.tracing)
+              ? true
+              : false,
+            lambda: [true, "lambda"].includes(config.tracing) ? true : false
+          }
+        }
+      : {})
+  };
 }
 
 function ssmPermissions(
@@ -57,17 +70,23 @@ function invokePermissions(
 function xRayPermissions(
   config: IServerlessAccountInfo
 ): IServerlessIAMRole | false {
-  return {
-    Effect: "Allow",
-    Action: ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
-    Resource: ["*"]
-  };
+  return config.tracing
+    ? {
+        Effect: "Allow",
+        Action: ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+        Resource: ["*"]
+      }
+    : false;
 }
 
 function stepFunctions(
   config: IServerlessAccountInfo
 ): IServerlessIAMRole | false {
-  return stateMachines.stateMachines &&
+  if (!config.devDependencies.includes("serverless-step-functions")) {
+    return false;
+  }
+  return stateMachines &&
+    stateMachines.stateMachines &&
     Object.keys(stateMachines.stateMachines).length > 0
     ? {
         Effect: "Allow",

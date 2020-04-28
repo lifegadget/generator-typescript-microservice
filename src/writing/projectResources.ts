@@ -7,7 +7,7 @@ export const projectResources = (context: IGeneratorDictionary) => async () => {
   const validate = validatationFactory(context.answers);
 
   const serverlessConfig: IFileConfiguration[] = [
-    "src/handlers/ping.ts",
+    "src/handlers/example/*",
     "src/models/README.md",
     "src/shared/README.md"
   ];

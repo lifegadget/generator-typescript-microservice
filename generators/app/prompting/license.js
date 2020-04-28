@@ -19,7 +19,7 @@ async function default_1(context) {
             store: true
         }
     ]);
-    context.answers = Object.assign({}, context.answers, license);
+    context.answers = Object.assign(Object.assign({}, context.answers), license);
 }
 exports.default = default_1;
 //# sourceMappingURL=license.js.map
