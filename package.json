@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "5.4.5",
+  "version": "5.4.6",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "https://github.com/lifegadget/generator-typescript-microservice",
