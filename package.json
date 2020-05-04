@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "5.4.4",
+  "version": "5.4.5",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "https://github.com/lifegadget/generator-typescript-microservice",
@@ -9,6 +9,9 @@
     "email": "ken@ken.net",
     "url": "https://github.com/ksnyde"
   },
+  "files": [
+    "generators"
+  ],
   "scripts": {
     "build": "yarn sync-glob 'templates/**' 'generators/app/templates' && tsc",
     "watch": "yarn parallelshell  \"sync-glob --watch 'template/**' 'generators/app/templates'\" \"tsc -w\"",
