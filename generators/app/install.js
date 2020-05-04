@@ -37,6 +37,7 @@ function install(context) {
         "webpack-cli",
         "webpack-node-externals",
         "webpack",
+        "webpack-bundle-analyzer",
         "do-devops",
         "fast-glob"
     ];
@@ -44,7 +45,6 @@ function install(context) {
         "serverless",
         "serverless-pseudo-parameters",
         "serverless-step-functions",
-        "serverless-webpack",
         "serverless-offline",
         "js-yaml",
         "fork-ts-checker-webpack-plugin",

@@ -39,6 +39,7 @@ export function install(context: IGeneratorDictionary) {
     "webpack-cli",
     "webpack-node-externals",
     "webpack",
+    "webpack-bundle-analyzer",
     "do-devops",
     "fast-glob"
   ];
@@ -47,7 +48,6 @@ export function install(context: IGeneratorDictionary) {
     "serverless",
     "serverless-pseudo-parameters",
     "serverless-step-functions",
-    "serverless-webpack",
     "serverless-offline",
     "js-yaml",
     "fork-ts-checker-webpack-plugin",

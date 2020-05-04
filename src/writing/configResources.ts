@@ -1,5 +1,4 @@
-import { IDictionary } from "common-types";
-import { IValidator, validatationFactory } from "../validate";
+import { validatationFactory } from "../validate";
 import { kebabCase } from "lodash";
 import { IGeneratorDictionary, IFileConfiguration } from "../@types";
 import { processFiles } from "../processFiles";
