@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-microservice",
-  "version": "5.4.7",
+  "version": "5.4.8",
   "description": "A NodeJS generator for Node/TypeScript which leverages the Serverless framework to be deployable to all the major cloud platforms",
   "license": "MIT",
   "repository": "https://github.com/lifegadget/generator-typescript-microservice",
@@ -13,10 +13,12 @@
     "generators"
   ],
   "scripts": {
-    "build": "yarn sync-glob 'templates/**' 'generators/app/templates' && tsc",
-    "watch": "yarn parallelshell  \"sync-glob --watch 'template/**' 'generators/app/templates'\" \"tsc -w\"",
-    "watch:templates": "yarn sync-glob --watch 'templates/**' 'generators/app/templates'",
-    "watch:code": "tsc -w",
+    "build": "run-p build:*",
+    "build:templates": "sync-glob templates/** 'generators/app/templates'",
+    "build:tsc": "tsc",
+    "watch": "run-p  watch:*",
+    "watch:templates": "sync-glob --watch 'templates/**' 'generators/app/templates'",
+    "watch:tsc": "tsc -w",
     "test": "node_modules/.bin/tsc && node_modules/.bin/mocha --exit --require ts-node/register test/test-app.ts"
   },
   "keywords": [
@@ -30,14 +32,15 @@
   "dependencies": {
     "async-shelljs": "^0.1.4",
     "chalk": "^4.0.0",
-    "common-types": "^1.14.3",
+    "common-types": "^1.14.4",
     "handlebars": "^4.7.6",
     "inquirer": "^7.1.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.0",
     "lodash": "^4.17.15",
-    "simple-git": "^2.3.0",
+    "npm-run-all": "^4.1.5",
+    "simple-git": "^2.5.0",
     "sync-glob": "^1.4.0",
-    "yeoman-generator": "^4.10.0",
+    "yeoman-generator": "^4.10.1",
     "yosay": "^2.0.2"
   },
   "devDependencies": {
@@ -56,7 +59,6 @@
     "lodash.last": "^3.0.0",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
-    "parallelshell": "3.0.2",
     "prettier": "^1.19.1",
     "rimraf": "^2.6.3",
     "test-console": "^1.1.0",

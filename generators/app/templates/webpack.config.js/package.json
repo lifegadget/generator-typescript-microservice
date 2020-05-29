@@ -1,0 +1,37 @@
+{
+  "name": "<%= appName %>",
+  "version": "0.1.0",
+  "description": "<%= appName %>",
+  "license": "MIT",
+  "repository": "<%- repo %>",
+  "author": "<%- author %>",
+  "keywords": <%- keywords %>,
+  "files": <%- files %>,
+  "main": "lib/index.js",
+  <%- module %> <%- browser %>
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "build": "do build",
+    "test": "do test ",
+    "invoke": "do invoke ",
+    "deploy": "do deploy ",
+    "package": "do package ",
+    "help": "yarn do --help",
+    "coverage":
+      "nyc --reporter=html _mocha --require ts-node/register 'test/**/*-spec.ts' && open coverage/index.html",
+    "coverage:coveralls":
+      "nyc --reporter=text-lcov _mocha --require ts-node/register 'test/**/*-spec.ts' | coveralls",
+    "coverage:codecov":
+      "nyc _mocha --reporter=json --require ts-node/register 'test/**/*-spec.ts' > coverage/coverage.json",
+    "watch": "tsc -w"
+  },
+
+  "devDependencies": {
+    "@types/node": "^10.14.15"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}

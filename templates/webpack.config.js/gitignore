@@ -1,0 +1,12 @@
+coverage/
+node_modules/
+npm-debug.log
+.nyc_output
+/lib
+/dist
+lib_test
+.rpt2_cache/
+.serverless/
+.vagrant/
+serverless-package/
+.webpack/*
