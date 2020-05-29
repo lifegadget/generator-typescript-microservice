@@ -1,0 +1,5 @@
+service: <%= appName %>
+custom:
+  stage: "${opt:stage, self:provider.stage}"
+  region: "${opt:region, self:provider.region}"
+

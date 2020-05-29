@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "quotemark": ["single"],
+    "no-console": [ false ],
+    "object-literal-sort-keys": false,
+    "no-trailing-whitespace": false,
+    "ordered-imports": [false],
+    "no-string-literal": false,
+    "max-line-length": [false],
+    "trailing-comma": [false],
+    "variable-name": [false],
+    "arrow-parens": [false],
+    "no-namespace": [true, "allow-declarations"]
+  }
+}

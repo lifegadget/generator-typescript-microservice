@@ -1,10 +1,19 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const validate_1 = require("../validate");
 const lodash_1 = require("lodash");
 const processFiles_1 = require("../processFiles");
 const badges_1 = require("./badges");
-exports.configResources = (context) => async () => {
+exports.configResources = (context) => () => __awaiter(void 0, void 0, void 0, function* () {
     const validate = validate_1.validatationFactory(context.answers);
     const npmBadge = badges_1.badges(context, validate)("features");
     const testBadges = badges_1.badges(context, validate)("testing");
@@ -129,5 +138,5 @@ exports.configResources = (context) => async () => {
         ? [...rootConfigFiles, ...serverlessConfig]
         : [...rootConfigFiles, ...notServerless];
     processFiles_1.processFiles(context)("configuration", config);
-};
+});
 //# sourceMappingURL=configResources.js.map
