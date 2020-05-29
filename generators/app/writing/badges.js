@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.badges = void 0;
 exports.badges = (context, validate) => (category) => {
     const badgeTemplate = "![ALT](URL) ";
     const npm = {

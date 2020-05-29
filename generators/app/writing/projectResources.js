@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.projectResources = void 0;
 const validate_1 = require("../validate");
 const processFiles_1 = require("../processFiles");
 exports.projectResources = (context) => () => __awaiter(void 0, void 0, void 0, function* () {

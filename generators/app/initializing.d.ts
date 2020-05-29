@@ -1,2 +1,2 @@
 import { IDictionary } from "common-types";
-export declare const initializing: (context: IDictionary<any>) => () => void;
+export declare const initializing: (context: IDictionary) => () => void;

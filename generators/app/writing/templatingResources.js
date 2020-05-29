@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.templatingResources = void 0;
 const validate_1 = require("../validate");
 const processFiles_1 = require("../processFiles");
 exports.templatingResources = (context) => () => {
