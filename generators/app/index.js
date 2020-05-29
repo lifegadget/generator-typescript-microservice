@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Generator = void 0;
 const yeoman_generator_1 = __importDefault(require("yeoman-generator"));
 const initializing_1 = require("./initializing");
 const prompting_1 = require("./prompting");

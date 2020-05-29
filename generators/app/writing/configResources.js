@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.configResources = void 0;
 const validate_1 = require("../validate");
 const lodash_1 = require("lodash");
 const processFiles_1 = require("../processFiles");

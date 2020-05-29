@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.install = void 0;
 const validate_1 = require("./validate");
 function install(context) {
     const validate = validate_1.validatationFactory(context.answers);

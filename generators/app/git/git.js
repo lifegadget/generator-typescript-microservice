@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.addRemote = exports.checkIsRepo = exports.initializeRepo = void 0;
 const util_1 = require("util");
 function initializeRepo(context) {
     const git = require("simple-git")(context.destinationPath());

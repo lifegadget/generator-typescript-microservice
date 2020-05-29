@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.testResources = void 0;
 const processFiles_1 = require("../processFiles");
 /**
  * Adds in some basic test files along with the test helper script
